@@ -2,27 +2,29 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const steps = [
     {
-      title: "Bienvenido a Umpla",
-      description: "La plataforma más fácil para crear tu tienda online en Guinea Ecuatorial",
+      title: t('onboarding.step1.title'),
+      description: t('onboarding.step1.description'),
       content: (
         <div className="text-center space-y-4">
           <div className="text-4xl md:text-6xl mb-4">🏪</div>
           <p className="text-base md:text-lg text-gray-600 max-w-md mx-auto">
-            Sin conocimientos técnicos, sin complicaciones. Solo necesitas unos minutos para tener tu tienda funcionando.
+            {t('onboarding.step1.content')}
           </p>
         </div>
       )
     },
     {
-      title: "Beneficios clave",
-      description: "Todo lo que necesitas para vender online",
+      title: t('onboarding.step2.title'),
+      description: t('onboarding.step2.description'),
       content: (
         <div className="space-y-4 md:space-y-6">
           <div className="flex items-center space-x-4">
@@ -30,8 +32,8 @@ const Onboarding = () => {
               <span className="text-white text-lg md:text-xl">🏪</span>
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-sm md:text-base">Crear tienda profesional</h3>
-              <p className="text-xs md:text-sm text-gray-600">Diseños modernos y atractivos</p>
+              <h3 className="font-semibold text-sm md:text-base">{t('onboarding.step2.professional_store')}</h3>
+              <p className="text-xs md:text-sm text-gray-600">{t('onboarding.step2.professional_store_desc')}</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -39,8 +41,8 @@ const Onboarding = () => {
               <span className="text-white text-lg md:text-xl">💳</span>
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-sm md:text-base">Pagos locales</h3>
-              <p className="text-xs md:text-sm text-gray-600">Métodos de pago populares en GQ</p>
+              <h3 className="font-semibold text-sm md:text-base">{t('onboarding.step2.local_payments')}</h3>
+              <p className="text-xs md:text-sm text-gray-600">{t('onboarding.step2.local_payments_desc')}</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -48,16 +50,16 @@ const Onboarding = () => {
               <span className="text-white text-lg md:text-xl">📦</span>
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-sm md:text-base">Productos físicos y digitales</h3>
-              <p className="text-xs md:text-sm text-gray-600">Vende cualquier tipo de producto</p>
+              <h3 className="font-semibold text-sm md:text-base">{t('onboarding.step2.physical_digital')}</h3>
+              <p className="text-xs md:text-sm text-gray-600">{t('onboarding.step2.physical_digital_desc')}</p>
             </div>
           </div>
         </div>
       )
     },
     {
-      title: "Características del SaaS",
-      description: "Herramientas profesionales para hacer crecer tu negocio",
+      title: t('onboarding.step3.title'),
+      description: t('onboarding.step3.description'),
       content: (
         <div className="space-y-4 md:space-y-6">
           <div className="flex items-center space-x-4">
@@ -65,8 +67,8 @@ const Onboarding = () => {
               <span className="text-white text-lg md:text-xl">🌐</span>
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-sm md:text-base">Dominio personalizado</h3>
-              <p className="text-xs md:text-sm text-gray-600">tutienda.umpla.gq incluido</p>
+              <h3 className="font-semibold text-sm md:text-base">{t('onboarding.step3.custom_domain')}</h3>
+              <p className="text-xs md:text-sm text-gray-600">{t('onboarding.step3.custom_domain_desc')}</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -74,8 +76,8 @@ const Onboarding = () => {
               <span className="text-white text-lg md:text-xl">🛠️</span>
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-sm md:text-base">Soporte técnico</h3>
-              <p className="text-xs md:text-sm text-gray-600">Ayuda cuando la necesites</p>
+              <h3 className="font-semibold text-sm md:text-base">{t('onboarding.step3.technical_support')}</h3>
+              <p className="text-xs md:text-sm text-gray-600">{t('onboarding.step3.technical_support_desc')}</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
@@ -83,21 +85,21 @@ const Onboarding = () => {
               <span className="text-white text-lg md:text-xl">📊</span>
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-sm md:text-base">Estadísticas avanzadas</h3>
-              <p className="text-xs md:text-sm text-gray-600">Analiza tu rendimiento</p>
+              <h3 className="font-semibold text-sm md:text-base">{t('onboarding.step3.advanced_analytics')}</h3>
+              <p className="text-xs md:text-sm text-gray-600">{t('onboarding.step3.advanced_analytics_desc')}</p>
             </div>
           </div>
         </div>
       )
     },
     {
-      title: "¡Listo para empezar!",
-      description: "Elige cómo quieres continuar",
+      title: t('onboarding.step4.title'),
+      description: t('onboarding.step4.description'),
       content: (
         <div className="text-center space-y-6">
           <div className="text-4xl md:text-6xl mb-4">🚀</div>
           <p className="text-base md:text-lg text-gray-600 max-w-md mx-auto">
-            Tu tienda estará lista en menos de 5 minutos. ¡Comienza a vender hoy mismo!
+            {t('onboarding.step4.content')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Button 
@@ -105,7 +107,7 @@ const Onboarding = () => {
               onClick={() => navigate('/create-store')}
               className="w-full sm:w-auto"
             >
-              Crear mi tienda
+              {t('onboarding.step4.create_store')}
             </Button>
             <Button 
               variant="outline" 
@@ -113,7 +115,7 @@ const Onboarding = () => {
               onClick={() => navigate('/store-example')}
               className="w-full sm:w-auto"
             >
-              Explorar Umpla
+              {t('onboarding.step4.explore')}
             </Button>
           </div>
         </div>
@@ -139,7 +141,7 @@ const Onboarding = () => {
             ))}
           </div>
           <div className="text-center text-xs md:text-sm text-gray-500">
-            {currentStep + 1} de {steps.length}
+            {t('onboarding.step_indicator', { current: currentStep + 1, total: steps.length })}
           </div>
         </div>
 
@@ -166,13 +168,13 @@ const Onboarding = () => {
                 onClick={() => navigate('/')}
                 className="w-full sm:w-auto"
               >
-                Saltar
+                {t('onboarding.skip')}
               </Button>
               <Button 
                 onClick={() => setCurrentStep(currentStep + 1)}
                 className="w-full sm:w-auto"
               >
-                Siguiente
+                {t('onboarding.next')}
               </Button>
             </div>
           ) : null}

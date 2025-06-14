@@ -4,66 +4,43 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useUserPlan } from '@/hooks/useUserPlan';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Pricing = () => {
   const { userPlan, loading } = useUserPlan();
+  const { t } = useTranslation();
 
   const plans = [
     {
       id: 'basic',
-      name: 'Basic',
-      price: 'Gratis',
+      name: t('pricing.basic.name'),
+      price: t('pricing.basic.price'),
       period: '',
-      description: 'Perfecto para empezar tu negocio online',
-      features: [
-        'Hasta 10 productos',
-        'Tienda básica',
-        'Soporte por email',
-        'Sin gestión de stock',
-        'Hasta 2 imágenes por producto'
-      ],
-      buttonText: 'Plan actual',
+      description: t('pricing.basic.description'),
+      features: t('pricing.basic.features', { returnObjects: true }) as string[],
+      buttonText: userPlan === 'basic' ? t('pricing.basic.button') : t('pricing.basic.button'),
       popular: false,
       current: userPlan === 'basic'
     },
     {
       id: 'professional',
-      name: 'Professional',
-      price: '₣5,000',
-      period: '/mes',
-      description: 'Para negocios en crecimiento',
-      features: [
-        'Hasta 50 productos',
-        'Tienda personalizada',
-        'Soporte prioritario',
-        'Gestión completa de stock',
-        'Hasta 5 imágenes por producto',
-        'Análisis básicos',
-        'Verificación KYC disponible'
-      ],
-      buttonText: userPlan === 'professional' ? 'Plan actual' : 'Actualizar plan',
+      name: t('pricing.professional.name'),
+      price: t('pricing.professional.price'),
+      period: t('pricing.professional.period'),
+      description: t('pricing.professional.description'),
+      features: t('pricing.professional.features', { returnObjects: true }) as string[],
+      buttonText: userPlan === 'professional' ? t('pricing.basic.button') : t('pricing.professional.button'),
       popular: true,
       current: userPlan === 'professional'
     },
     {
       id: 'premium',
-      name: 'Premium',
-      price: '₣10,000',
-      period: '/mes',
-      description: 'Para empresas establecidas',
-      features: [
-        'Hasta 100 productos',
-        'Productos extra con cuota adicional',
-        'Tienda completamente personalizada',
-        'Soporte 24/7',
-        'Gestión completa de stock',
-        'Hasta 10 imágenes por producto',
-        'Análisis avanzados',
-        'Dominio .gq gratuito por 1 año',
-        'Múltiples métodos de pago',
-        'Verificación KYC disponible'
-      ],
-      buttonText: userPlan === 'premium' ? 'Plan actual' : 'Actualizar plan',
+      name: t('pricing.premium.name'),
+      price: t('pricing.premium.price'),
+      period: t('pricing.premium.period'),
+      description: t('pricing.premium.description'),
+      features: t('pricing.premium.features', { returnObjects: true }) as string[],
+      buttonText: userPlan === 'premium' ? t('pricing.basic.button') : t('pricing.premium.button'),
       popular: false,
       current: userPlan === 'premium'
     }
@@ -78,9 +55,9 @@ const Pricing = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mx-auto mb-2">
-            <span className="text-white font-bold text-lg">T</span>
+            <span className="text-white font-bold text-lg">U</span>
           </div>
-          <p className="text-gray-600">Cargando planes...</p>
+          <p className="text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -92,10 +69,10 @@ const Pricing = () => {
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">TuTienda</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Umpla</h1>
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={handleClose}>
-                Volver
+                {t('pricing.back')}
               </Button>
               <Button variant="ghost" size="icon" onClick={handleClose}>
                 <X className="h-4 w-4" />
@@ -109,10 +86,10 @@ const Pricing = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Elige el plan perfecto para tu negocio
+            {t('pricing.title')}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Comienza gratis y escala tu negocio con nuestros planes diseñados para crecer contigo
+            {t('pricing.subtitle')}
           </p>
         </div>
 
@@ -122,7 +99,7 @@ const Pricing = () => {
             <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
               <Crown className="h-4 w-4 text-blue-600" />
               <span className="text-sm text-blue-800">
-                Tu plan actual: <span className="font-semibold capitalize">{userPlan}</span>
+                {t('pricing.current_plan')} <span className="font-semibold capitalize">{userPlan}</span>
               </span>
             </div>
           </div>
@@ -134,7 +111,7 @@ const Pricing = () => {
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                    Más popular
+                    {t('pricing.most_popular')}
                   </span>
                 </div>
               )}
@@ -142,7 +119,7 @@ const Pricing = () => {
               {plan.current && (
                 <div className="absolute -top-4 right-4">
                   <Badge className="bg-green-500 text-white">
-                    Plan actual
+                    {t('pricing.current')}
                   </Badge>
                 </div>
               )}
@@ -181,7 +158,7 @@ const Pricing = () => {
         {/* FAQ or Additional Info */}
         <div className="mt-16 text-center">
           <p className="text-gray-600">
-            ¿Tienes preguntas? <a href="#" className="text-blue-600 hover:underline">Contáctanos</a>
+            {t('pricing.contact')} <a href="#" className="text-blue-600 hover:underline">{t('pricing.contact_us')}</a>
           </p>
         </div>
       </div>

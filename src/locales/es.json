@@ -5,7 +5,9 @@
     "example": "Ejemplo",
     "start_free": "Empezar Gratis",
     "admin": "Admin",
-    "dashboard": "Panel"
+    "dashboard": "Panel",
+    "login": "Iniciar Sesión",
+    "my_dashboard": "Mi Dashboard"
   },
   "auth": {
     "login": "Iniciar Sesión",
@@ -91,6 +93,122 @@
     "powered_by": "Powered by Umpla",
     "location": "Guinea Ecuatorial"
   },
+  "home": {
+    "hero_title": "Tu tienda, sin límites",
+    "hero_subtitle": "Crea tu tienda online en Guinea Ecuatorial en minutos. Sin conocimientos técnicos, sin complicaciones.",
+    "main_cta": "Crear mi tienda gratis",
+    "secondary_cta": "Ver cómo funciona",
+    "see_my_store": "Ver mi tienda",
+    "improve_store_tips": "Consejos para mejorar mi tienda",
+    "loading": "Cargando...",
+    "features_title": "Todo lo que necesitas para vender online",
+    "feature_professional_store": "Tienda profesional",
+    "feature_professional_store_desc": "Diseños modernos y responsive que se adaptan a cualquier dispositivo",
+    "feature_local_payments": "Pagos locales",
+    "feature_local_payments_desc": "Acepta pagos con métodos populares en Guinea Ecuatorial",
+    "feature_analytics": "Estadísticas",
+    "feature_analytics_desc": "Analiza tus ventas y optimiza tu negocio con datos reales",
+    "cta_title": "Empieza gratis hoy mismo",
+    "cta_title_existing": "Mejora tu tienda hoy mismo",
+    "cta_subtitle": "No necesitas tarjeta de crédito. Crea tu tienda en menos de 5 minutos.",
+    "cta_subtitle_existing": "Completa las mejoras recomendadas para maximizar tus ventas.",
+    "footer_tagline": "La plataforma de comercio electrónico para Guinea Ecuatorial"
+  },
+  "pricing": {
+    "title": "Elige el plan perfecto para tu negocio",
+    "subtitle": "Comienza gratis y escala tu negocio con nuestros planes diseñados para crecer contigo",
+    "current_plan": "Tu plan actual:",
+    "back": "Volver",
+    "most_popular": "Más popular",
+    "current": "Plan actual",
+    "basic": {
+      "name": "Basic",
+      "price": "Gratis",
+      "description": "Perfecto para empezar tu negocio online",
+      "features": [
+        "Hasta 10 productos",
+        "Tienda básica",
+        "Soporte por email",
+        "Sin gestión de stock",
+        "Hasta 2 imágenes por producto"
+      ],
+      "button": "Plan actual"
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "₣5,000",
+      "period": "/mes",
+      "description": "Para negocios en crecimiento",
+      "features": [
+        "Hasta 50 productos",
+        "Tienda personalizada",
+        "Soporte prioritario",
+        "Gestión completa de stock",
+        "Hasta 5 imágenes por producto",
+        "Análisis básicos",
+        "Verificación KYC disponible"
+      ],
+      "button": "Actualizar plan"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": "₣10,000",
+      "period": "/mes",
+      "description": "Para empresas establecidas",
+      "features": [
+        "Hasta 100 productos",
+        "Productos extra con cuota adicional",
+        "Tienda completamente personalizada",
+        "Soporte 24/7",
+        "Gestión completa de stock",
+        "Hasta 10 imágenes por producto",
+        "Análisis avanzados",
+        "Dominio .gq gratuito por 1 año",
+        "Múltiples métodos de pago",
+        "Verificación KYC disponible"
+      ],
+      "button": "Actualizar plan"
+    },
+    "contact": "¿Tienes preguntas?",
+    "contact_us": "Contáctanos"
+  },
+  "onboarding": {
+    "step_indicator": "{{current}} de {{total}}",
+    "step1": {
+      "title": "Bienvenido a Umpla",
+      "description": "La plataforma más fácil para crear tu tienda online en Guinea Ecuatorial",
+      "content": "Sin conocimientos técnicos, sin complicaciones. Solo necesitas unos minutos para tener tu tienda funcionando."
+    },
+    "step2": {
+      "title": "Beneficios clave",
+      "description": "Todo lo que necesitas para vender online",
+      "professional_store": "Crear tienda profesional",
+      "professional_store_desc": "Diseños modernos y atractivos",
+      "local_payments": "Pagos locales",
+      "local_payments_desc": "Métodos de pago populares en GQ",
+      "physical_digital": "Productos físicos y digitales",
+      "physical_digital_desc": "Vende cualquier tipo de producto"
+    },
+    "step3": {
+      "title": "Características del SaaS",
+      "description": "Herramientas profesionales para hacer crecer tu negocio",
+      "custom_domain": "Dominio personalizado",
+      "custom_domain_desc": "tutienda.umpla.gq incluido",
+      "technical_support": "Soporte técnico",
+      "technical_support_desc": "Ayuda cuando la necesites",
+      "advanced_analytics": "Estadísticas avanzadas",
+      "advanced_analytics_desc": "Analiza tu rendimiento"
+    },
+    "step4": {
+      "title": "¡Listo para empezar!",
+      "description": "Elige cómo quieres continuar",
+      "content": "Tu tienda estará lista en menos de 5 minutos. ¡Comienza a vender hoy mismo!",
+      "create_store": "Crear mi tienda",
+      "explore": "Explorar Umpla"
+    },
+    "skip": "Saltar",
+    "next": "Siguiente"
+  },
   "common": {
     "loading": "Cargando...",
     "save": "Guardar",
@@ -111,5 +229,10 @@
     "spanish": "Español",
     "english": "English",
     "select_language": "Seleccionar idioma"
+  },
+  "not_found": {
+    "title": "404",
+    "message": "¡Ups! Página no encontrada",
+    "return_home": "Volver al Inicio"
   }
 }

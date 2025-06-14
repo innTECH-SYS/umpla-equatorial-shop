@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Menu, Plus, Eye } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface HeaderProps {
   storeName: string;
@@ -10,6 +11,8 @@ interface HeaderProps {
 }
 
 export const Header = ({ storeName, setSidebarOpen, onAddProductClick }: HeaderProps) => {
+  const { t } = useTranslation();
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="flex items-center justify-between px-4 sm:px-6 py-4">
@@ -23,8 +26,10 @@ export const Header = ({ storeName, setSidebarOpen, onAddProductClick }: HeaderP
             <Menu className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">¡Hola, {storeName}!</h1>
-            <p className="text-sm text-gray-600 mt-1">Aquí puedes gestionar tus productos, pedidos y configuración de tu tienda.</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+              {t('dashboard.hello', { storeName })}
+            </h1>
+            <p className="text-sm text-gray-600 mt-1">{t('dashboard.subtitle')}</p>
           </div>
         </div>
         
@@ -41,7 +46,7 @@ export const Header = ({ storeName, setSidebarOpen, onAddProductClick }: HeaderP
             onClick={onAddProductClick}
           >
             <Plus className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Añadir producto</span>
+            <span className="hidden sm:inline">{t('dashboard.add_product')}</span>
             <span className="sm:hidden">Añadir</span>
           </Button>
         </div>

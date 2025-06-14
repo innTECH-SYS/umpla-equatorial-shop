@@ -5,7 +5,9 @@
     "example": "Example",
     "start_free": "Start Free",
     "admin": "Admin",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "login": "Log In",
+    "my_dashboard": "My Dashboard"
   },
   "auth": {
     "login": "Log In",
@@ -91,6 +93,122 @@
     "powered_by": "Powered by Umpla",
     "location": "Equatorial Guinea"
   },
+  "home": {
+    "hero_title": "Your store, without limits",
+    "hero_subtitle": "Create your online store in Equatorial Guinea in minutes. No technical knowledge, no complications.",
+    "main_cta": "Create my free store",
+    "secondary_cta": "See how it works",
+    "see_my_store": "See my store",
+    "improve_store_tips": "Tips to improve my store",
+    "loading": "Loading...",
+    "features_title": "Everything you need to sell online",
+    "feature_professional_store": "Professional store",
+    "feature_professional_store_desc": "Modern and responsive designs that adapt to any device",
+    "feature_local_payments": "Local payments",
+    "feature_local_payments_desc": "Accept payments with popular methods in Equatorial Guinea",
+    "feature_analytics": "Analytics",
+    "feature_analytics_desc": "Analyze your sales and optimize your business with real data",
+    "cta_title": "Start free today",
+    "cta_title_existing": "Improve your store today",
+    "cta_subtitle": "No credit card needed. Create your store in less than 5 minutes.",
+    "cta_subtitle_existing": "Complete the recommended improvements to maximize your sales.",
+    "footer_tagline": "The e-commerce platform for Equatorial Guinea"
+  },
+  "pricing": {
+    "title": "Choose the perfect plan for your business",
+    "subtitle": "Start for free and scale your business with our plans designed to grow with you",
+    "current_plan": "Your current plan:",
+    "back": "Back",
+    "most_popular": "Most popular",
+    "current": "Current plan",
+    "basic": {
+      "name": "Basic",
+      "price": "Free",
+      "description": "Perfect to start your online business",
+      "features": [
+        "Up to 10 products",
+        "Basic store",
+        "Email support",
+        "No stock management",
+        "Up to 2 images per product"
+      ],
+      "button": "Current plan"
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "₣5,000",
+      "period": "/month",
+      "description": "For growing businesses",
+      "features": [
+        "Up to 50 products",
+        "Custom store",
+        "Priority support",
+        "Complete stock management",
+        "Up to 5 images per product",
+        "Basic analytics",
+        "KYC verification available"
+      ],
+      "button": "Upgrade plan"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": "₣10,000",
+      "period": "/month",
+      "description": "For established businesses",
+      "features": [
+        "Up to 100 products",
+        "Extra products with additional fee",
+        "Fully customized store",
+        "24/7 support",
+        "Complete stock management",
+        "Up to 10 images per product",
+        "Advanced analytics",
+        "Free .gq domain for 1 year",
+        "Multiple payment methods",
+        "KYC verification available"
+      ],
+      "button": "Upgrade plan"
+    },
+    "contact": "Have questions?",
+    "contact_us": "Contact us"
+  },
+  "onboarding": {
+    "step_indicator": "{{current}} of {{total}}",
+    "step1": {
+      "title": "Welcome to Umpla",
+      "description": "The easiest platform to create your online store in Equatorial Guinea",
+      "content": "No technical knowledge, no complications. You just need a few minutes to get your store running."
+    },
+    "step2": {
+      "title": "Key benefits",
+      "description": "Everything you need to sell online",
+      "professional_store": "Create professional store",
+      "professional_store_desc": "Modern and attractive designs",
+      "local_payments": "Local payments",
+      "local_payments_desc": "Popular payment methods in EG",
+      "physical_digital": "Physical and digital products",
+      "physical_digital_desc": "Sell any type of product"
+    },
+    "step3": {
+      "title": "SaaS features",
+      "description": "Professional tools to grow your business",
+      "custom_domain": "Custom domain",
+      "custom_domain_desc": "yourstore.umpla.gq included",
+      "technical_support": "Technical support",
+      "technical_support_desc": "Help when you need it",
+      "advanced_analytics": "Advanced analytics",
+      "advanced_analytics_desc": "Analyze your performance"
+    },
+    "step4": {
+      "title": "Ready to start!",
+      "description": "Choose how you want to continue",
+      "content": "Your store will be ready in less than 5 minutes. Start selling today!",
+      "create_store": "Create my store",
+      "explore": "Explore Umpla"
+    },
+    "skip": "Skip",
+    "next": "Next"
+  },
   "common": {
     "loading": "Loading...",
     "save": "Save",
@@ -111,5 +229,10 @@
     "spanish": "Español",
     "english": "English",
     "select_language": "Select language"
+  },
+  "not_found": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "return_home": "Return to Home"
   }
 }
