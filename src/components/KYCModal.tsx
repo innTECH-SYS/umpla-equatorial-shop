@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Upload, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { Shield, Upload, CheckCircle, Clock, AlertCircle, Star } from 'lucide-react';
 import { useUserPlan } from '@/hooks/useUserPlan';
 
 interface KYCModalProps {
@@ -46,33 +46,6 @@ export const KYCModal = ({ open, onOpenChange }: KYCModalProps) => {
     }
   };
 
-  if (!isPaidPlan) {
-    return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-blue-600" />
-              Verificación KYC
-            </DialogTitle>
-            <DialogDescription>
-              La verificación KYC está disponible solo para usuarios con planes de pago.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="text-center py-6">
-            <AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-            <p className="text-gray-600 mb-4">
-              Actualiza tu plan para acceder a la verificación KYC y obtener el badge de cuenta verificada.
-            </p>
-            <Button onClick={() => window.location.href = '/pricing'}>
-              Ver planes
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -111,6 +84,33 @@ export const KYCModal = ({ open, onOpenChange }: KYCModalProps) => {
             )}
           </div>
         )}
+
+        {/* Beneficios del KYC */}
+        <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="font-medium text-blue-900 mb-3 flex items-center gap-2">
+            <Star className="h-4 w-4" />
+            Beneficios de la verificación KYC
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-blue-800">
+            <div className="space-y-2">
+              <div>• Badge de cuenta verificada</div>
+              <div>• Mayor confianza de los clientes</div>
+              <div>• Acceso a pagos con tarjeta</div>
+            </div>
+            <div className="space-y-2">
+              <div>• Soporte prioritario</div>
+              <div>• Límites de pago más altos</div>
+              {isPaidPlan && <div>• Funciones premium exclusivas</div>}
+            </div>
+          </div>
+          {!isPaidPlan && (
+            <div className="mt-3 p-2 bg-blue-100 rounded border-l-4 border-blue-500">
+              <p className="text-xs text-blue-700">
+                💡 Con un plan de pago obtienes beneficios adicionales como funciones premium y límites más altos.
+              </p>
+            </div>
+          )}
+        </div>
 
         {kycStatus === 'none' && (
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -209,16 +209,6 @@ export const KYCModal = ({ open, onOpenChange }: KYCModalProps) => {
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-medium text-blue-900 mb-2">¿Por qué verificar tu cuenta?</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• Badge de cuenta verificada</li>
-                <li>• Mayor confianza de los clientes</li>
-                <li>• Acceso a funciones premium</li>
-                <li>• Soporte prioritario</li>
-              </ul>
             </div>
 
             <div className="flex gap-3 pt-4">

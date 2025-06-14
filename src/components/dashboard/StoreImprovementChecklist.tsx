@@ -8,12 +8,23 @@ import { CheckCircle2, Circle, Store, CreditCard, Palette, Users, Shield, Chevro
 import { KYCModal } from '@/components/KYCModal';
 import { useUserPlan } from '@/hooks/useUserPlan';
 
+interface ChecklistItem {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactElement;
+  action: () => void;
+  actionText: string;
+  completed: boolean;
+  badge?: string;
+}
+
 export const StoreImprovementChecklist = () => {
-  const { isPaidPlan, kycStatus } = useUserPlan();
+  const { kycStatus } = useUserPlan();
   const [kycModalOpen, setKycModalOpen] = useState(false);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
-  const baseItems = [
+  const items: ChecklistItem[] = [
     {
       id: 'add-product',
       title: 'Agregar primer producto',
@@ -22,6 +33,16 @@ export const StoreImprovementChecklist = () => {
       action: () => window.dispatchEvent(new CustomEvent('openAddProductModal')),
       actionText: 'Agregar producto',
       completed: false
+    },
+    {
+      id: 'kyc-verification',
+      title: 'Verificar cuenta (KYC)',
+      description: 'Verifica tu identidad para mayor confianza y acceso a todas las funciones',
+      icon: <Shield className="h-5 w-5" />,
+      action: () => setKycModalOpen(true),
+      actionText: kycStatus === 'verified' ? 'Verificado' : kycStatus === 'pending' ? 'Pendiente' : 'Verificar',
+      completed: kycStatus === 'verified',
+      badge: kycStatus === 'verified' ? 'Verificado' : kycStatus === 'pending' ? 'Pendiente' : undefined
     },
     {
       id: 'customize-store',
@@ -51,21 +72,6 @@ export const StoreImprovementChecklist = () => {
       completed: false
     }
   ];
-
-  // Agregar item de KYC solo para usuarios de pago
-  const items = isPaidPlan ? [
-    ...baseItems,
-    {
-      id: 'kyc-verification',
-      title: 'Verificar cuenta (KYC)',
-      description: 'Verifica tu identidad para obtener el badge de cuenta verificada',
-      icon: <Shield className="h-5 w-5" />,
-      action: () => setKycModalOpen(true),
-      actionText: kycStatus === 'verified' ? 'Verificado' : kycStatus === 'pending' ? 'Pendiente' : 'Verificar',
-      completed: kycStatus === 'verified',
-      badge: kycStatus === 'verified' ? 'Verificado' : kycStatus === 'pending' ? 'Pendiente' : undefined
-    }
-  ] : baseItems;
 
   const completedCount = items.filter(item => item.completed || checkedItems.includes(item.id)).length;
   const progressPercentage = (completedCount / items.length) * 100;
