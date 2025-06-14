@@ -551,6 +551,48 @@ export type Database = {
         }
         Relationships: []
       }
+      referidos: {
+        Row: {
+          activado_el: string | null
+          created_at: string | null
+          id: string
+          referente_id: string | null
+          referido_id: string | null
+          valido: boolean | null
+        }
+        Insert: {
+          activado_el?: string | null
+          created_at?: string | null
+          id?: string
+          referente_id?: string | null
+          referido_id?: string | null
+          valido?: boolean | null
+        }
+        Update: {
+          activado_el?: string | null
+          created_at?: string | null
+          id?: string
+          referente_id?: string | null
+          referido_id?: string | null
+          valido?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referidos_referente_id_fkey"
+            columns: ["referente_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referidos_referido_id_fkey"
+            columns: ["referido_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           created_at: string | null
@@ -604,6 +646,7 @@ export type Database = {
           logo_url: string | null
           nombre: string
           plan_id: string | null
+          productos_extra: number | null
           subdominio: string | null
           telefono: string | null
           telefono_whatsapp: string | null
@@ -621,6 +664,7 @@ export type Database = {
           logo_url?: string | null
           nombre: string
           plan_id?: string | null
+          productos_extra?: number | null
           subdominio?: string | null
           telefono?: string | null
           telefono_whatsapp?: string | null
@@ -638,6 +682,7 @@ export type Database = {
           logo_url?: string | null
           nombre?: string
           plan_id?: string | null
+          productos_extra?: number | null
           subdominio?: string | null
           telefono?: string | null
           telefono_whatsapp?: string | null
@@ -701,6 +746,7 @@ export type Database = {
       }
       usuarios: {
         Row: {
+          codigo_referido: string | null
           creado_el: string | null
           email: string | null
           foto: string | null
@@ -709,6 +755,7 @@ export type Database = {
           rol: string | null
         }
         Insert: {
+          codigo_referido?: string | null
           creado_el?: string | null
           email?: string | null
           foto?: string | null
@@ -717,6 +764,7 @@ export type Database = {
           rol?: string | null
         }
         Update: {
+          codigo_referido?: string | null
           creado_el?: string | null
           email?: string | null
           foto?: string | null
