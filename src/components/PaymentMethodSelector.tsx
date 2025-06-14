@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -74,9 +73,16 @@ const getIcon = (iconName: string) => {
 interface PaymentMethodSelectorProps {
   storeIds: number[];
   onBack: () => void;
+  onOrderComplete: () => void;
+  customerData: {
+    nombre: string;
+    telefono: string;
+    direccion: string;
+    notas: string;
+  };
 }
 
-export const PaymentMethodSelector = ({ storeIds, onBack }: PaymentMethodSelectorProps) => {
+export const PaymentMethodSelector = ({ storeIds, onBack, onOrderComplete, customerData }: PaymentMethodSelectorProps) => {
   const [selectedMethod, setSelectedMethod] = useState<string>('');
   const [kycModalOpen, setKycModalOpen] = useState(false);
   const { clearCart, closeCart, getTotalPrice } = useCart();
@@ -123,8 +129,7 @@ export const PaymentMethodSelector = ({ storeIds, onBack }: PaymentMethodSelecto
 
     // Simulate payment processing
     alert(`Procesando pago con ${method?.name}...\n\nTotal: ₣ ${getTotalPrice().toLocaleString()}\n\n¡Gracias por tu compra!`);
-    clearCart();
-    closeCart();
+    onOrderComplete();
   };
 
   return (

@@ -1,16 +1,46 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserStore } from "@/hooks/useUserStore";
 
 const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { hasStore, loading: storeLoading } = useUserStore();
 
   const handleCreateStore = () => {
     if (user) {
-      navigate('/create-store');
+      if (hasStore) {
+        // If user has a store, go to dashboard with checklist focus
+        navigate('/dashboard?focus=checklist');
+      } else {
+        // If user doesn't have a store, go to create store
+        navigate('/create-store');
+      }
     } else {
       navigate('/auth');
+    }
+  };
+
+  const getMainButtonText = () => {
+    if (!user) return "Crear mi tienda gratis";
+    if (storeLoading) return "Cargando...";
+    if (hasStore) return "Consejos para mejorar mi tienda";
+    return "Crear mi tienda gratis";
+  };
+
+  const getSecondaryButtonText = () => {
+    if (!user) return "Ver cómo funciona";
+    if (hasStore) return "Ver mi tienda";
+    return "Ver cómo funciona";
+  };
+
+  const handleSecondaryAction = () => {
+    if (user && hasStore) {
+      navigate('/dashboard');
+    } else {
+      navigate('/onboarding');
     }
   };
 
@@ -54,16 +84,17 @@ const Index = () => {
               size="lg" 
               className="w-full sm:w-auto"
               onClick={handleCreateStore}
+              disabled={storeLoading}
             >
-              Crear mi tienda gratis
+              {getMainButtonText()}
             </Button>
             <Button 
               variant="outline" 
               size="lg"
               className="w-full sm:w-auto"
-              onClick={() => navigate('/onboarding')}
+              onClick={handleSecondaryAction}
             >
-              Ver cómo funciona
+              {getSecondaryButtonText()}
             </Button>
           </div>
         </div>
@@ -111,17 +142,21 @@ const Index = () => {
       <section className="px-4 py-8 md:px-8 md:py-16">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
-            Empieza gratis hoy mismo
+            {user && hasStore ? "Mejora tu tienda hoy mismo" : "Empieza gratis hoy mismo"}
           </h2>
           <p className="text-lg md:text-xl text-gray-600 mb-6 md:mb-8">
-            No necesitas tarjeta de crédito. Crea tu tienda en menos de 5 minutos.
+            {user && hasStore 
+              ? "Completa las mejoras recomendadas para maximizar tus ventas." 
+              : "No necesitas tarjeta de crédito. Crea tu tienda en menos de 5 minutos."
+            }
           </p>
           <Button 
             size="lg" 
             className="w-full sm:w-auto"
             onClick={handleCreateStore}
+            disabled={storeLoading}
           >
-            Crear mi tienda ahora
+            {getMainButtonText()}
           </Button>
         </div>
       </section>

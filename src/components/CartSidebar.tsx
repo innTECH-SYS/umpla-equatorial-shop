@@ -1,4 +1,3 @@
-
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -141,6 +140,7 @@ export const CartSidebar = () => {
 
                 <PaymentMethodSelector 
                   storeIds={Object.keys(groupedByStore).map(Number)}
+                  onBack={() => setShowCheckout(false)}
                   onOrderComplete={handleOrderComplete}
                   customerData={customerData}
                 />
