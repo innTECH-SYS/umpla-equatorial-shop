@@ -2,7 +2,7 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
 interface TranslationContextType {
-  t: (key: string, params?: Record<string, any>) => string;
+  t: (key: string, params?: Record<string, any>) => any;
   language: string;
   setLanguage: (lang: string) => void;
   changeLanguage: (lang: string) => void;
@@ -116,20 +116,21 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
   const t = (key: string, params?: Record<string, any>) => {
     let translation = translations[language as keyof typeof translations]?.[key as keyof typeof translations.es] || key;
     
-    // Handle array return for features
+    // Handle array return for features - return as is
     if (Array.isArray(translation)) {
       return translation;
     }
     
-    if (params) {
+    // Handle string interpolation only for strings
+    if (typeof translation === 'string' && params) {
       Object.entries(params).forEach(([paramKey, value]) => {
-        translation = translation.replace(`{{${paramKey}}}`, value);
+        translation = (translation as string).replace(`{{${paramKey}}}`, value);
         // También manejar interpolación directa para compatibilidad
         if (paramKey === 'productName') {
           translation = `${value} ${translation}`;
         }
         if (paramKey === 'count') {
-          translation = translation.replace(/\d+/, value.toString());
+          translation = (translation as string).replace(/\d+/, value.toString());
         }
       });
     }
