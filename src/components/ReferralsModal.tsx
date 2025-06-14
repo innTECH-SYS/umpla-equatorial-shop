@@ -19,7 +19,7 @@ interface Referral {
   valido: boolean;
   activado_el: string | null;
   created_at: string;
-  usuarios: {
+  referido_usuario: {
     nombre: string;
     email: string;
   } | null;
@@ -72,7 +72,7 @@ export const ReferralsModal = ({ open, onOpenChange }: ReferralsModalProps) => {
           valido,
           activado_el,
           created_at,
-          usuarios:referido_id (
+          referido_usuario:usuarios!referidos_referido_id_fkey (
             nombre,
             email
           )
@@ -213,8 +213,8 @@ export const ReferralsModal = ({ open, onOpenChange }: ReferralsModalProps) => {
                   <Card key={referral.id} className="p-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">{referral.usuarios?.nombre || 'Usuario'}</p>
-                        <p className="text-sm text-gray-600">{referral.usuarios?.email || 'Email no disponible'}</p>
+                        <p className="font-medium">{referral.referido_usuario?.nombre || 'Usuario'}</p>
+                        <p className="text-sm text-gray-600">{referral.referido_usuario?.email || 'Email no disponible'}</p>
                         <p className="text-xs text-gray-500">
                           Registrado: {new Date(referral.created_at).toLocaleDateString()}
                         </p>
