@@ -1,0 +1,613 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  public: {
+    Tables: {
+      donations: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          description: string | null
+          donation_type: string
+          id: string
+          location: string | null
+          request_id: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string | null
+          description?: string | null
+          donation_type: string
+          id?: string
+          location?: string | null
+          request_id?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string | null
+          description?: string | null
+          donation_type?: string
+          id?: string
+          location?: string | null
+          request_id?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donations_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "help_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "donations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      help_matches: {
+        Row: {
+          admin_notes: string | null
+          approved_by: string | null
+          created_at: string | null
+          donation_id: string | null
+          help_request_id: string
+          id: string
+          inventory_id: string | null
+          match_score: number | null
+          matched_at: string | null
+          status: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          donation_id?: string | null
+          help_request_id: string
+          id?: string
+          inventory_id?: string | null
+          match_score?: number | null
+          matched_at?: string | null
+          status?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          donation_id?: string | null
+          help_request_id?: string
+          id?: string
+          inventory_id?: string | null
+          match_score?: number | null
+          matched_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "help_matches_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "help_matches_donation_id_fkey"
+            columns: ["donation_id"]
+            isOneToOne: false
+            referencedRelation: "donations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "help_matches_help_request_id_fkey"
+            columns: ["help_request_id"]
+            isOneToOne: false
+            referencedRelation: "help_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "help_matches_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      help_requests: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string
+          id: string
+          location: string | null
+          priority: number | null
+          status: Database["public"]["Enums"]["help_request_status"] | null
+          title: string
+          updated_at: string | null
+          urgency_level: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          location?: string | null
+          priority?: number | null
+          status?: Database["public"]["Enums"]["help_request_status"] | null
+          title: string
+          updated_at?: string | null
+          urgency_level?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          location?: string | null
+          priority?: number | null
+          status?: Database["public"]["Enums"]["help_request_status"] | null
+          title?: string
+          updated_at?: string | null
+          urgency_level?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "help_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          donated_by: string | null
+          expiration_date: string | null
+          id: string
+          item_name: string
+          item_type: string
+          location: string | null
+          pharmacy_id: string | null
+          quantity: number
+          status: string
+          unit: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          donated_by?: string | null
+          expiration_date?: string | null
+          id?: string
+          item_name: string
+          item_type: string
+          location?: string | null
+          pharmacy_id?: string | null
+          quantity?: number
+          status?: string
+          unit?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          donated_by?: string | null
+          expiration_date?: string | null
+          id?: string
+          item_name?: string
+          item_type?: string
+          location?: string | null
+          pharmacy_id?: string | null
+          quantity?: number
+          status?: string
+          unit?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_donated_by_fkey"
+            columns: ["donated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pharmacies: {
+        Row: {
+          address: string
+          contact_email: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          hours: string | null
+          id: string
+          is_on_duty: boolean | null
+          is_open: boolean | null
+          latitude: number | null
+          license_number: string | null
+          longitude: number | null
+          medications_available: string[] | null
+          name: string
+          phone: string | null
+          services: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          contact_email?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          hours?: string | null
+          id?: string
+          is_on_duty?: boolean | null
+          is_open?: boolean | null
+          latitude?: number | null
+          license_number?: string | null
+          longitude?: number | null
+          medications_available?: string[] | null
+          name: string
+          phone?: string | null
+          services?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          contact_email?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          hours?: string | null
+          id?: string
+          is_on_duty?: boolean | null
+          is_open?: boolean | null
+          latitude?: number | null
+          license_number?: string | null
+          longitude?: number | null
+          medications_available?: string[] | null
+          name?: string
+          phone?: string | null
+          services?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacies_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prescription_estimations: {
+        Row: {
+          created_at: string | null
+          estimated_cost: number | null
+          id: string
+          input_method:
+            | Database["public"]["Enums"]["prescription_input_method"]
+            | null
+          notes: string | null
+          status: Database["public"]["Enums"]["prescription_status"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          estimated_cost?: number | null
+          id?: string
+          input_method?:
+            | Database["public"]["Enums"]["prescription_input_method"]
+            | null
+          notes?: string | null
+          status?: Database["public"]["Enums"]["prescription_status"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          estimated_cost?: number | null
+          id?: string
+          input_method?:
+            | Database["public"]["Enums"]["prescription_input_method"]
+            | null
+          notes?: string | null
+          status?: Database["public"]["Enums"]["prescription_status"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_estimations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prescription_items: {
+        Row: {
+          created_at: string | null
+          dosage: string | null
+          drug_name: string
+          id: string
+          prescription_id: string
+          quantity: number
+          total_price: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          dosage?: string | null
+          drug_name: string
+          id?: string
+          prescription_id: string
+          quantity?: number
+          total_price?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          dosage?: string | null
+          drug_name?: string
+          id?: string
+          prescription_id?: string
+          quantity?: number
+          total_price?: number | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_items_prescription_id_fkey"
+            columns: ["prescription_id"]
+            isOneToOne: false
+            referencedRelation: "prescription_estimations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          location: string | null
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          location?: string | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          location?: string | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          plan_type: string
+          started_at: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          plan_type?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          plan_type?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      help_request_status: "open" | "fulfilled" | "closed"
+      prescription_input_method: "manual" | "image"
+      prescription_status: "pending" | "processed"
+      user_role: "user" | "admin" | "pharmacy"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DefaultSchema = Database[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof Database },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof Database },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof Database },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof Database },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      help_request_status: ["open", "fulfilled", "closed"],
+      prescription_input_method: ["manual", "image"],
+      prescription_status: ["pending", "processed"],
+      user_role: ["user", "admin", "pharmacy"],
+    },
+  },
+} as const
