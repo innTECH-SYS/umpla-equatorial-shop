@@ -48,6 +48,7 @@ export const EditProductModal = ({ open, onOpenChange, product }: EditProductMod
 
   useEffect(() => {
     if (product) {
+      console.log('Loading product data into form:', product);
       setFormData({
         nombre: product.nombre || '',
         descripcion: product.descripcion || '',
@@ -59,17 +60,48 @@ export const EditProductModal = ({ open, onOpenChange, product }: EditProductMod
         disponible: product.disponible !== false,
         activo: product.activo !== false
       });
+    } else {
+      console.log('No product provided, resetting form');
+      setFormData({
+        nombre: '',
+        descripcion: '',
+        precio: '',
+        stock: '',
+        tipo: 'físico',
+        imagen_url: '',
+        destacado: false,
+        disponible: true,
+        activo: true
+      });
     }
   }, [product]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!product) return;
-
-    if (!formData.nombre || !formData.precio) {
+    if (!product) {
+      console.error('No product provided for update');
       toast({
         title: "Error",
-        description: "El nombre y precio son obligatorios",
+        description: "No hay producto para actualizar",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate required fields
+    if (!formData.nombre.trim()) {
+      toast({
+        title: "Error",
+        description: "El nombre del producto es obligatorio",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.precio || parseFloat(formData.precio) <= 0) {
+      toast({
+        title: "Error",
+        description: "El precio debe ser mayor a 0",
         variant: "destructive"
       });
       return;
@@ -78,28 +110,45 @@ export const EditProductModal = ({ open, onOpenChange, product }: EditProductMod
     setLoading(true);
     
     try {
+      console.log('Submitting product update for product:', product.id);
+      console.log('Form data:', formData);
+      
       const updateData = {
-        nombre: formData.nombre,
-        descripcion: formData.descripcion || null,
+        nombre: formData.nombre.trim(),
+        descripcion: formData.descripcion.trim() || null,
         precio: parseFloat(formData.precio),
         stock: formData.stock ? parseInt(formData.stock) : 0,
         tipo: formData.tipo,
-        imagen_url: formData.imagen_url || null,
+        imagen_url: formData.imagen_url.trim() || null,
         destacado: formData.destacado,
         disponible: formData.disponible,
         activo: formData.activo
       };
 
-      await updateProduct(product.id, updateData);
-      onOpenChange(false);
+      console.log('Processed update data:', updateData);
+
+      const result = await updateProduct(product.id, updateData);
+      
+      if (result) {
+        console.log('Product updated successfully');
+        onOpenChange(false);
+      } else {
+        console.error('Product update failed - no result returned');
+      }
     } catch (error) {
-      console.error('Error updating product:', error);
+      console.error('Error in handleSubmit:', error);
+      toast({
+        title: "Error",
+        description: "Error inesperado al actualizar el producto",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleInputChange = (field: string, value: any) => {
+    console.log('Form field changed:', field, '=', value);
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

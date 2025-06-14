@@ -27,9 +27,16 @@ export const useProducts = () => {
   const [loading, setLoading] = useState(true);
 
   const loadProducts = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('No user found, skipping product load');
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
 
     try {
+      console.log('Loading products for user:', user.id);
+      
       // First get the user's store
       const { data: tienda, error: tiendaError } = await supabase
         .from('tiendas')
@@ -37,10 +44,23 @@ export const useProducts = () => {
         .eq('usuario_id', user.id)
         .single();
 
-      if (tiendaError || !tienda) {
+      if (tiendaError) {
+        console.error('Error loading store:', tiendaError);
+        if (tiendaError.code === 'PGRST116') {
+          console.log('No store found for user');
+          setProducts([]);
+          return;
+        }
+        throw tiendaError;
+      }
+
+      if (!tienda) {
+        console.log('No store found for user');
         setProducts([]);
         return;
       }
+
+      console.log('Store found:', tienda.id);
 
       // Then get the products
       const { data, error } = await supabase
@@ -49,11 +69,15 @@ export const useProducts = () => {
         .eq('tienda_id', tienda.id)
         .order('creado_el', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error loading products:', error);
+        throw error;
+      }
 
+      console.log('Products loaded:', data?.length || 0);
       setProducts(data || []);
     } catch (error) {
-      console.error('Error loading products:', error);
+      console.error('Error in loadProducts:', error);
       toast({
         title: "Error",
         description: "No se pudieron cargar los productos",
@@ -69,9 +93,14 @@ export const useProducts = () => {
   }, [user]);
 
   const addProduct = async (productData: Omit<Product, 'id' | 'tienda_id' | 'creado_el'>) => {
-    if (!user) return null;
+    if (!user) {
+      console.error('No user found for adding product');
+      return null;
+    }
 
     try {
+      console.log('Adding product for user:', user.id);
+      
       // Get user's store
       const { data: tienda, error: tiendaError } = await supabase
         .from('tiendas')
@@ -80,6 +109,7 @@ export const useProducts = () => {
         .single();
 
       if (tiendaError || !tienda) {
+        console.error('Error getting store for product creation:', tiendaError);
         toast({
           title: "Error",
           description: "No se encontró tu tienda",
@@ -87,6 +117,8 @@ export const useProducts = () => {
         });
         return null;
       }
+
+      console.log('Creating product for store:', tienda.id);
 
       const { data, error } = await supabase
         .from('productos')
@@ -97,8 +129,12 @@ export const useProducts = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating product:', error);
+        throw error;
+      }
 
+      console.log('Product created successfully:', data.id);
       setProducts(prev => [data, ...prev]);
       
       toast({
@@ -119,7 +155,47 @@ export const useProducts = () => {
   };
 
   const updateProduct = async (id: string, updates: Partial<Product>) => {
+    if (!user) {
+      console.error('No user found for updating product');
+      return null;
+    }
+
     try {
+      console.log('Updating product:', id, 'with updates:', updates);
+      
+      // First verify the product exists and belongs to the user's store
+      const { data: existingProduct, error: checkError } = await supabase
+        .from('productos')
+        .select('id, tienda_id')
+        .eq('id', id)
+        .single();
+
+      if (checkError) {
+        console.error('Error checking existing product:', checkError);
+        if (checkError.code === 'PGRST116') {
+          toast({
+            title: "Error",
+            description: "Producto no encontrado",
+            variant: "destructive"
+          });
+          return null;
+        }
+        throw checkError;
+      }
+
+      if (!existingProduct) {
+        console.error('Product not found:', id);
+        toast({
+          title: "Error",
+          description: "Producto no encontrado",
+          variant: "destructive"
+        });
+        return null;
+      }
+
+      console.log('Existing product found:', existingProduct);
+
+      // Perform the update
       const { data, error } = await supabase
         .from('productos')
         .update(updates)
@@ -127,8 +203,20 @@ export const useProducts = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating product:', error);
+        if (error.code === 'PGRST116') {
+          toast({
+            title: "Error",
+            description: "No tienes permisos para actualizar este producto",
+            variant: "destructive"
+          });
+          return null;
+        }
+        throw error;
+      }
 
+      console.log('Product updated successfully:', data);
       setProducts(prev => prev.map(p => p.id === id ? data : p));
       
       toast({
@@ -141,7 +229,7 @@ export const useProducts = () => {
       console.error('Error updating product:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar el producto",
+        description: "No se pudo actualizar el producto. Verifica tu conexión e inténtalo de nuevo.",
         variant: "destructive"
       });
       return null;
@@ -149,14 +237,25 @@ export const useProducts = () => {
   };
 
   const deleteProduct = async (id: string) => {
+    if (!user) {
+      console.error('No user found for deleting product');
+      return;
+    }
+
     try {
+      console.log('Deleting product:', id);
+      
       const { error } = await supabase
         .from('productos')
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error deleting product:', error);
+        throw error;
+      }
 
+      console.log('Product deleted successfully');
       setProducts(prev => prev.filter(p => p.id !== id));
       
       toast({
@@ -175,8 +274,12 @@ export const useProducts = () => {
 
   const toggleProductStatus = async (id: string, field: 'activo' | 'destacado' | 'disponible') => {
     const product = products.find(p => p.id === id);
-    if (!product) return;
+    if (!product) {
+      console.error('Product not found for toggle:', id);
+      return;
+    }
 
+    console.log('Toggling product status:', id, field, 'current value:', product[field]);
     await updateProduct(id, { [field]: !product[field] });
   };
 
