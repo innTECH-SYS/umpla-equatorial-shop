@@ -6,8 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
 import { Users } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export const AdminUsersTable = () => {
+  const { t } = useTranslation();
   const { data: users, isLoading } = useQuery({
     queryKey: ['admin-users'],
     queryFn: async () => {
@@ -32,8 +34,8 @@ export const AdminUsersTable = () => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Gestión de Usuarios</CardTitle>
-          <CardDescription>Cargando usuarios...</CardDescription>
+          <CardTitle>{t('admin.user_management')}</CardTitle>
+          <CardDescription>{t('admin.loading_users')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="animate-pulse space-y-4">
@@ -51,21 +53,21 @@ export const AdminUsersTable = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5" />
-          Gestión de Usuarios
+          {t('admin.user_management')}
         </CardTitle>
         <CardDescription>
-          Administra todos los usuarios registrados en la plataforma
+          {t('admin.manage_users_desc')}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Usuario</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Rol</TableHead>
-              <TableHead>Tiendas</TableHead>
-              <TableHead>Fecha de Registro</TableHead>
+              <TableHead>{t('admin.user')}</TableHead>
+              <TableHead>{t('admin.email')}</TableHead>
+              <TableHead>{t('admin.role')}</TableHead>
+              <TableHead>{t('admin.stores')}</TableHead>
+              <TableHead>{t('admin.registration_date')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -81,14 +83,14 @@ export const AdminUsersTable = () => {
                       />
                     )}
                     <div>
-                      <div className="font-medium">{user.nombre || 'Sin nombre'}</div>
+                      <div className="font-medium">{user.nombre || t('admin.no_name')}</div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
                   <Badge variant={user.email === 'desarrollos@inntech.gq' ? "destructive" : "secondary"}>
-                    {user.email === 'desarrollos@inntech.gq' ? 'admin' : 'user'}
+                    {user.email === 'desarrollos@inntech.gq' ? t('admin.admin') : t('admin.user_role')}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -96,11 +98,11 @@ export const AdminUsersTable = () => {
                     <div className="flex items-center gap-2">
                       <span className="text-sm">{user.tiendas.nombre}</span>
                       <Badge variant={user.tiendas.activa ? "default" : "destructive"} className="text-xs">
-                        {user.tiendas.activa ? "Activa" : "Inactiva"}
+                        {user.tiendas.activa ? t('admin.active') : t('admin.inactive')}
                       </Badge>
                     </div>
                   ) : (
-                    <span className="text-gray-500 text-sm">Sin tiendas</span>
+                    <span className="text-gray-500 text-sm">{t('admin.no_stores')}</span>
                   )}
                 </TableCell>
                 <TableCell>

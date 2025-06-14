@@ -26,18 +26,21 @@ import { AdminAnalytics } from '@/components/admin/AdminAnalytics';
 import { AdminModeration } from '@/components/admin/AdminModeration';
 import { AdminOrderManagement } from '@/components/admin/AdminOrderManagement';
 import { AdminSystemConfig } from '@/components/admin/AdminSystemConfig';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading: roleLoading } = useUserRole();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando panel administrativo...</p>
+          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -86,10 +89,11 @@ const Admin = () => {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">
-                Bienvenido, {user.email}
+                {t('admin.welcome', { email: user.email })}
               </span>
+              <LanguageSelector />
               <Button variant="outline" onClick={() => navigate('/')}>
-                Ver Sitio Principal
+                {t('admin.view_main_site')}
               </Button>
             </div>
           </div>
@@ -99,9 +103,9 @@ const Admin = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('admin.title')}</h1>
           <p className="mt-2 text-gray-600">
-            Gestiona la plataforma Umpla desde este panel centralizado
+            {t('admin.subtitle')}
           </p>
         </div>
 
@@ -109,31 +113,31 @@ const Admin = () => {
           <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
-              Dashboard
+              {t('admin.dashboard')}
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              Analytics
+              {t('admin.analytics')}
             </TabsTrigger>
             <TabsTrigger value="stores" className="flex items-center gap-2">
               <Store className="h-4 w-4" />
-              Tiendas
+              {t('admin.stores')}
             </TabsTrigger>
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
-              Usuarios
+              {t('admin.users')}
             </TabsTrigger>
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
-              Pedidos
+              {t('admin.orders')}
             </TabsTrigger>
             <TabsTrigger value="moderation" className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
-              Moderación
+              {t('admin.moderation')}
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
-              Configuración
+              {t('admin.settings')}
             </TabsTrigger>
           </TabsList>
 

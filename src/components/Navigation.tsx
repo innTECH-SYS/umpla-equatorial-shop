@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -19,15 +22,16 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             <Link to="/pricing" className="text-gray-600 hover:text-primary transition-colors">
-              Precios
+              {t('nav.pricing')}
             </Link>
             <Link to="/store-example" className="text-gray-600 hover:text-primary transition-colors">
-              Ejemplo
+              {t('nav.example')}
             </Link>
+            <LanguageSelector />
             <Link to="/onboarding">
-              <Button>Empezar Gratis</Button>
+              <Button>{t('nav.start_free')}</Button>
             </Link>
           </div>
 
@@ -52,17 +56,20 @@ const Navigation = () => {
                 className="text-gray-600 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Precios
+                {t('nav.pricing')}
               </Link>
               <Link 
                 to="/store-example" 
                 className="text-gray-600 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Ejemplo
+                {t('nav.example')}
               </Link>
+              <div className="flex justify-center">
+                <LanguageSelector />
+              </div>
               <Link to="/onboarding" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full">Empezar Gratis</Button>
+                <Button className="w-full">{t('nav.start_free')}</Button>
               </Link>
             </div>
           </div>

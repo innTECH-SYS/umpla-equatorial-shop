@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Package } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface Product {
   id: string;
@@ -29,6 +30,7 @@ interface ProductGridProps {
 export const ProductGrid = ({ products, store }: ProductGridProps) => {
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-ES', {
@@ -52,16 +54,16 @@ export const ProductGrid = ({ products, store }: ProductGridProps) => {
     addToCart(cartProduct, { name: store.nombre });
     
     toast({
-      title: "Producto añadido",
-      description: `${product.nombre} se ha añadido al carrito`,
+      title: t('store.product_added'),
+      description: t('store.product_added_desc', { productName: product.nombre }),
     });
   };
 
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Nuestros Productos</h2>
-        <p className="text-gray-600">{products.length} productos disponibles</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('store.our_products')}</h2>
+        <p className="text-gray-600">{t('store.products_available', { count: products.length })}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -85,7 +87,7 @@ export const ProductGrid = ({ products, store }: ProductGridProps) => {
                   className="absolute top-2 right-2 bg-orange-500 text-white"
                   variant="secondary"
                 >
-                  Últimas {product.stock}
+                  {t('store.last_units', { count: product.stock })}
                 </Badge>
               )}
             </div>
@@ -113,7 +115,7 @@ export const ProductGrid = ({ products, store }: ProductGridProps) => {
                   className="flex items-center gap-2"
                 >
                   <ShoppingCart className="h-4 w-4" />
-                  {product.stock === 0 ? 'Agotado' : 'Añadir'}
+                  {product.stock === 0 ? t('store.out_of_stock') : t('store.add_to_cart')}
                 </Button>
               </div>
             </div>

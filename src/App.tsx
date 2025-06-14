@@ -17,6 +17,9 @@ import StoreExample from "./pages/StoreExample";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 
+// Importar configuración de i18n
+import "@/i18n/config";
+
 const queryClient = new QueryClient();
 
 const App = () => (

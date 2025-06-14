@@ -5,6 +5,8 @@ import { Share2, Store, MapPin, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { ShareStoreModal } from '@/components/ShareStoreModal';
 import { useCart } from '@/contexts/CartContext';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface StoreData {
   id: string;
@@ -25,6 +27,7 @@ interface PublicStoreHeaderProps {
 export const PublicStoreHeader = ({ store }: PublicStoreHeaderProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const { openCart, getTotalItems } = useCart();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -56,13 +59,14 @@ export const PublicStoreHeader = ({ store }: PublicStoreHeaderProps) => {
 
             {/* Acciones */}
             <div className="flex items-center gap-3">
+              <LanguageSelector />
               <Button 
                 variant="outline" 
                 size="sm"
                 onClick={() => setShareModalOpen(true)}
               >
                 <Share2 className="h-4 w-4 mr-2" />
-                Compartir
+                {t('store.share')}
               </Button>
               
               <Button 
@@ -70,7 +74,7 @@ export const PublicStoreHeader = ({ store }: PublicStoreHeaderProps) => {
                 onClick={openCart}
                 className="relative"
               >
-                <span>Carrito</span>
+                <span>{t('store.cart')}</span>
                 {getTotalItems() > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {getTotalItems()}
