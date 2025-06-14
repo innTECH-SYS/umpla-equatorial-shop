@@ -8,43 +8,57 @@ import {
   Package,
   ShoppingCart,
   CreditCard,
-  Palette,
-  BarChart3,
   Settings,
   HelpCircle,
-  Bell,
-  User,
   Plus,
-  TrendingUp,
-  Eye,
   Menu,
-  X
+  X,
+  Store,
+  Eye,
+  TrendingUp,
+  AlertCircle
 } from 'lucide-react';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [storeName] = useState("Mi Negocio GQ"); // This would come from user data
+  const [hasPaymentMethod] = useState(false); // This would come from user data
 
   const menuItems = [
-    { icon: <Home className="h-5 w-5" />, label: 'Dashboard', active: true },
-    { icon: <Package className="h-5 w-5" />, label: 'Productos' },
+    { icon: <Home className="h-5 w-5" />, label: 'Inicio', active: true },
+    { icon: <Package className="h-5 w-5" />, label: 'Mis productos' },
     { icon: <ShoppingCart className="h-5 w-5" />, label: 'Pedidos' },
-    { icon: <CreditCard className="h-5 w-5" />, label: 'Pagos' },
-    { icon: <Palette className="h-5 w-5" />, label: 'Diseño de tienda' },
-    { icon: <BarChart3 className="h-5 w-5" />, label: 'Estadísticas' },
-    { icon: <Settings className="h-5 w-5" />, label: 'Configuración' },
+    { icon: <CreditCard className="h-5 w-5" />, label: 'Métodos de pago' },
+    { icon: <Store className="h-5 w-5" />, label: 'Configuración de tienda' },
+    { icon: <HelpCircle className="h-5 w-5" />, label: 'Soporte' },
   ];
 
   const stats = [
-    { title: 'Ventas del mes', value: '₣ 1,245,000', change: '+12%', trend: 'up' },
-    { title: 'Pedidos', value: '38', change: '+5%', trend: 'up' },
-    { title: 'Productos', value: '24', change: '0%', trend: 'neutral' },
-    { title: 'Visitantes', value: '1,847', change: '+18%', trend: 'up' },
-  ];
-
-  const recentOrders = [
-    { id: '#001', customer: 'María González', amount: '₣ 45,000', status: 'Completado', date: 'Hoy' },
-    { id: '#002', customer: 'Carlos Mendez', amount: '₣ 78,500', status: 'Procesando', date: 'Ayer' },
-    { id: '#003', customer: 'Ana López', amount: '₣ 32,000', status: 'Enviado', date: '2 días' },
+    { 
+      title: 'Productos publicados', 
+      value: '0/10', 
+      subtitle: 'Límite del plan gratuito',
+      icon: <Package className="h-5 w-5 text-blue-600" />
+    },
+    { 
+      title: 'Visitas a la tienda', 
+      value: '0', 
+      subtitle: 'Últimos 30 días',
+      icon: <Eye className="h-5 w-5 text-green-600" />
+    },
+    { 
+      title: 'Pedidos', 
+      value: '0', 
+      subtitle: 'Total de pedidos',
+      icon: <ShoppingCart className="h-5 w-5 text-purple-600" />
+    },
+    { 
+      title: 'Plan actual', 
+      value: 'Gratuito', 
+      subtitle: 'Actualizar para más funciones',
+      icon: <TrendingUp className="h-5 w-5 text-orange-600" />,
+      hasButton: true
+    },
   ];
 
   return (
@@ -53,10 +67,10 @@ const Dashboard = () => {
       <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">U</span>
             </div>
-            <span className="text-xl font-bold text-secondary">Umpla</span>
+            <span className="text-xl font-bold text-gray-900">Umpla</span>
           </Link>
           <Button
             variant="ghost"
@@ -75,8 +89,8 @@ const Dashboard = () => {
               href="#"
               className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${
                 item.active
-                  ? 'text-primary bg-primary/10 border-r-2 border-primary'
-                  : 'text-gray-600 hover:text-primary hover:bg-gray-50'
+                  ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600'
+                  : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
               }`}
             >
               {item.icon}
@@ -86,11 +100,11 @@ const Dashboard = () => {
         </nav>
 
         <div className="absolute bottom-6 left-6 right-6">
-          <Card className="p-4 bg-primary/5 border-primary/20">
-            <HelpCircle className="h-8 w-8 text-primary mb-2" />
-            <p className="text-sm font-medium text-secondary mb-1">¿Necesitas ayuda?</p>
+          <Card className="p-4 bg-blue-50 border-blue-200">
+            <HelpCircle className="h-8 w-8 text-blue-600 mb-2" />
+            <p className="text-sm font-medium text-gray-900 mb-1">¿Necesitas ayuda?</p>
             <p className="text-xs text-gray-600 mb-3">Contacta con nuestro equipo</p>
-            <Button size="sm" variant="outline" className="w-full text-xs">
+            <Button size="sm" variant="outline" className="w-full text-xs border-blue-200 text-blue-600 hover:bg-blue-100">
               Soporte 24/7
             </Button>
           </Card>
@@ -109,7 +123,7 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-gray-200">
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4">
             <div className="flex items-center">
               <Button
                 variant="ghost"
@@ -119,125 +133,127 @@ const Dashboard = () => {
               >
                 <Menu className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-secondary">Dashboard</h1>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">¡Hola, {storeName}!</h1>
+                <p className="text-sm text-gray-600 mt-1">Aquí puedes gestionar tus productos, pedidos y configuración de tu tienda.</p>
+              </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <Link to="/store-example">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link to="/store-example" className="hidden sm:block">
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
                   Ver tienda
                 </Button>
               </Link>
-              <Button size="sm" className="bg-success hover:bg-success/90 text-black">
+              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="h-4 w-4 mr-2" />
-                Nuevo producto
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Bell className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="sm">
-                <User className="h-5 w-5" />
+                <span className="hidden sm:inline">Añadir producto</span>
+                <span className="sm:hidden">Añadir</span>
               </Button>
             </div>
           </div>
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-6">
-          {/* Welcome Card */}
-          <Card className="p-6 mb-8 bg-gradient-to-r from-primary to-primary/80 text-white border-0">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold mb-2">¡Bienvenido a tu tienda!</h2>
-                <p className="text-blue-100 mb-4">
-                  Tu tienda "Mi Negocio GQ" está online y lista para recibir pedidos
-                </p>
-                <Link to="/store-example">
-                  <Button variant="secondary" className="bg-white text-primary hover:bg-gray-50">
-                    Ver mi tienda
-                    <Eye className="ml-2 h-4 w-4" />
+        <main className="flex-1 p-4 sm:p-6">
+          {/* Payment Method Reminder */}
+          {!hasPaymentMethod && (
+            <Card className="p-4 sm:p-6 mb-6 sm:mb-8 bg-amber-50 border-amber-200">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-amber-800 mb-2">
+                    Aún no has configurado un método de pago. Hazlo aquí.
+                  </p>
+                  <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white">
+                    Agregar método de pago
                   </Button>
-                </Link>
-              </div>
-              <div className="hidden md:block">
-                <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center">
-                  <Package className="h-10 w-10 text-white" />
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          )}
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {stats.map((stat, index) => (
-              <Card key={index} className="p-6 bg-white border border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                    <p className="text-2xl font-bold text-secondary mt-1">{stat.value}</p>
-                  </div>
-                  <div className={`flex items-center gap-1 text-sm ${
-                    stat.trend === 'up' ? 'text-success' : stat.trend === 'down' ? 'text-red-500' : 'text-gray-500'
-                  }`}>
-                    {stat.trend === 'up' && <TrendingUp className="h-4 w-4" />}
-                    <span>{stat.change}</span>
+              <Card key={index} className="p-4 sm:p-6 bg-white border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    {stat.icon}
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">{stat.title}</p>
+                      <p className="text-lg sm:text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                    </div>
                   </div>
                 </div>
+                <p className="text-xs text-gray-500 mb-3">{stat.subtitle}</p>
+                {stat.hasButton && (
+                  <Button size="sm" variant="outline" className="w-full text-xs border-blue-200 text-blue-600 hover:bg-blue-50">
+                    Actualizar plan
+                  </Button>
+                )}
               </Card>
             ))}
           </div>
 
-          {/* Recent Orders */}
+          {/* Quick Actions */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6 bg-white border border-gray-100">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-secondary">Pedidos recientes</h3>
-                <Button variant="ghost" size="sm" className="text-primary">
-                  Ver todos
-                </Button>
-              </div>
-              <div className="space-y-4">
-                {recentOrders.map((order, index) => (
-                  <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                    <div>
-                      <p className="font-medium text-secondary">{order.customer}</p>
-                      <p className="text-sm text-gray-600">{order.id} • {order.date}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-secondary">{order.amount}</p>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        order.status === 'Completado' ? 'bg-success/20 text-success' :
-                        order.status === 'Procesando' ? 'bg-blue-100 text-blue-600' :
-                        'bg-yellow-100 text-yellow-600'
-                      }`}>
-                        {order.status}
-                      </span>
-                    </div>
+            <Card className="p-4 sm:p-6 bg-white border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Primeros pasos</h3>
+              <div className="space-y-3">
+                <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                  <Package className="h-5 w-5 text-blue-600 mr-3" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">Añadir tu primer producto</p>
+                    <p className="text-xs text-gray-600">Comienza subiendo productos a tu tienda</p>
                   </div>
-                ))}
+                  <Button size="sm" variant="outline">Añadir</Button>
+                </div>
+                
+                <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                  <CreditCard className="h-5 w-5 text-green-600 mr-3" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">Configurar pagos</p>
+                    <p className="text-xs text-gray-600">Acepta pagos de tus clientes</p>
+                  </div>
+                  <Button size="sm" variant="outline">Configurar</Button>
+                </div>
+                
+                <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                  <Store className="h-5 w-5 text-purple-600 mr-3" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">Personalizar tienda</p>
+                    <p className="text-xs text-gray-600">Cambia colores, logo y diseño</p>
+                  </div>
+                  <Button size="sm" variant="outline">Personalizar</Button>
+                </div>
               </div>
             </Card>
 
-            <Card className="p-6 bg-white border border-gray-100">
-              <h3 className="text-lg font-semibold text-secondary mb-6">Acciones rápidas</h3>
+            <Card className="p-4 sm:p-6 bg-white border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Plan Gratuito</h3>
               <div className="space-y-4">
-                <Button variant="outline" className="w-full justify-start">
-                  <Plus className="h-4 w-4 mr-3" />
-                  Agregar producto
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Palette className="h-4 w-4 mr-3" />
-                  Personalizar tienda
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <BarChart3 className="h-4 w-4 mr-3" />
-                  Ver estadísticas
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Settings className="h-4 w-4 mr-3" />
-                  Configurar pagos
-                </Button>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-2">¿Qué incluye tu plan?</h4>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>• Hasta 10 productos</li>
+                    <li>• Subdominio .umpla.gq</li>
+                    <li>• Carrito de compras</li>
+                    <li>• Soporte básico</li>
+                  </ul>
+                </div>
+                
+                <div className="border-t pt-4">
+                  <p className="text-sm text-gray-600 mb-3">
+                    ¿Necesitas más productos o un dominio personalizado?
+                  </p>
+                  <Link to="/pricing">
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                      Ver planes Premium
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </Card>
           </div>
