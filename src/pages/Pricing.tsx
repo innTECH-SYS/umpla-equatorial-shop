@@ -17,7 +17,7 @@ const Pricing = () => {
       price: t('pricing.basic.price'),
       period: '',
       description: t('pricing.basic.description'),
-      features: t('pricing.basic.features', { returnObjects: true }) as string[],
+      features: t('pricing.basic.features') as string[],
       buttonText: userPlan === 'basic' ? t('pricing.basic.button') : t('pricing.basic.button'),
       popular: false,
       current: userPlan === 'basic'
@@ -28,7 +28,7 @@ const Pricing = () => {
       price: t('pricing.professional.price'),
       period: t('pricing.professional.period'),
       description: t('pricing.professional.description'),
-      features: t('pricing.professional.features', { returnObjects: true }) as string[],
+      features: t('pricing.professional.features') as string[],
       buttonText: userPlan === 'professional' ? t('pricing.basic.button') : t('pricing.professional.button'),
       popular: true,
       current: userPlan === 'professional'
@@ -39,7 +39,7 @@ const Pricing = () => {
       price: t('pricing.premium.price'),
       period: t('pricing.premium.period'),
       description: t('pricing.premium.description'),
-      features: t('pricing.premium.features', { returnObjects: true }) as string[],
+      features: t('pricing.premium.features') as string[],
       buttonText: userPlan === 'premium' ? t('pricing.basic.button') : t('pricing.premium.button'),
       popular: false,
       current: userPlan === 'premium'

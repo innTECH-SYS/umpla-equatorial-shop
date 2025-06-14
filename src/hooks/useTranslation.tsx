@@ -9,7 +9,7 @@ export const useTranslation = () => {
     return {
       t: (key: string, params?: Record<string, any>) => {
         // Simple fallback translations for key parts
-        const fallbackTranslations: Record<string, string> = {
+        const fallbackTranslations: Record<string, any> = {
           'store.product_added': 'Producto agregado',
           'store.product_added_desc': `${params?.productName || 'Producto'} se agregó al carrito`,
           'store.our_products': 'Nuestros Productos',
@@ -17,12 +17,17 @@ export const useTranslation = () => {
           'store.last_units': `Últimas ${params?.count || 0} unidades`,
           'store.out_of_stock': 'Sin stock',
           'store.add_to_cart': 'Agregar al carrito',
-          'common.loading': 'Cargando...'
+          'common.loading': 'Cargando...',
+          'pricing.basic.features': ['Hasta 10 productos', 'Tienda básica', 'Soporte por email'],
+          'pricing.professional.features': ['Productos ilimitados', 'Análisis avanzados', 'Soporte prioritario'],
+          'pricing.premium.features': ['Todo lo de Profesional', 'API personalizada', 'Soporte 24/7']
         };
         return fallbackTranslations[key] || key;
       },
       language: 'es',
-      setLanguage: () => {}
+      setLanguage: () => {},
+      changeLanguage: () => {},
+      currentLanguage: 'es'
     };
   }
   return context;
