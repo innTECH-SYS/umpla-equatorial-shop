@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AddProductModal } from '@/components/AddProductModal';
 import { PaymentMethodsModal } from '@/components/PaymentMethodsModal';
 import { CustomizeStoreModal } from '@/components/CustomizeStoreModal';
@@ -10,6 +10,7 @@ import { PaymentMethodReminder } from '@/components/dashboard/PaymentMethodRemin
 import { StatsGrid } from '@/components/dashboard/StatsGrid';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { PlanCard } from '@/components/dashboard/PlanCard';
+import { StoreImprovementChecklist } from '@/components/dashboard/StoreImprovementChecklist';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,6 +22,23 @@ const Dashboard = () => {
   const [paymentMethodsOpen, setPaymentMethodsOpen] = useState(false);
   const [customizeStoreOpen, setCustomizeStoreOpen] = useState(false);
   const [referralsOpen, setReferralsOpen] = useState(false);
+
+  // Event listeners para abrir modales desde el checklist
+  useEffect(() => {
+    const handleOpenAddProductModal = () => setAddProductOpen(true);
+    const handleOpenCustomizeStoreModal = () => setCustomizeStoreOpen(true);
+    const handleOpenReferralsModal = () => setReferralsOpen(true);
+
+    window.addEventListener('openAddProductModal', handleOpenAddProductModal);
+    window.addEventListener('openCustomizeStoreModal', handleOpenCustomizeStoreModal);
+    window.addEventListener('openReferralsModal', handleOpenReferralsModal);
+
+    return () => {
+      window.removeEventListener('openAddProductModal', handleOpenAddProductModal);
+      window.removeEventListener('openCustomizeStoreModal', handleOpenCustomizeStoreModal);
+      window.removeEventListener('openReferralsModal', handleOpenReferralsModal);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -41,13 +59,16 @@ const Dashboard = () => {
         />
 
         {/* Content */}
-        <main className="flex-1 p-4 sm:p-6">
+        <main className="flex-1 p-4 sm:p-6 space-y-6">
           <PaymentMethodReminder 
             hasPaymentMethod={hasPaymentMethod}
             onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
           />
 
           <StatsGrid />
+
+          {/* Checklist de mejoras */}
+          <StoreImprovementChecklist />
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

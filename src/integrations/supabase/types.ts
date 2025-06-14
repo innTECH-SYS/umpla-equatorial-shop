@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      checklist_progreso: {
+        Row: {
+          completado: boolean
+          completado_el: string | null
+          created_at: string
+          id: string
+          item_id: string
+          updated_at: string
+          usuario_id: string
+        }
+        Insert: {
+          completado?: boolean
+          completado_el?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          updated_at?: string
+          usuario_id: string
+        }
+        Update: {
+          completado?: boolean
+          completado_el?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          updated_at?: string
+          usuario_id?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number | null
