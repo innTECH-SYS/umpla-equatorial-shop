@@ -55,13 +55,19 @@ export const useUserPlan = () => {
 
   const isPaidPlan = userPlan === 'professional' || userPlan === 'premium';
   const canManageStock = isPaidPlan;
-  const maxImages = isPaidPlan ? Infinity : 2;
+  
+  // Nuevos límites de imágenes por plan
+  const maxImages = userPlan === 'basic' ? 2 : userPlan === 'professional' ? 5 : 10;
+  
+  // Límites de productos por plan
+  const maxProducts = userPlan === 'basic' ? 10 : userPlan === 'professional' ? 50 : 100;
 
   return {
     userPlan,
     loading,
     isPaidPlan,
     canManageStock,
-    maxImages
+    maxImages,
+    maxProducts
   };
 };

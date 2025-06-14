@@ -1,11 +1,16 @@
 
-import { Check } from 'lucide-react';
+import { Check, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useUserPlan } from '@/hooks/useUserPlan';
 
 const Pricing = () => {
+  const { userPlan, loading } = useUserPlan();
+
   const plans = [
     {
+      id: 'basic',
       name: 'Basic',
       price: 'Gratis',
       period: '',
@@ -17,44 +22,63 @@ const Pricing = () => {
         'Sin gestión de stock',
         'Hasta 2 imágenes por producto'
       ],
-      buttonText: 'Comenzar gratis',
-      popular: false
+      buttonText: 'Plan actual',
+      popular: false,
+      current: userPlan === 'basic'
     },
     {
+      id: 'professional',
       name: 'Professional',
       price: '₣5,000',
       period: '/mes',
       description: 'Para negocios en crecimiento',
       features: [
-        'Hasta 100 productos',
+        'Hasta 50 productos',
         'Tienda personalizada',
         'Soporte prioritario',
         'Gestión completa de stock',
-        'Imágenes ilimitadas por producto',
-        'Análisis avanzados'
+        'Hasta 5 imágenes por producto',
+        'Análisis básicos'
       ],
-      buttonText: 'Comenzar ahora',
-      popular: true
+      buttonText: userPlan === 'professional' ? 'Plan actual' : 'Actualizar plan',
+      popular: true,
+      current: userPlan === 'professional'
     },
     {
+      id: 'premium',
       name: 'Premium',
       price: '₣10,000',
       period: '/mes',
       description: 'Para empresas establecidas',
       features: [
-        'Productos ilimitados',
+        'Hasta 100 productos',
+        'Productos extra con cuota adicional',
         'Tienda completamente personalizada',
         'Soporte 24/7',
         'Gestión completa de stock',
-        'Imágenes ilimitadas por producto',
+        'Hasta 10 imágenes por producto',
         'Análisis avanzados',
-        'Dominio personalizado',
+        'Dominio .gq gratuito por 1 año',
         'Múltiples métodos de pago'
       ],
-      buttonText: 'Comenzar ahora',
-      popular: false
+      buttonText: userPlan === 'premium' ? 'Plan actual' : 'Actualizar plan',
+      popular: false,
+      current: userPlan === 'premium'
     }
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mx-auto mb-2">
+            <span className="text-white font-bold text-lg">T</span>
+          </div>
+          <p className="text-gray-600">Cargando planes...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -63,7 +87,9 @@ const Pricing = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">TuTienda</h1>
-            <Button variant="outline">Volver al inicio</Button>
+            <Button variant="outline" onClick={() => window.history.back()}>
+              Volver
+            </Button>
           </div>
         </div>
       </div>
@@ -79,14 +105,34 @@ const Pricing = () => {
           </p>
         </div>
 
+        {/* Current Plan Indicator */}
+        {userPlan && (
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
+              <Crown className="h-4 w-4 text-blue-600" />
+              <span className="text-sm text-blue-800">
+                Tu plan actual: <span className="font-semibold capitalize">{userPlan}</span>
+              </span>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan, index) => (
-            <Card key={index} className={`relative ${plan.popular ? 'ring-2 ring-blue-500 shadow-lg scale-105' : ''}`}>
+            <Card key={index} className={`relative ${plan.popular ? 'ring-2 ring-blue-500 shadow-lg scale-105' : ''} ${plan.current ? 'ring-2 ring-green-500' : ''}`}>
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
                     Más popular
                   </span>
+                </div>
+              )}
+
+              {plan.current && (
+                <div className="absolute -top-4 right-4">
+                  <Badge className="bg-green-500 text-white">
+                    Plan actual
+                  </Badge>
                 </div>
               )}
               
@@ -110,8 +156,9 @@ const Pricing = () => {
                 </ul>
 
                 <Button 
-                  className={`w-full ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
-                  variant={plan.popular ? 'default' : 'outline'}
+                  className={`w-full ${plan.popular && !plan.current ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
+                  variant={plan.current ? 'outline' : plan.popular ? 'default' : 'outline'}
+                  disabled={plan.current}
                 >
                   {plan.buttonText}
                 </Button>
