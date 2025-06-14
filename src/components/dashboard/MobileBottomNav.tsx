@@ -1,14 +1,4 @@
-
-import { Button } from '@/components/ui/button';
-import { 
-  Home,
-  Package,
-  ShoppingCart,
-  CreditCard,
-  Store,
-  Users,
-  Plus
-} from 'lucide-react';
+import { Home, Package, ShoppingCart, BarChart3, MoreHorizontal, Plus } from 'lucide-react';
 
 interface MobileBottomNavProps {
   activeTab: string;
@@ -20,73 +10,63 @@ interface MobileBottomNavProps {
   onReferralsClick: () => void;
 }
 
-export const MobileBottomNav = ({
-  activeTab,
-  onTabChange,
+export const MobileBottomNav = ({ 
+  activeTab, 
+  onTabChange, 
   onAddProductClick,
   onProductsClick,
   onPaymentMethodsClick,
   onCustomizeStoreClick,
-  onReferralsClick
+  onReferralsClick 
 }: MobileBottomNavProps) => {
-  const tabs = [
-    { 
-      id: 'home', 
-      icon: <Home className="h-5 w-5" />, 
-      label: 'Inicio',
-      onClick: () => onTabChange('home')
-    },
-    { 
-      id: 'products', 
-      icon: <Package className="h-5 w-5" />, 
-      label: 'Productos',
-      onClick: onProductsClick
-    },
-    { 
-      id: 'add', 
-      icon: <Plus className="h-6 w-6" />, 
-      label: 'Añadir',
-      onClick: onAddProductClick,
-      isSpecial: true
-    },
-    { 
-      id: 'orders', 
-      icon: <ShoppingCart className="h-5 w-5" />, 
-      label: 'Pedidos',
-      onClick: () => onTabChange('orders')
-    },
-    { 
-      id: 'more', 
-      icon: <Store className="h-5 w-5" />, 
-      label: 'Más',
-      onClick: () => onTabChange('more')
-    }
+  const navItems = [
+    { id: 'home', label: 'Inicio', icon: Home },
+    { id: 'products', label: 'Productos', icon: Package },
+    { id: 'orders', label: 'Pedidos', icon: ShoppingCart },
+    { id: 'analytics', label: 'Reportes', icon: BarChart3 },
+    { id: 'more', label: 'Más', icon: MoreHorizontal }
   ];
 
+  const handleTabClick = (tabId: string) => {
+    if (tabId === 'products') {
+      onProductsClick();
+    } else {
+      onTabChange(tabId);
+    }
+  };
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2 z-50 lg:hidden">
-      <div className="flex justify-around items-center">
-        {tabs.map((tab) => (
-          <Button
-            key={tab.id}
-            variant="ghost"
-            size="sm"
-            className={`flex flex-col items-center gap-1 h-auto py-2 px-3 min-w-0 ${
-              tab.isSpecial 
-                ? 'bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3'
-                : activeTab === tab.id 
-                  ? 'text-blue-600' 
-                  : 'text-gray-600'
-            }`}
-            onClick={tab.onClick}
-          >
-            {tab.icon}
-            {!tab.isSpecial && (
-              <span className="text-xs font-medium">{tab.label}</span>
-            )}
-          </Button>
-        ))}
-      </div>
-    </div>
+    <>
+      <nav className="bg-white border-t border-gray-200 px-4 py-2 flex items-center justify-around sticky bottom-0 z-50">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleTabClick(item.id)}
+              className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
+                isActive 
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <Icon className="h-5 w-5 mb-1" />
+              <span className="text-xs font-medium">{item.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Floating Action Button */}
+      <button
+        onClick={onAddProductClick}
+        className="fixed bottom-20 right-4 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition-colors z-40"
+        aria-label="Agregar producto"
+      >
+        <Plus className="h-6 w-6" />
+      </button>
+    </>
   );
 };

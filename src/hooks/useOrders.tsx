@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
@@ -12,79 +13,11 @@ interface Order {
   estado: 'pendiente' | 'confirmado' | 'preparando' | 'enviado' | 'entregado' | 'cancelado';
   total: number;
   divisa: string;
-  fecha_pedido: string;
+  created_at: string;
   metodo_pago: string;
+  notas?: string;
   items_count?: number;
 }
-
-// Datos simulados hasta que se implementen las migraciones SQL
-const mockOrders: Order[] = [
-  {
-    id: '1',
-    numero_pedido: 'ORD-001',
-    nombre_cliente: 'María Nsue Obiang',
-    telefono_cliente: '+240 222 123 456',
-    direccion_entrega: 'Malabo, Bioko Norte, Guinea Ecuatorial',
-    estado: 'pendiente',
-    total: 15000,
-    divisa: 'XAF',
-    fecha_pedido: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    metodo_pago: 'Efectivo',
-    items_count: 3
-  },
-  {
-    id: '2',
-    numero_pedido: 'ORD-002',
-    nombre_cliente: 'Carlos Nguema Mba',
-    telefono_cliente: '+240 333 987 654',
-    direccion_entrega: 'Bata, Litoral, Guinea Ecuatorial',
-    estado: 'confirmado',
-    total: 25000,
-    divisa: 'XAF',
-    fecha_pedido: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    metodo_pago: 'Transferencia bancaria',
-    items_count: 2
-  },
-  {
-    id: '3',
-    numero_pedido: 'ORD-003',
-    nombre_cliente: 'Ana Ondo Bile',
-    telefono_cliente: '+240 555 555 123',
-    direccion_entrega: 'Ebebiyín, Kié-Ntem, Guinea Ecuatorial',
-    estado: 'enviado',
-    total: 18500,
-    divisa: 'XAF',
-    fecha_pedido: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-    metodo_pago: 'Mobile Money',
-    items_count: 1
-  },
-  {
-    id: '4',
-    numero_pedido: 'ORD-004',
-    nombre_cliente: 'Pedro Ela Nchama',
-    telefono_cliente: '+240 666 111 222',
-    direccion_entrega: 'Mongomo, Wele-Nzas, Guinea Ecuatorial',
-    estado: 'entregado',
-    total: 32000,
-    divisa: 'XAF',
-    fecha_pedido: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    metodo_pago: 'Efectivo',
-    items_count: 4
-  },
-  {
-    id: '5',
-    numero_pedido: 'ORD-005',
-    nombre_cliente: 'Isabel Mangue Owono',
-    telefono_cliente: '+240 777 333 444',
-    direccion_entrega: 'Evinayong, Centro Sur, Guinea Ecuatorial',
-    estado: 'preparando',
-    total: 12500,
-    divisa: 'XAF',
-    fecha_pedido: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-    metodo_pago: 'Transferencia bancaria',
-    items_count: 2
-  }
-];
 
 export const useOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -98,13 +31,58 @@ export const useOrders = () => {
     try {
       setLoading(true);
       
-      // Simular una pequeña demora para mostrar el loading
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Por ahora usamos datos simulados
-      setOrders(mockOrders);
-      
-      console.log('Orders loaded:', mockOrders.length);
+      // Obtener la tienda del usuario
+      const { data: tienda, error: tiendaError } = await supabase
+        .from('tiendas')
+        .select('id')
+        .eq('usuario_id', user.id)
+        .single();
+
+      if (tiendaError || !tienda) {
+        console.log('No store found for user');
+        setOrders([]);
+        return;
+      }
+
+      // Obtener pedidos con conteo de items
+      const { data: pedidosData, error: pedidosError } = await supabase
+        .from('pedidos')
+        .select(`
+          id,
+          numero_pedido,
+          nombre_cliente,
+          telefono_cliente,
+          direccion_entrega,
+          estado,
+          total,
+          divisa,
+          created_at,
+          metodo_pago,
+          notas
+        `)
+        .eq('tienda_id', tienda.id)
+        .order('created_at', { ascending: false });
+
+      if (pedidosError) throw pedidosError;
+
+      // Obtener conteo de items para cada pedido
+      const ordersWithItemCount = await Promise.all(
+        (pedidosData || []).map(async (pedido) => {
+          const { count } = await supabase
+            .from('pedido_items')
+            .select('*', { count: 'exact', head: true })
+            .eq('pedido_id', pedido.id);
+
+          return {
+            ...pedido,
+            fecha_pedido: pedido.created_at, // Para compatibilidad
+            items_count: count || 0
+          };
+        })
+      );
+
+      setOrders(ordersWithItemCount);
+      console.log('Orders loaded from database:', ordersWithItemCount.length);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
@@ -119,7 +97,14 @@ export const useOrders = () => {
 
   const updateOrderStatus = async (orderId: string, newStatus: Order['estado']) => {
     try {
-      // Simular actualización en datos locales
+      const { error } = await supabase
+        .from('pedidos')
+        .update({ estado: newStatus })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      // Actualizar estado local
       setOrders(prevOrders => 
         prevOrders.map(order => 
           order.id === orderId 

@@ -315,6 +315,110 @@ export type Database = {
           },
         ]
       }
+      pedido_items: {
+        Row: {
+          cantidad: number
+          created_at: string
+          id: string
+          nombre_producto: string
+          pedido_id: string | null
+          precio_unitario: number
+          producto_id: string | null
+          subtotal: number
+        }
+        Insert: {
+          cantidad?: number
+          created_at?: string
+          id?: string
+          nombre_producto: string
+          pedido_id?: string | null
+          precio_unitario: number
+          producto_id?: string | null
+          subtotal: number
+        }
+        Update: {
+          cantidad?: number
+          created_at?: string
+          id?: string
+          nombre_producto?: string
+          pedido_id?: string | null
+          precio_unitario?: number
+          producto_id?: string | null
+          subtotal?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedido_items_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pedido_items_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pedidos: {
+        Row: {
+          created_at: string
+          direccion_entrega: string
+          divisa: string
+          estado: string
+          id: string
+          metodo_pago: string
+          nombre_cliente: string
+          notas: string | null
+          numero_pedido: string
+          telefono_cliente: string
+          tienda_id: string | null
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          direccion_entrega: string
+          divisa?: string
+          estado?: string
+          id?: string
+          metodo_pago: string
+          nombre_cliente: string
+          notas?: string | null
+          numero_pedido: string
+          telefono_cliente: string
+          tienda_id?: string | null
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          direccion_entrega?: string
+          divisa?: string
+          estado?: string
+          id?: string
+          metodo_pago?: string
+          nombre_cliente?: string
+          notas?: string | null
+          numero_pedido?: string
+          telefono_cliente?: string
+          tienda_id?: string | null
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_tienda_id_fkey"
+            columns: ["tienda_id"]
+            isOneToOne: false
+            referencedRelation: "tiendas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pharmacies: {
         Row: {
           address: string
@@ -506,8 +610,11 @@ export type Database = {
           activo: boolean | null
           creado_el: string | null
           descripcion: string | null
+          destacado: boolean | null
+          disponible: boolean | null
           id: string
           imagen_url: string | null
+          imagenes: string[] | null
           nombre: string
           precio: number
           stock: number | null
@@ -518,8 +625,11 @@ export type Database = {
           activo?: boolean | null
           creado_el?: string | null
           descripcion?: string | null
+          destacado?: boolean | null
+          disponible?: boolean | null
           id?: string
           imagen_url?: string | null
+          imagenes?: string[] | null
           nombre: string
           precio: number
           stock?: number | null
@@ -530,8 +640,11 @@ export type Database = {
           activo?: boolean | null
           creado_el?: string | null
           descripcion?: string | null
+          destacado?: boolean | null
+          disponible?: boolean | null
           id?: string
           imagen_url?: string | null
+          imagenes?: string[] | null
           nombre?: string
           precio?: number
           stock?: number | null
@@ -809,7 +922,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_order_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       help_request_status: "open" | "fulfilled" | "closed"

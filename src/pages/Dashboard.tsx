@@ -65,6 +65,12 @@ const Dashboard = () => {
         );
       case 'orders':
         return <MobileOrdersView />;
+      case 'analytics':
+        return (
+          <div className="p-4 pb-20">
+            <SalesReports />
+          </div>
+        );
       case 'more':
         return (
           <MobileMoreMenu
@@ -119,6 +125,9 @@ const Dashboard = () => {
 
             {/* Checklist de mejoras */}
             <StoreImprovementChecklist />
+
+            {/* Sales Reports */}
+            <SalesReports />
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
