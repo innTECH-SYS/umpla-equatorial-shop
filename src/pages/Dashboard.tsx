@@ -16,6 +16,7 @@ import { StatsGrid } from '@/components/dashboard/StatsGrid';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { PlanCard } from '@/components/dashboard/PlanCard';
 import { StoreImprovementChecklist } from '@/components/dashboard/StoreImprovementChecklist';
+import { SalesReports } from '@/components/dashboard/SalesReports';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

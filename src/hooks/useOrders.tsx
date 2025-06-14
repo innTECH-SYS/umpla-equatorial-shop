@@ -75,7 +75,7 @@ export const useOrders = () => {
 
           return {
             ...pedido,
-            fecha_pedido: pedido.created_at, // Para compatibilidad
+            estado: pedido.estado as Order['estado'],
             items_count: count || 0
           };
         })
