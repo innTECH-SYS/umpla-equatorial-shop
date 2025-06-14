@@ -72,15 +72,15 @@ export const ImprovedLanguageSelector = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white border shadow-lg z-50 min-w-[160px]">
-        {languages.map((language) => (
+        {languages.map((lang) => (
           <DropdownMenuItem
-            key={language.code}
-            onClick={() => changeLanguage(language.code)}
+            key={lang.code}
+            onClick={() => changeLanguage(lang.code)}
             className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 px-3 py-2"
           >
-            <span className="text-lg">{language.flag}</span>
-            <span className="flex-1">{language.name}</span>
-            {language === language.code && (
+            <span className="text-lg">{lang.flag}</span>
+            <span className="flex-1">{lang.name}</span>
+            {language === lang.code && (
               <Check className="h-4 w-4 text-blue-600" />
             )}
           </DropdownMenuItem>
