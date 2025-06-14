@@ -92,16 +92,12 @@ export const AdminUsersTable = () => {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {user.tiendas?.length > 0 ? (
-                    <div className="space-y-1">
-                      {user.tiendas.map((tienda: any) => (
-                        <div key={tienda.id} className="flex items-center gap-2">
-                          <span className="text-sm">{tienda.nombre}</span>
-                          <Badge variant={tienda.activa ? "default" : "destructive"} className="text-xs">
-                            {tienda.activa ? "Activa" : "Inactiva"}
-                          </Badge>
-                        </div>
-                      ))}
+                  {user.tiendas ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">{user.tiendas.nombre}</span>
+                      <Badge variant={user.tiendas.activa ? "default" : "destructive"} className="text-xs">
+                        {user.tiendas.activa ? "Activa" : "Inactiva"}
+                      </Badge>
                     </div>
                   ) : (
                     <span className="text-gray-500 text-sm">Sin tiendas</span>

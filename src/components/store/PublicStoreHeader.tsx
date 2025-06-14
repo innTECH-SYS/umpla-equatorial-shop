@@ -25,7 +25,6 @@ interface PublicStoreHeaderProps {
 export const PublicStoreHeader = ({ store }: PublicStoreHeaderProps) => {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const { openCart, getTotalItems } = useCart();
-  const storeUrl = `${window.location.origin}/tienda/${store.subdominio}`;
 
   return (
     <>
@@ -121,7 +120,6 @@ export const PublicStoreHeader = ({ store }: PublicStoreHeaderProps) => {
       <ShareStoreModal 
         isOpen={shareModalOpen}
         onClose={() => setShareModalOpen(false)}
-        storeUrl={storeUrl}
         storeName={store.nombre}
       />
     </>
