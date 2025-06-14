@@ -16,20 +16,32 @@ import {
   Store,
   Eye,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  Users
 } from 'lucide-react';
+import { AddProductModal } from '@/components/AddProductModal';
+import { PaymentMethodsModal } from '@/components/PaymentMethodsModal';
+import { CustomizeStoreModal } from '@/components/CustomizeStoreModal';
+import { ReferralsModal } from '@/components/ReferralsModal';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [storeName] = useState("Mi Negocio GQ"); // This would come from user data
-  const [hasPaymentMethod] = useState(false); // This would come from user data
+  const [storeName] = useState("Mi Negocio GQ");
+  const [hasPaymentMethod] = useState(false);
+  
+  // Estados para los modales
+  const [addProductOpen, setAddProductOpen] = useState(false);
+  const [paymentMethodsOpen, setPaymentMethodsOpen] = useState(false);
+  const [customizeStoreOpen, setCustomizeStoreOpen] = useState(false);
+  const [referralsOpen, setReferralsOpen] = useState(false);
 
   const menuItems = [
     { icon: <Home className="h-5 w-5" />, label: 'Inicio', active: true },
     { icon: <Package className="h-5 w-5" />, label: 'Mis productos' },
     { icon: <ShoppingCart className="h-5 w-5" />, label: 'Pedidos' },
-    { icon: <CreditCard className="h-5 w-5" />, label: 'Métodos de pago' },
-    { icon: <Store className="h-5 w-5" />, label: 'Configuración de tienda' },
+    { icon: <CreditCard className="h-5 w-5" />, label: 'Métodos de pago', onClick: () => setPaymentMethodsOpen(true) },
+    { icon: <Store className="h-5 w-5" />, label: 'Configuración de tienda', onClick: () => setCustomizeStoreOpen(true) },
+    { icon: <Users className="h-5 w-5" />, label: 'Referidos', onClick: () => setReferralsOpen(true) },
     { icon: <HelpCircle className="h-5 w-5" />, label: 'Soporte' },
   ];
 
@@ -84,10 +96,10 @@ const Dashboard = () => {
         
         <nav className="mt-6">
           {menuItems.map((item, index) => (
-            <a
+            <button
               key={index}
-              href="#"
-              className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${
+              onClick={item.onClick}
+              className={`w-full flex items-center px-6 py-3 text-sm font-medium transition-colors text-left ${
                 item.active
                   ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600'
                   : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
@@ -95,7 +107,7 @@ const Dashboard = () => {
             >
               {item.icon}
               <span className="ml-3">{item.label}</span>
-            </a>
+            </button>
           ))}
         </nav>
 
@@ -146,7 +158,11 @@ const Dashboard = () => {
                   Ver tienda
                 </Button>
               </Link>
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button 
+                size="sm" 
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => setAddProductOpen(true)}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Añadir producto</span>
                 <span className="sm:hidden">Añadir</span>
@@ -166,7 +182,11 @@ const Dashboard = () => {
                   <p className="text-sm font-medium text-amber-800 mb-2">
                     Aún no has configurado un método de pago. Hazlo aquí.
                   </p>
-                  <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white">
+                  <Button 
+                    size="sm" 
+                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                    onClick={() => setPaymentMethodsOpen(true)}
+                  >
                     Agregar método de pago
                   </Button>
                 </div>
@@ -208,7 +228,13 @@ const Dashboard = () => {
                     <p className="text-sm font-medium text-gray-900">Añadir tu primer producto</p>
                     <p className="text-xs text-gray-600">Comienza subiendo productos a tu tienda</p>
                   </div>
-                  <Button size="sm" variant="outline">Añadir</Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setAddProductOpen(true)}
+                  >
+                    Añadir
+                  </Button>
                 </div>
                 
                 <div className="flex items-center p-3 bg-gray-50 rounded-lg">
@@ -217,7 +243,13 @@ const Dashboard = () => {
                     <p className="text-sm font-medium text-gray-900">Configurar pagos</p>
                     <p className="text-xs text-gray-600">Acepta pagos de tus clientes</p>
                   </div>
-                  <Button size="sm" variant="outline">Configurar</Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setPaymentMethodsOpen(true)}
+                  >
+                    Configurar
+                  </Button>
                 </div>
                 
                 <div className="flex items-center p-3 bg-gray-50 rounded-lg">
@@ -226,7 +258,28 @@ const Dashboard = () => {
                     <p className="text-sm font-medium text-gray-900">Personalizar tienda</p>
                     <p className="text-xs text-gray-600">Cambia colores, logo y diseño</p>
                   </div>
-                  <Button size="sm" variant="outline">Personalizar</Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setCustomizeStoreOpen(true)}
+                  >
+                    Personalizar
+                  </Button>
+                </div>
+
+                <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                  <Users className="h-5 w-5 text-indigo-600 mr-3" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">Programa de referidos</p>
+                    <p className="text-xs text-gray-600">Invita amigos y gana productos extra</p>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setReferralsOpen(true)}
+                  >
+                    Ver referidos
+                  </Button>
                 </div>
               </div>
             </Card>
@@ -259,6 +312,24 @@ const Dashboard = () => {
           </div>
         </main>
       </div>
+
+      {/* Modales */}
+      <AddProductModal 
+        open={addProductOpen} 
+        onOpenChange={setAddProductOpen} 
+      />
+      <PaymentMethodsModal 
+        open={paymentMethodsOpen} 
+        onOpenChange={setPaymentMethodsOpen} 
+      />
+      <CustomizeStoreModal 
+        open={customizeStoreOpen} 
+        onOpenChange={setCustomizeStoreOpen} 
+      />
+      <ReferralsModal 
+        open={referralsOpen} 
+        onOpenChange={setReferralsOpen} 
+      />
     </div>
   );
 };
