@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { CheckCircle2, Circle, Store, CreditCard, Palette, Users, Shield, ChevronRight } from 'lucide-react';
 import { KYCModal } from '@/components/KYCModal';
 import { useUserPlan } from '@/hooks/useUserPlan';
+import { useChecklistProgress } from '@/hooks/useChecklistProgress';
 
 interface ChecklistItem {
   id: string;
@@ -22,7 +23,7 @@ interface ChecklistItem {
 export const StoreImprovementChecklist = () => {
   const { kycStatus } = useUserPlan();
   const [kycModalOpen, setKycModalOpen] = useState(false);
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const { isCompleted, updateProgress, loading } = useChecklistProgress();
 
   const items: ChecklistItem[] = [
     {
@@ -32,7 +33,7 @@ export const StoreImprovementChecklist = () => {
       icon: <Store className="h-5 w-5" />,
       action: () => window.dispatchEvent(new CustomEvent('openAddProductModal')),
       actionText: 'Agregar producto',
-      completed: false
+      completed: isCompleted('add-product')
     },
     {
       id: 'kyc-verification',
@@ -51,7 +52,7 @@ export const StoreImprovementChecklist = () => {
       icon: <Palette className="h-5 w-5" />,
       action: () => window.dispatchEvent(new CustomEvent('openCustomizeStoreModal')),
       actionText: 'Personalizar',
-      completed: false
+      completed: isCompleted('customize-store')
     },
     {
       id: 'payment-methods',
@@ -60,7 +61,7 @@ export const StoreImprovementChecklist = () => {
       icon: <CreditCard className="h-5 w-5" />,
       action: () => window.dispatchEvent(new CustomEvent('openPaymentMethodsModal')),
       actionText: 'Configurar',
-      completed: false
+      completed: isCompleted('payment-methods')
     },
     {
       id: 'referrals',
@@ -69,25 +70,33 @@ export const StoreImprovementChecklist = () => {
       icon: <Users className="h-5 w-5" />,
       action: () => window.dispatchEvent(new CustomEvent('openReferralsModal')),
       actionText: 'Ver programa',
-      completed: false
+      completed: isCompleted('referrals')
     }
   ];
 
-  const completedCount = items.filter(item => item.completed || checkedItems.includes(item.id)).length;
+  const completedCount = items.filter(item => item.completed).length;
   const progressPercentage = (completedCount / items.length) * 100;
 
-  useEffect(() => {
-    // Simular algunos items completados para demo
-    setCheckedItems(['add-product']);
-  }, []);
-
   const toggleItem = (itemId: string) => {
-    setCheckedItems(prev => 
-      prev.includes(itemId) 
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
+    const currentStatus = isCompleted(itemId);
+    updateProgress(itemId, !currentStatus);
   };
+
+  if (loading) {
+    return (
+      <Card className="p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-2 bg-gray-200 rounded"></div>
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-16 bg-gray-100 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -113,7 +122,7 @@ export const StoreImprovementChecklist = () => {
 
           <div className="space-y-3">
             {items.map((item) => {
-              const isCompleted = item.completed || checkedItems.includes(item.id);
+              const isCompleted = item.completed;
               
               return (
                 <div
@@ -128,7 +137,7 @@ export const StoreImprovementChecklist = () => {
                     <button
                       onClick={() => toggleItem(item.id)}
                       className="flex-shrink-0"
-                      disabled={item.completed}
+                      disabled={item.id === 'kyc-verification'} // KYC status managed separately
                     >
                       {isCompleted ? (
                         <CheckCircle2 className="h-6 w-6 text-green-600" />

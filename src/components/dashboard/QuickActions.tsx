@@ -1,84 +1,74 @@
 
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Package, CreditCard, Store, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Plus, Package, CreditCard, Palette, Users } from 'lucide-react';
 
 interface QuickActionsProps {
   onAddProductClick: () => void;
+  onProductsClick: () => void;
   onPaymentMethodsClick: () => void;
   onCustomizeStoreClick: () => void;
   onReferralsClick: () => void;
 }
 
-export const QuickActions = ({ 
-  onAddProductClick, 
-  onPaymentMethodsClick, 
+export const QuickActions = ({
+  onAddProductClick,
+  onProductsClick,
+  onPaymentMethodsClick,
   onCustomizeStoreClick,
-  onReferralsClick 
+  onReferralsClick
 }: QuickActionsProps) => {
   return (
-    <Card className="p-4 sm:p-6 bg-white border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Primeros pasos</h3>
-      <div className="space-y-3">
-        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-          <Package className="h-5 w-5 text-blue-600 mr-3" />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-900">Añadir tu primer producto</p>
-            <p className="text-xs text-gray-600">Comienza subiendo productos a tu tienda</p>
+    <Card className="p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Acciones rápidas</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 justify-start h-auto p-4"
+          onClick={onAddProductClick}
+        >
+          <Plus className="h-5 w-5 text-blue-600" />
+          <div className="text-left">
+            <div className="font-medium">Añadir producto</div>
+            <div className="text-sm text-gray-500">Agregar nuevo producto</div>
           </div>
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={onAddProductClick}
-          >
-            Añadir
-          </Button>
-        </div>
-        
-        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-          <CreditCard className="h-5 w-5 text-green-600 mr-3" />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-900">Configurar pagos</p>
-            <p className="text-xs text-gray-600">Acepta pagos de tus clientes</p>
-          </div>
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={onPaymentMethodsClick}
-          >
-            Configurar
-          </Button>
-        </div>
-        
-        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-          <Store className="h-5 w-5 text-purple-600 mr-3" />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-900">Personalizar tienda</p>
-            <p className="text-xs text-gray-600">Cambia colores, logo y diseño</p>
-          </div>
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={onCustomizeStoreClick}
-          >
-            Personalizar
-          </Button>
-        </div>
+        </Button>
 
-        <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-          <Users className="h-5 w-5 text-indigo-600 mr-3" />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-900">Programa de referidos</p>
-            <p className="text-xs text-gray-600">Invita amigos y gana productos extra</p>
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 justify-start h-auto p-4"
+          onClick={onProductsClick}
+        >
+          <Package className="h-5 w-5 text-green-600" />
+          <div className="text-left">
+            <div className="font-medium">Ver productos</div>
+            <div className="text-sm text-gray-500">Gestionar inventario</div>
           </div>
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={onReferralsClick}
-          >
-            Ver referidos
-          </Button>
-        </div>
+        </Button>
+
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 justify-start h-auto p-4"
+          onClick={onPaymentMethodsClick}
+        >
+          <CreditCard className="h-5 w-5 text-purple-600" />
+          <div className="text-left">
+            <div className="font-medium">Métodos de pago</div>
+            <div className="text-sm text-gray-500">Configurar pagos</div>
+          </div>
+        </Button>
+
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 justify-start h-auto p-4"
+          onClick={onCustomizeStoreClick}
+        >
+          <Palette className="h-5 w-5 text-orange-600" />
+          <div className="text-left">
+            <div className="font-medium">Personalizar</div>
+            <div className="text-sm text-gray-500">Diseño de tienda</div>
+          </div>
+        </Button>
       </div>
     </Card>
   );

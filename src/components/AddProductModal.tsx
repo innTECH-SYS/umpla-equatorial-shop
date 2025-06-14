@@ -7,11 +7,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useAuth } from '@/hooks/useAuth';
+import { Switch } from '@/components/ui/switch';
 import { useUserPlan } from '@/hooks/useUserPlan';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Crown, Info } from 'lucide-react';
+import { useProducts } from '@/hooks/useProducts';
+import { useChecklistProgress } from '@/hooks/useChecklistProgress';
+import { Crown, Info, Plus, X } from 'lucide-react';
 
 interface AddProductModalProps {
   open: boolean;
@@ -27,85 +27,62 @@ export const AddProductModal = ({ open, onOpenChange }: AddProductModalProps) =>
     stock: '',
     tipo: 'físico',
     imagen_url: '',
-    imagenes_adicionales: ['']
+    imagenes: [''],
+    destacado: false,
+    disponible: true
   });
-  const { user } = useAuth();
-  const { toast } = useToast();
+  
   const { canManageStock, maxImages, isPaidPlan } = useUserPlan();
+  const { addProduct } = useProducts();
+  const { updateProgress } = useChecklistProgress();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
-
     setLoading(true);
+
     try {
-      // Primero obtener la tienda del usuario
-      const { data: tienda, error: tiendaError } = await supabase
-        .from('tiendas')
-        .select('id')
-        .eq('usuario_id', user.id)
-        .single();
-
-      if (tiendaError || !tienda) {
-        toast({
-          title: "Error",
-          description: "No se encontró tu tienda. Crea una tienda primero.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // Filtrar imágenes válidas
-      const imagenes = [formData.imagen_url, ...formData.imagenes_adicionales].filter(url => url.trim() !== '');
+      // Filter valid images
+      const imagenes = [formData.imagen_url, ...formData.imagenes].filter(url => url.trim() !== '');
       
-      // Validar número de imágenes según el plan
+      // Validate image count
       if (imagenes.length > maxImages) {
-        toast({
-          title: "Límite de imágenes excedido",
-          description: `Tu plan permite hasta ${maxImages} imágenes. Actualiza tu plan para añadir más.`,
-          variant: "destructive"
-        });
-        return;
+        throw new Error(`Tu plan permite hasta ${maxImages} imágenes`);
       }
 
-      // Crear el producto
-      const { error } = await supabase
-        .from('productos')
-        .insert({
-          nombre: formData.nombre,
-          descripcion: formData.descripcion,
-          precio: parseFloat(formData.precio),
-          stock: canManageStock ? parseInt(formData.stock) || 0 : 0,
-          tipo: formData.tipo,
-          imagen_url: formData.imagen_url || null,
-          tienda_id: tienda.id
+      const productData = {
+        nombre: formData.nombre,
+        descripcion: formData.descripcion || undefined,
+        precio: parseFloat(formData.precio),
+        stock: canManageStock ? parseInt(formData.stock) || 0 : 0,
+        tipo: formData.tipo,
+        imagen_url: formData.imagen_url || undefined,
+        imagenes: imagenes.length > 1 ? imagenes : undefined,
+        destacado: formData.destacado,
+        disponible: formData.disponible
+      };
+
+      const result = await addProduct(productData);
+      
+      if (result) {
+        // Mark add-product as completed in checklist
+        await updateProgress('add-product', true);
+        
+        // Reset form and close modal
+        setFormData({
+          nombre: '',
+          descripcion: '',
+          precio: '',
+          stock: '',
+          tipo: 'físico',
+          imagen_url: '',
+          imagenes: [''],
+          destacado: false,
+          disponible: true
         });
-
-      if (error) throw error;
-
-      toast({
-        title: "¡Producto añadido!",
-        description: "Tu producto se ha añadido correctamente a tu tienda."
-      });
-
-      // Resetear form y cerrar modal
-      setFormData({
-        nombre: '',
-        descripcion: '',
-        precio: '',
-        stock: '',
-        tipo: 'físico',
-        imagen_url: '',
-        imagenes_adicionales: ['']
-      });
-      onOpenChange(false);
+        onOpenChange(false);
+      }
     } catch (error) {
       console.error('Error adding product:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo añadir el producto. Inténtalo de nuevo.",
-        variant: "destructive"
-      });
     } finally {
       setLoading(false);
     }
@@ -113,39 +90,33 @@ export const AddProductModal = ({ open, onOpenChange }: AddProductModalProps) =>
 
   const validateImageFormat = (url: string) => {
     if (!url) return true;
-    const validFormats = /\.(jpg|jpeg|png)$/i;
+    const validFormats = /\.(jpg|jpeg|png|webp)$/i;
     return validFormats.test(url);
   };
 
   const addImageField = () => {
-    if (formData.imagenes_adicionales.length + 1 < maxImages) {
+    if (formData.imagenes.length < maxImages - 1) {
       setFormData({
         ...formData,
-        imagenes_adicionales: [...formData.imagenes_adicionales, '']
-      });
-    } else {
-      toast({
-        title: "Límite de imágenes",
-        description: `Tu plan permite hasta ${maxImages} imágenes. Actualiza tu plan para añadir más.`,
-        variant: "destructive"
+        imagenes: [...formData.imagenes, '']
       });
     }
   };
 
   const removeImageField = (index: number) => {
-    const newImages = formData.imagenes_adicionales.filter((_, i) => i !== index);
+    const newImages = formData.imagenes.filter((_, i) => i !== index);
     setFormData({
       ...formData,
-      imagenes_adicionales: newImages
+      imagenes: newImages
     });
   };
 
   const updateImageField = (index: number, value: string) => {
-    const newImages = [...formData.imagenes_adicionales];
+    const newImages = [...formData.imagenes];
     newImages[index] = value;
     setFormData({
       ...formData,
-      imagenes_adicionales: newImages
+      imagenes: newImages
     });
   };
 
@@ -233,9 +204,9 @@ export const AddProductModal = ({ open, onOpenChange }: AddProductModalProps) =>
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Label htmlFor="imagen_url">Imagen principal</Label>
-                {!isPaidPlan && (
-                  <span className="text-xs text-gray-500">({formData.imagen_url ? 1 : 0}/{maxImages})</span>
-                )}
+                <span className="text-xs text-gray-500">
+                  ({[formData.imagen_url, ...formData.imagenes].filter(Boolean).length}/{maxImages})
+                </span>
               </div>
               <Input
                 id="imagen_url"
@@ -245,11 +216,11 @@ export const AddProductModal = ({ open, onOpenChange }: AddProductModalProps) =>
                 placeholder="https://ejemplo.com/imagen.jpg"
               />
               {formData.imagen_url && !validateImageFormat(formData.imagen_url) && (
-                <p className="text-sm text-red-500 mt-1">Solo se permiten archivos JPG, JPEG y PNG</p>
+                <p className="text-sm text-red-500 mt-1">Solo se permiten archivos JPG, JPEG, PNG y WebP</p>
               )}
             </div>
 
-            {/* Imágenes adicionales */}
+            {/* Additional images for paid plans */}
             {isPaidPlan && (
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -259,12 +230,13 @@ export const AddProductModal = ({ open, onOpenChange }: AddProductModalProps) =>
                     variant="outline"
                     size="sm"
                     onClick={addImageField}
-                    disabled={formData.imagenes_adicionales.length >= maxImages - 1}
+                    disabled={formData.imagenes.length >= maxImages - 1}
+                    className="h-8"
                   >
-                    Añadir imagen
+                    <Plus className="h-3 w-3" />
                   </Button>
                 </div>
-                {formData.imagenes_adicionales.map((imagen, index) => (
+                {formData.imagenes.map((imagen, index) => (
                   <div key={index} className="flex gap-2 mb-2">
                     <Input
                       type="url"
@@ -277,15 +249,43 @@ export const AddProductModal = ({ open, onOpenChange }: AddProductModalProps) =>
                       variant="outline"
                       size="sm"
                       onClick={() => removeImageField(index)}
+                      className="h-10 w-10 p-0"
                     >
-                      ×
+                      <X className="h-4 w-4" />
                     </Button>
                   </div>
                 ))}
               </div>
             )}
 
-            {!isPaidPlan && (formData.imagen_url || formData.imagenes_adicionales.some(img => img)) && (
+            {/* Product options */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="destacado">Producto destacado</Label>
+                  <p className="text-xs text-gray-500">Aparecerá en la sección de productos destacados</p>
+                </div>
+                <Switch
+                  id="destacado"
+                  checked={formData.destacado}
+                  onCheckedChange={(checked) => setFormData({...formData, destacado: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="disponible">Disponible para venta</Label>
+                  <p className="text-xs text-gray-500">Los clientes podrán ver y comprar este producto</p>
+                </div>
+                <Switch
+                  id="disponible"
+                  checked={formData.disponible}
+                  onCheckedChange={(checked) => setFormData({...formData, disponible: checked})}
+                />
+              </div>
+            </div>
+
+            {!isPaidPlan && (formData.imagen_url || formData.imagenes.some(img => img)) && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <div className="flex items-center gap-2">
                   <Crown className="h-4 w-4 text-blue-600" />

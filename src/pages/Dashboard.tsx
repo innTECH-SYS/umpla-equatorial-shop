@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { AddProductModal } from '@/components/AddProductModal';
+import { ProductsModal } from '@/components/ProductsModal';
 import { PaymentMethodsModal } from '@/components/PaymentMethodsModal';
 import { CustomizeStoreModal } from '@/components/CustomizeStoreModal';
 import { ReferralsModal } from '@/components/ReferralsModal';
@@ -19,6 +20,7 @@ const Dashboard = () => {
   
   // Estados para los modales
   const [addProductOpen, setAddProductOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
   const [paymentMethodsOpen, setPaymentMethodsOpen] = useState(false);
   const [customizeStoreOpen, setCustomizeStoreOpen] = useState(false);
   const [referralsOpen, setReferralsOpen] = useState(false);
@@ -28,15 +30,18 @@ const Dashboard = () => {
     const handleOpenAddProductModal = () => setAddProductOpen(true);
     const handleOpenCustomizeStoreModal = () => setCustomizeStoreOpen(true);
     const handleOpenReferralsModal = () => setReferralsOpen(true);
+    const handleOpenPaymentMethodsModal = () => setPaymentMethodsOpen(true);
 
     window.addEventListener('openAddProductModal', handleOpenAddProductModal);
     window.addEventListener('openCustomizeStoreModal', handleOpenCustomizeStoreModal);
     window.addEventListener('openReferralsModal', handleOpenReferralsModal);
+    window.addEventListener('openPaymentMethodsModal', handleOpenPaymentMethodsModal);
 
     return () => {
       window.removeEventListener('openAddProductModal', handleOpenAddProductModal);
       window.removeEventListener('openCustomizeStoreModal', handleOpenCustomizeStoreModal);
       window.removeEventListener('openReferralsModal', handleOpenReferralsModal);
+      window.removeEventListener('openPaymentMethodsModal', handleOpenPaymentMethodsModal);
     };
   }, []);
 
@@ -48,6 +53,7 @@ const Dashboard = () => {
         onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
         onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
         onReferralsClick={() => setReferralsOpen(true)}
+        onProductsClick={() => setProductsOpen(true)}
       />
 
       {/* Main Content */}
@@ -77,6 +83,7 @@ const Dashboard = () => {
               onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
               onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
               onReferralsClick={() => setReferralsOpen(true)}
+              onProductsClick={() => setProductsOpen(true)}
             />
             <PlanCard />
           </div>
@@ -87,6 +94,11 @@ const Dashboard = () => {
       <AddProductModal 
         open={addProductOpen} 
         onOpenChange={setAddProductOpen} 
+      />
+      <ProductsModal 
+        open={productsOpen} 
+        onOpenChange={setProductsOpen}
+        onAddProduct={() => setAddProductOpen(true)}
       />
       <PaymentMethodsModal 
         open={paymentMethodsOpen} 
