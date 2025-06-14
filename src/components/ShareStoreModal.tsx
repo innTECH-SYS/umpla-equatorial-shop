@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Share2, Copy, MessageCircle, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface ShareStoreModalProps {
   isOpen: boolean;
@@ -56,7 +56,7 @@ export const ShareStoreModal = ({ isOpen, onClose, storeUrl, storeName }: ShareS
           {/* QR Code */}
           <div className="flex justify-center">
             <div className="bg-white p-4 rounded-lg border">
-              <QRCode 
+              <QRCodeSVG 
                 value={storeUrl} 
                 size={200}
                 level="M"
