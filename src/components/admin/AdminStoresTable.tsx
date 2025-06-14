@@ -6,9 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
 import { Store } from 'lucide-react';
+import { AdminStoreActions } from './AdminStoreActions';
 
 export const AdminStoresTable = () => {
-  const { data: stores, isLoading } = useQuery({
+  const { data: stores, isLoading, refetch } = useQuery({
     queryKey: ['admin-stores'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -65,10 +66,11 @@ export const AdminStoresTable = () => {
             <TableRow>
               <TableHead>Tienda</TableHead>
               <TableHead>Propietario</TableHead>
-              <TableHead>Estado</TableHead>
               <TableHead>Productos</TableHead>
               <TableHead>Categoría</TableHead>
               <TableHead>Fecha de Creación</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead>Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -98,11 +100,6 @@ export const AdminStoresTable = () => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={store.activa ? "default" : "destructive"}>
-                    {store.activa ? "Activa" : "Inactiva"}
-                  </Badge>
-                </TableCell>
-                <TableCell>
                   <span className="text-sm">{store.productos?.length || 0} productos</span>
                 </TableCell>
                 <TableCell>
@@ -110,6 +107,14 @@ export const AdminStoresTable = () => {
                 </TableCell>
                 <TableCell>
                   {new Date(store.creado_el).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Badge variant={store.activa ? "default" : "destructive"}>
+                    {store.activa ? "Activa" : "Inactiva"}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <AdminStoreActions store={store} onUpdate={refetch} />
                 </TableCell>
               </TableRow>
             ))}

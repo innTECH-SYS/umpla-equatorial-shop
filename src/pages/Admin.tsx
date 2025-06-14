@@ -15,14 +15,17 @@ import {
   TrendingUp,
   AlertCircle,
   Settings,
-  Eye,
-  Ban,
-  CheckCircle
+  BarChart3,
+  Shield
 } from 'lucide-react';
 import { AdminStoresTable } from '@/components/admin/AdminStoresTable';
 import { AdminUsersTable } from '@/components/admin/AdminUsersTable';
 import { AdminOrdersTable } from '@/components/admin/AdminOrdersTable';
 import { AdminStats } from '@/components/admin/AdminStats';
+import { AdminAnalytics } from '@/components/admin/AdminAnalytics';
+import { AdminModeration } from '@/components/admin/AdminModeration';
+import { AdminOrderManagement } from '@/components/admin/AdminOrderManagement';
+import { AdminSystemConfig } from '@/components/admin/AdminSystemConfig';
 
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
@@ -103,10 +106,14 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Analytics
             </TabsTrigger>
             <TabsTrigger value="stores" className="flex items-center gap-2">
               <Store className="h-4 w-4" />
@@ -120,6 +127,10 @@ const Admin = () => {
               <ShoppingBag className="h-4 w-4" />
               Pedidos
             </TabsTrigger>
+            <TabsTrigger value="moderation" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Moderación
+            </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
               Configuración
@@ -128,6 +139,10 @@ const Admin = () => {
 
           <TabsContent value="dashboard">
             <AdminStats />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <AdminAnalytics />
           </TabsContent>
 
           <TabsContent value="stores">
@@ -139,21 +154,15 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="orders">
-            <AdminOrdersTable />
+            <AdminOrderManagement />
+          </TabsContent>
+
+          <TabsContent value="moderation">
+            <AdminModeration />
           </TabsContent>
 
           <TabsContent value="settings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Configuración del Sistema</CardTitle>
-                <CardDescription>
-                  Configuraciones generales de la plataforma
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Funcionalidad en desarrollo...</p>
-              </CardContent>
-            </Card>
+            <AdminSystemConfig />
           </TabsContent>
         </Tabs>
       </main>
