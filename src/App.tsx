@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
 import Pricing from "./pages/Pricing";
 import StoreExample from "./pages/StoreExample";
+import StoreProfile from "./pages/StoreProfile";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +101,7 @@ function App() {
               <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/store-example" element={<StoreExample />} />
+              <Route path="/tienda/:subdomain" element={<StoreProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -595,38 +595,53 @@ export type Database = {
       tiendas: {
         Row: {
           activa: boolean | null
+          banner_url: string | null
           categoria: string | null
           creado_el: string | null
+          descripcion: string | null
           dominio_personal: string | null
           id: string
           logo_url: string | null
           nombre: string
           plan_id: string | null
           subdominio: string | null
+          telefono: string | null
+          telefono_whatsapp: string | null
+          ubicacion: string | null
           usuario_id: string | null
         }
         Insert: {
           activa?: boolean | null
+          banner_url?: string | null
           categoria?: string | null
           creado_el?: string | null
+          descripcion?: string | null
           dominio_personal?: string | null
           id?: string
           logo_url?: string | null
           nombre: string
           plan_id?: string | null
           subdominio?: string | null
+          telefono?: string | null
+          telefono_whatsapp?: string | null
+          ubicacion?: string | null
           usuario_id?: string | null
         }
         Update: {
           activa?: boolean | null
+          banner_url?: string | null
           categoria?: string | null
           creado_el?: string | null
+          descripcion?: string | null
           dominio_personal?: string | null
           id?: string
           logo_url?: string | null
           nombre?: string
           plan_id?: string | null
           subdominio?: string | null
+          telefono?: string | null
+          telefono_whatsapp?: string | null
+          ubicacion?: string | null
           usuario_id?: string | null
         }
         Relationships: [
@@ -642,6 +657,44 @@ export type Database = {
             columns: ["usuario_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tiendas_seo: {
+        Row: {
+          created_at: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          og_image_url: string | null
+          tienda_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image_url?: string | null
+          tienda_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image_url?: string | null
+          tienda_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tiendas_seo_tienda_id_fkey"
+            columns: ["tienda_id"]
+            isOneToOne: false
+            referencedRelation: "tiendas"
             referencedColumns: ["id"]
           },
         ]
