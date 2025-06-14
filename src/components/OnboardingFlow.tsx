@@ -1,137 +1,89 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Globe, Store, Shield, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
-import { 
-  Globe, 
-  Store, 
-  Shield, 
-  ChevronRight, 
-  ChevronLeft,
-  Sparkles,
-  MapPin,
-  CreditCard
-} from 'lucide-react';
 
 interface OnboardingFlowProps {
   onComplete: () => void;
 }
 
 export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
-  const { t, changeLanguage, language } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
+  const { t, changeLanguage, language } = useTranslation();
+
+  const languages = [
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'en', name: 'English', flag: '🇺🇸' }
+  ];
 
   const steps = [
     {
-      id: 'language',
-      icon: <Globe className="h-12 w-12 text-blue-600" />,
+      icon: <Globe className="h-16 w-16 text-blue-600 mx-auto mb-4" />,
       title: t('onboarding.step1.title'),
-      description: t('onboarding.step1.description'),
       content: (
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              variant={language === 'es' ? 'default' : 'outline'}
-              onClick={() => changeLanguage('es')}
-              className="h-20 flex-col gap-2"
-            >
-              <span className="text-2xl">🇪🇸</span>
-              <span>Español</span>
-            </Button>
-            <Button
-              variant={language === 'en' ? 'default' : 'outline'}
-              onClick={() => changeLanguage('en')}
-              className="h-20 flex-col gap-2"
-            >
-              <span className="text-2xl">🇬🇧</span>
-              <span>English</span>
-            </Button>
+          <p className="text-gray-600 mb-6">{t('onboarding.step1.description')}</p>
+          <div className="space-y-3">
+            {languages.map((lang) => (
+              <Button
+                key={lang.code}
+                variant={language === lang.code ? 'default' : 'outline'}
+                className="w-full justify-start gap-3"
+                onClick={() => changeLanguage(lang.code)}
+              >
+                <span className="text-xl">{lang.flag}</span>
+                <span>{lang.name}</span>
+              </Button>
+            ))}
           </div>
         </div>
       )
     },
     {
-      id: 'discover',
-      icon: <Store className="h-12 w-12 text-green-600" />,
+      icon: <Store className="h-16 w-16 text-green-600 mx-auto mb-4" />,
       title: t('onboarding.step2.title'),
-      description: t('onboarding.step2.description'),
       content: (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card className="border-2 border-green-200">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">📱</span>
-                </div>
-                <h3 className="font-semibold text-sm">TechnoMax</h3>
-                <p className="text-xs text-gray-600">Tecnología</p>
-                <Badge variant="secondary" className="mt-2">Verificada</Badge>
-              </CardContent>
-            </Card>
-            <Card className="border-2 border-blue-200">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">👕</span>
-                </div>
-                <h3 className="font-semibold text-sm">ModaStyle</h3>
-                <p className="text-xs text-gray-600">Moda</p>
-                <Badge variant="secondary" className="mt-2">Verificada</Badge>
-              </CardContent>
-            </Card>
-            <Card className="border-2 border-orange-200">
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">🛒</span>
-                </div>
-                <h3 className="font-semibold text-sm">SuperMarket</h3>
-                <p className="text-xs text-gray-600">Alimentación</p>
-                <Badge variant="secondary" className="mt-2">Verificada</Badge>
-              </CardContent>
-            </Card>
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">{t('onboarding.step2.description')}</p>
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <p className="text-sm text-blue-800">
+              ✓ Productos verificados<br/>
+              ✓ Vendedores locales<br/>
+              ✓ Entregas seguras
+            </p>
           </div>
         </div>
       )
     },
     {
-      id: 'secure',
-      icon: <Shield className="h-12 w-12 text-purple-600" />,
+      icon: <Shield className="h-16 w-16 text-purple-600 mx-auto mb-4" />,
       title: t('onboarding.step3.title'),
-      description: t('onboarding.step3.description'),
       content: (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
-              <CreditCard className="h-8 w-8 text-green-600" />
-              <div>
-                <h4 className="font-semibold text-sm">Pagos Seguros</h4>
-                <p className="text-xs text-gray-600">Mobile Money, Transferencias</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
-              <MapPin className="h-8 w-8 text-blue-600" />
-              <div>
-                <h4 className="font-semibold text-sm">Entrega Local</h4>
-                <p className="text-xs text-gray-600">En toda Guinea Ecuatorial</p>
-              </div>
-            </div>
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">{t('onboarding.step3.description')}</p>
+          <div className="bg-green-50 p-4 rounded-lg">
+            <p className="text-sm text-green-800">
+              ✓ Pagos protegidos<br/>
+              ✓ Garantía de entrega<br/>
+              ✓ Soporte 24/7
+            </p>
           </div>
         </div>
       )
     },
     {
-      id: 'ready',
-      icon: <Sparkles className="h-12 w-12 text-yellow-600" />,
+      icon: <div className="text-6xl mx-auto mb-4">🎉</div>,
       title: t('onboarding.step4.title'),
-      description: t('onboarding.step4.description'),
       content: (
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="flex-1" onClick={onComplete}>
+        <div className="text-center">
+          <p className="text-gray-600 mb-6">{t('onboarding.step4.description')}</p>
+          <div className="space-y-3">
+            <Button onClick={onComplete} className="w-full">
               {t('onboarding.exploreStores')}
             </Button>
-            <Button variant="outline" className="flex-1" onClick={onComplete}>
+            <Button variant="outline" onClick={onComplete} className="w-full">
               {t('onboarding.createAccount')}
             </Button>
           </div>
@@ -139,8 +91,6 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       )
     }
   ];
-
-  const currentStepData = steps[currentStep];
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -155,77 +105,63 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-green-50 z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl mx-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-md mx-auto">
         <CardContent className="p-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">U</span>
-              </div>
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {t('onboarding.welcome')}
-            </h1>
-            <p className="text-gray-600">
-              {t('onboarding.subtitle')}
-            </p>
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-bold text-blue-600 mb-2">{t('onboarding.welcome')}</h1>
+            <p className="text-gray-600">{t('onboarding.subtitle')}</p>
           </div>
 
-          {/* Progress */}
-          <div className="flex justify-center mb-8">
-            <div className="flex gap-2">
+          <div className="mb-6">
+            <div className="flex justify-center mb-4">
+              {steps[currentStep].icon}
+            </div>
+            <h2 className="text-xl font-semibold text-center mb-4">
+              {steps[currentStep].title}
+            </h2>
+            {steps[currentStep].content}
+          </div>
+
+          <div className="flex justify-between items-center">
+            <Button
+              variant="outline"
+              onClick={prevStep}
+              disabled={currentStep === 0}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t('onboarding.previous')}
+            </Button>
+
+            <div className="flex space-x-2">
               {steps.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                  className={`h-2 w-2 rounded-full ${
+                    index === currentStep ? 'bg-blue-600' : 'bg-gray-300'
                   }`}
                 />
               ))}
             </div>
-          </div>
 
-          {/* Step Content */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              {currentStepData.icon}
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {currentStepData.title}
-            </h2>
-            <p className="text-gray-600 mb-6">
-              {currentStepData.description}
-            </p>
-            {currentStepData.content}
-          </div>
-
-          {/* Navigation */}
-          {currentStep < steps.length - 1 && (
-            <div className="flex justify-between">
-              <Button
-                variant="outline"
-                onClick={onComplete}
-                className="text-gray-600"
-              >
-                {t('onboarding.skip')}
+            {currentStep < steps.length - 1 ? (
+              <Button onClick={nextStep} className="flex items-center gap-2">
+                {t('onboarding.next')}
+                <ArrowRight className="h-4 w-4" />
               </Button>
-              
-              <div className="flex gap-2">
-                {currentStep > 0 && (
-                  <Button variant="outline" onClick={prevStep}>
-                    <ChevronLeft className="h-4 w-4 mr-2" />
-                    {t('onboarding.previous')}
-                  </Button>
-                )}
-                <Button onClick={nextStep}>
-                  {t('onboarding.next')}
-                  <ChevronRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-            </div>
-          )}
+            ) : (
+              <Button onClick={onComplete} className="flex items-center gap-2">
+                {t('onboarding.getStarted')}
+              </Button>
+            )}
+          </div>
+
+          <div className="text-center mt-4">
+            <Button variant="ghost" onClick={onComplete} className="text-sm text-gray-500">
+              {t('onboarding.skip')}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

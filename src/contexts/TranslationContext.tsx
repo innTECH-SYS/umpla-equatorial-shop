@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, ReactNode } from 'react';
 import { useTranslation as useI18next } from 'react-i18next';
 
 interface TranslationContextType {
@@ -8,7 +8,7 @@ interface TranslationContextType {
   changeLanguage: (lang: string) => void;
 }
 
-const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
+export const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
 
 export const TranslationProvider = ({ children }: { children: ReactNode }) => {
   const { t, i18n } = useI18next();
@@ -28,12 +28,4 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </TranslationContext.Provider>
   );
-};
-
-export const useTranslation = () => {
-  const context = useContext(TranslationContext);
-  if (!context) {
-    throw new Error('useTranslation must be used within a TranslationProvider');
-  }
-  return context;
 };

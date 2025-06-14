@@ -5,7 +5,7 @@ import { TranslationContext } from '@/contexts/TranslationContext';
 export const useTranslation = () => {
   const context = useContext(TranslationContext);
   if (!context) {
-    // Fallback básico
+    // Fallback básico si no hay contexto
     return {
       t: (key: string) => key,
       language: 'es',
