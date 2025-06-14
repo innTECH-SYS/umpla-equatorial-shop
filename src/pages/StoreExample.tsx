@@ -21,7 +21,7 @@ import {
 const StoreExample = () => {
   const [selectedStore, setSelectedStore] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const { addToCart, isCartOpen, closeCart, getTotalItems } = useCart();
+  const { addToCart, isCartOpen, closeCart, getTotalItems, openCart } = useCart();
 
   const stores = [
     {

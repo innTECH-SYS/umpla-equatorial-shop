@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { PaymentMethodSelector } from "@/components/PaymentMethodSelector";
 import { supabase } from "@/integrations/supabase/client";
 
 interface CartSidebarProps {
@@ -47,7 +46,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
     try {
       const total = getTotalPrice();
       
-      // Crear el pedido
+      // Crear el pedido (sin numero_pedido, se genera automáticamente)
       const { data: pedido, error: pedidoError } = await supabase
         .from('pedidos')
         .insert({
@@ -70,9 +69,9 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
         pedido_id: pedido.id,
         producto_id: item.id.toString(),
         nombre_producto: item.name,
-        precio_unitario: Number(item.price),
+        precio_unitario: Number(item.price.replace(/[^\d]/g, '')),
         cantidad: item.quantity,
-        subtotal: Number(item.price) * item.quantity
+        subtotal: Number(item.price.replace(/[^\d]/g, '')) * item.quantity
       }));
 
       const { error: itemsError } = await supabase
@@ -159,7 +158,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
                     )}
                     <div className="flex-1">
                       <h4 className="font-medium text-sm">{item.name}</h4>
-                      <p className="text-primary font-semibold">{item.price} XAF</p>
+                      <p className="text-primary font-semibold">{item.price}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <Button
                           size="sm"
@@ -227,7 +226,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
             {items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm mb-1">
                 <span>{item.name} x{item.quantity}</span>
-                <span>{Number(item.price) * item.quantity} XAF</span>
+                <span>{Number(item.price.replace(/[^\d]/g, '')) * item.quantity} XAF</span>
               </div>
             ))}
             <div className="border-t pt-2 mt-2 font-semibold">

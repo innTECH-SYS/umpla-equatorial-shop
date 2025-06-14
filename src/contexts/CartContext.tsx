@@ -21,7 +21,7 @@ export interface PaymentMethod {
 
 interface CartContextType {
   items: CartItem[];
-  isOpen: boolean;
+  isCartOpen: boolean;
   addToCart: (product: any, store: any) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
@@ -44,7 +44,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (product: any, store: any) => {
     setItems(prevItems => {
@@ -88,8 +88,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setItems([]);
   };
 
-  const openCart = () => setIsOpen(true);
-  const closeCart = () => setIsOpen(false);
+  const openCart = () => setIsCartOpen(true);
+  const closeCart = () => setIsCartOpen(false);
 
   const getTotalItems = () => {
     return items.reduce((total, item) => total + item.quantity, 0);
@@ -105,7 +105,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CartContext.Provider value={{
       items,
-      isOpen,
+      isCartOpen,
       addToCart,
       removeFromCart,
       updateQuantity,
