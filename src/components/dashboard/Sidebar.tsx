@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
+import { SupportModal } from '@/components/SupportModal';
+import { ImprovedLanguageSelector } from '@/components/ImprovedLanguageSelector';
 import { 
   Home,
   Package,
@@ -32,6 +34,8 @@ export const Sidebar = ({
   onReferralsClick,
   onProductsClick
 }: SidebarProps) => {
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
+
   const menuItems = [
     { icon: <Home className="h-5 w-5" />, label: 'Inicio', active: true },
     { icon: <Package className="h-5 w-5" />, label: 'Mis productos', onClick: onProductsClick },
@@ -39,7 +43,7 @@ export const Sidebar = ({
     { icon: <CreditCard className="h-5 w-5" />, label: 'Métodos de pago', onClick: onPaymentMethodsClick },
     { icon: <Store className="h-5 w-5" />, label: 'Configuración de tienda', onClick: onCustomizeStoreClick },
     { icon: <Users className="h-5 w-5" />, label: 'Referidos', onClick: onReferralsClick },
-    { icon: <HelpCircle className="h-5 w-5" />, label: 'Soporte' },
+    { icon: <HelpCircle className="h-5 w-5" />, label: 'Soporte', onClick: () => setSupportModalOpen(true) },
   ];
 
   return (
@@ -60,6 +64,11 @@ export const Sidebar = ({
           >
             <X className="h-5 w-5" />
           </Button>
+        </div>
+        
+        {/* Selector de idioma en la parte superior */}
+        <div className="px-6 py-3 border-b border-gray-100">
+          <ImprovedLanguageSelector variant="compact" showLabel={false} />
         </div>
         
         <nav className="mt-6">
@@ -84,7 +93,12 @@ export const Sidebar = ({
             <HelpCircle className="h-8 w-8 text-blue-600 mb-2" />
             <p className="text-sm font-medium text-gray-900 mb-1">¿Necesitas ayuda?</p>
             <p className="text-xs text-gray-600 mb-3">Contacta con nuestro equipo</p>
-            <Button size="sm" variant="outline" className="w-full text-xs border-blue-200 text-blue-600 hover:bg-blue-100">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="w-full text-xs border-blue-200 text-blue-600 hover:bg-blue-100"
+              onClick={() => setSupportModalOpen(true)}
+            >
               Soporte 24/7
             </Button>
           </Card>
@@ -97,6 +111,11 @@ export const Sidebar = ({
           onClick={() => setSidebarOpen(false)}
         />
       )}
+
+      <SupportModal 
+        open={supportModalOpen} 
+        onOpenChange={setSupportModalOpen} 
+      />
     </>
   );
 };

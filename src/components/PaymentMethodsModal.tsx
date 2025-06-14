@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { CreditCard, Smartphone, Wallet, Trash2 } from 'lucide-react';
+import { CreditCard, Smartphone, Wallet, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface PaymentMethodsModalProps {
   open: boolean;
@@ -62,6 +62,7 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
     numero: '',
     titular: ''
   });
+  const [operationSuccess, setOperationSuccess] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -70,6 +71,16 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
       loadPaymentMethods();
     }
   }, [open, user]);
+
+  // Limpiar mensaje de éxito después de 3 segundos
+  useEffect(() => {
+    if (operationSuccess) {
+      const timer = setTimeout(() => {
+        setOperationSuccess(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [operationSuccess]);
 
   const loadPaymentMethods = async () => {
     if (!user) return;
@@ -85,12 +96,48 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
       setPaymentMethods(data || []);
     } catch (error) {
       console.error('Error loading payment methods:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar los métodos de pago",
+        variant: "destructive"
+      });
     }
+  };
+
+  const validateForm = () => {
+    if (!newMethod.tipo) {
+      toast({
+        title: "Error de validación",
+        description: "Selecciona un tipo de pago",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
+    if (!newMethod.titular.trim()) {
+      toast({
+        title: "Error de validación",
+        description: "El nombre del titular es requerido",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    if (newMethod.tipo !== 'efectivo' && !newMethod.numero.trim()) {
+      toast({
+        title: "Error de validación",
+        description: "El número es requerido para este tipo de pago",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleAddMethod = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !newMethod.tipo) return;
+    if (!user || !validateForm()) return;
 
     setLoading(true);
     try {
@@ -105,6 +152,7 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
 
       if (error) throw error;
 
+      setOperationSuccess('added');
       toast({
         title: "¡Método de pago añadido!",
         description: "El método de pago se ha configurado correctamente."
@@ -133,6 +181,7 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
 
       if (error) throw error;
 
+      setOperationSuccess('deleted');
       toast({
         title: "Método eliminado",
         description: "El método de pago se ha eliminado correctamente."
@@ -156,18 +205,40 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
           <DialogTitle>Configurar métodos de pago</DialogTitle>
         </DialogHeader>
         
+        {/* Mensaje de éxito */}
+        {operationSuccess && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <p className="text-sm text-green-800">
+                {operationSuccess === 'added' 
+                  ? 'Método de pago añadido exitosamente' 
+                  : 'Método de pago eliminado exitosamente'
+                }
+              </p>
+            </div>
+          </div>
+        )}
+        
         <div className="space-y-6">
           {/* Métodos existentes */}
           <div>
             <h3 className="font-medium mb-3">Métodos configurados</h3>
             <div className="space-y-2">
               {paymentMethods.length === 0 ? (
-                <p className="text-gray-500 text-sm">No tienes métodos de pago configurados.</p>
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5 text-amber-600" />
+                    <p className="text-sm text-amber-800">
+                      No tienes métodos de pago configurados. Añade al menos uno para recibir pagos.
+                    </p>
+                  </div>
+                </div>
               ) : (
                 paymentMethods.map((method) => {
                   const typeInfo = paymentTypes.find(t => t.value === method.tipo);
                   return (
-                    <Card key={method.id} className="p-3">
+                    <Card key={method.id} className="p-3 bg-green-50 border-green-200">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {typeInfo?.icon}
@@ -177,11 +248,13 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
                               {method.numero && `${method.numero} - `}{method.titular}
                             </p>
                           </div>
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
                         </div>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteMethod(method.id)}
+                          className="hover:bg-red-50 hover:text-red-600"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -198,7 +271,7 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
             <h3 className="font-medium mb-3">Añadir nuevo método</h3>
             <form onSubmit={handleAddMethod} className="space-y-4">
               <div>
-                <Label htmlFor="tipo">Tipo de pago</Label>
+                <Label htmlFor="tipo">Tipo de pago *</Label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   {paymentTypes.map((type) => (
                     <Button
@@ -224,28 +297,34 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
               {newMethod.tipo && newMethod.tipo !== 'efectivo' && (
                 <div>
                   <Label htmlFor="numero">
-                    {newMethod.tipo === 'tarjeta_debito' ? 'Número de tarjeta' : 'Número de cuenta'}
+                    {newMethod.tipo === 'tarjeta_debito' ? 'Número de tarjeta *' : 'Número de cuenta *'}
                   </Label>
                   <Input
                     id="numero"
                     value={newMethod.numero}
                     onChange={(e) => setNewMethod({...newMethod, numero: e.target.value})}
                     placeholder={newMethod.tipo === 'tarjeta_debito' ? '**** **** **** 1234' : '+240 6XX XXX XXX'}
+                    required
                   />
                 </div>
               )}
 
               <div>
-                <Label htmlFor="titular">Nombre del titular</Label>
+                <Label htmlFor="titular">Nombre del titular *</Label>
                 <Input
                   id="titular"
                   value={newMethod.titular}
                   onChange={(e) => setNewMethod({...newMethod, titular: e.target.value})}
+                  placeholder="Nombre completo del titular"
                   required
                 />
               </div>
 
-              <Button type="submit" disabled={loading || !newMethod.tipo} className="w-full">
+              <Button 
+                type="submit" 
+                disabled={loading || !newMethod.tipo || !newMethod.titular.trim()} 
+                className="w-full"
+              >
                 {loading ? "Añadiendo..." : "Añadir método de pago"}
               </Button>
             </form>

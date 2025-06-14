@@ -1,12 +1,16 @@
 
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { SupportModal } from '@/components/SupportModal';
+import { ImprovedLanguageSelector } from '@/components/ImprovedLanguageSelector';
+import { useState } from 'react';
 import { 
   CreditCard,
   Store,
   Users,
   HelpCircle,
-  Eye
+  Eye,
+  Globe
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -21,6 +25,8 @@ export const MobileMoreMenu = ({
   onCustomizeStoreClick,
   onReferralsClick
 }: MobileMoreMenuProps) => {
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
+
   return (
     <div className="p-4 space-y-4 pb-20">
       <h2 className="text-xl font-semibold text-gray-900 mb-4">Más opciones</h2>
@@ -103,6 +109,7 @@ export const MobileMoreMenu = ({
           <Button
             variant="ghost"
             className="w-full justify-start h-auto p-0"
+            onClick={() => setSupportModalOpen(true)}
           >
             <div className="flex items-center gap-3">
               <div className="p-2 bg-gray-100 rounded-lg">
@@ -115,7 +122,25 @@ export const MobileMoreMenu = ({
             </div>
           </Button>
         </Card>
+
+        {/* Selector de idioma para móvil */}
+        <Card className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-indigo-100 rounded-lg">
+              <Globe className="h-5 w-5 text-indigo-600" />
+            </div>
+            <div className="flex-1">
+              <div className="font-medium mb-2">Idioma</div>
+              <ImprovedLanguageSelector variant="mobile" showLabel={false} />
+            </div>
+          </div>
+        </Card>
       </div>
+
+      <SupportModal 
+        open={supportModalOpen} 
+        onOpenChange={setSupportModalOpen} 
+      />
     </div>
   );
 };

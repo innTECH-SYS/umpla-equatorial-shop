@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Menu, Plus, Eye } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { ImprovedLanguageSelector } from '@/components/ImprovedLanguageSelector';
 
 interface HeaderProps {
   storeName: string;
@@ -34,6 +35,11 @@ export const Header = ({ storeName, setSidebarOpen, onAddProductClick }: HeaderP
         </div>
         
         <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Selector de idioma visible en desktop */}
+          <div className="hidden lg:block">
+            <ImprovedLanguageSelector variant="compact" />
+          </div>
+          
           <Link to="/store-example" className="hidden sm:block">
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               <Eye className="h-4 w-4" />
