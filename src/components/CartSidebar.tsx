@@ -30,6 +30,34 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
   const [notes, setNotes] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
 
+  const validateProducts = async () => {
+    console.log('Validating products for store:', storeId);
+    console.log('Cart items:', items);
+
+    // Verify all products exist and are available
+    for (const item of items) {
+      const { data: product, error } = await supabase
+        .from('productos')
+        .select('id, nombre, precio, disponible, activo, tienda_id')
+        .eq('id', item.id)
+        .eq('tienda_id', storeId)
+        .single();
+
+      if (error || !product) {
+        console.error('Product validation error:', error, 'Product ID:', item.id);
+        throw new Error(`Producto "${item.name}" no encontrado o no disponible`);
+      }
+
+      if (!product.disponible || !product.activo) {
+        throw new Error(`Producto "${item.name}" no está disponible`);
+      }
+
+      console.log('Product validated:', product);
+    }
+
+    return true;
+  };
+
   const handleProcessOrder = async () => {
     // Validar campos requeridos
     if (!customerName.trim() || !customerPhone.trim() || !deliveryAddress.trim() || !selectedPaymentMethod) {
@@ -41,10 +69,27 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
       return;
     }
 
+    if (items.length === 0) {
+      toast({
+        title: "Carrito vacío",
+        description: "Agrega productos antes de continuar",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
+      console.log('Starting order process...');
+      console.log('Store ID:', storeId);
+      console.log('Items:', items);
+
+      // Validate products before creating order
+      await validateProducts();
+
       const total = getTotalPrice();
+      console.log('Total calculated:', total);
       
       // Crear el pedido (numero_pedido se genera automáticamente por el trigger)
       const { data: pedido, error: pedidoError } = await supabase
@@ -63,23 +108,38 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
         .select()
         .single();
 
-      if (pedidoError) throw pedidoError;
+      if (pedidoError) {
+        console.error('Order creation error:', pedidoError);
+        throw pedidoError;
+      }
+
+      console.log('Order created:', pedido);
 
       // Crear los items del pedido
-      const pedidoItems = items.map(item => ({
-        pedido_id: pedido.id,
-        producto_id: item.id.toString(),
-        nombre_producto: item.name,
-        precio_unitario: Number(item.price.replace(/[^\d]/g, '')),
-        cantidad: item.quantity,
-        subtotal: Number(item.price.replace(/[^\d]/g, '')) * item.quantity
-      }));
+      const pedidoItems = items.map(item => {
+        const precioUnitario = item.rawPrice || parseInt(item.price.replace(/[^\d]/g, ''));
+        return {
+          pedido_id: pedido.id,
+          producto_id: item.id, // Keep as string UUID
+          nombre_producto: item.name,
+          precio_unitario: precioUnitario,
+          cantidad: item.quantity,
+          subtotal: precioUnitario * item.quantity
+        };
+      });
+
+      console.log('Creating order items:', pedidoItems);
 
       const { error: itemsError } = await supabase
         .from('pedido_items')
         .insert(pedidoItems);
 
-      if (itemsError) throw itemsError;
+      if (itemsError) {
+        console.error('Order items creation error:', itemsError);
+        throw itemsError;
+      }
+
+      console.log('Order items created successfully');
 
       toast({
         title: "¡Pedido enviado!",
@@ -102,7 +162,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
       console.error('Error processing order:', error);
       toast({
         title: "Error",
-        description: "No se pudo procesar el pedido. Inténtalo de nuevo.",
+        description: error instanceof Error ? error.message : "No se pudo procesar el pedido. Inténtalo de nuevo.",
         variant: "destructive",
       });
     } finally {
@@ -227,7 +287,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
             {items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm mb-1">
                 <span>{item.name} x{item.quantity}</span>
-                <span>{Number(item.price.replace(/[^\d]/g, '')) * item.quantity} XAF</span>
+                <span>{(item.rawPrice || parseInt(item.price.replace(/[^\d]/g, ''))) * item.quantity} XAF</span>
               </div>
             ))}
             <div className="border-t pt-2 mt-2 font-semibold">

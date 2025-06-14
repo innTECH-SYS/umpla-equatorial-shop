@@ -2,13 +2,14 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface CartItem {
-  id: number;
+  id: string; // Changed from number to string (UUID)
   name: string;
   price: string;
   image: string;
-  storeId: number;
+  storeId: string; // Changed from number to string (UUID)
   storeName: string;
   quantity: number;
+  rawPrice?: number; // Add raw price for calculations
 }
 
 export interface PaymentMethod {
@@ -23,8 +24,8 @@ interface CartContextType {
   items: CartItem[];
   isCartOpen: boolean;
   addToCart: (product: any, store: any) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeFromCart: (id: string) => void; // Changed from number to string
+  updateQuantity: (id: string, quantity: number) => void; // Changed from number to string
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -47,6 +48,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (product: any, store: any) => {
+    console.log('Adding to cart - Product:', product, 'Store:', store);
+    
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -57,22 +60,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         );
       }
       return [...prevItems, {
-        id: product.id,
+        id: product.id, // Keep as string UUID
         name: product.name,
         price: product.price,
         image: product.image,
-        storeId: product.storeId,
+        storeId: product.storeId, // Keep as string UUID
         storeName: store.name,
-        quantity: 1
+        quantity: 1,
+        rawPrice: product.rawPrice
       }];
     });
   };
 
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string) => { // Changed parameter type
     setItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: string, quantity: number) => { // Changed parameter type
     if (quantity <= 0) {
       removeFromCart(id);
       return;
@@ -97,7 +101,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const getTotalPrice = () => {
     return items.reduce((total, item) => {
-      const price = parseInt(item.price.replace(/[^\d]/g, ''));
+      // Use rawPrice if available, otherwise parse from formatted price
+      const price = item.rawPrice || parseInt(item.price.replace(/[^\d]/g, ''));
       return total + (price * item.quantity);
     }, 0);
   };

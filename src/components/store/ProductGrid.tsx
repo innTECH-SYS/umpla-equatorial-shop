@@ -44,13 +44,16 @@ export const ProductGrid = ({ products, store }: ProductGridProps) => {
   const handleAddToCart = (product: Product) => {
     // Convert product to cart format
     const cartProduct = {
-      id: parseInt(product.id),
+      id: product.id, // Keep as string UUID
       name: product.nombre,
       price: formatPrice(product.precio),
       image: product.imagen_url || '/placeholder.svg',
-      storeId: parseInt(store.id),
+      storeId: store.id, // Keep as string UUID
+      rawPrice: product.precio // Add raw price for calculations
     };
 
+    console.log('Adding product to cart:', cartProduct);
+    
     addToCart(cartProduct, { name: store.nombre });
     
     toast({
