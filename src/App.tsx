@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -14,6 +13,7 @@ import Onboarding from "./pages/Onboarding";
 import Pricing from "./pages/Pricing";
 import StoreExample from "./pages/StoreExample";
 import StoreProfile from "./pages/StoreProfile";
+import PublicStore from "./pages/PublicStore";
 
 // Create QueryClient outside of component to avoid recreating it
 const queryClient = new QueryClient({
@@ -109,6 +109,7 @@ function App() {
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/store-example" element={<StoreExample />} />
               <Route path="/tienda/:subdomain" element={<StoreProfile />} />
+              <Route path="/store/:subdomain" element={<PublicStore />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
