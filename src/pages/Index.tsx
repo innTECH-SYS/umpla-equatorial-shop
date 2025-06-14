@@ -1,215 +1,130 @@
 
-import Navigation from '@/components/Navigation';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
-import { 
-  Store, 
-  CreditCard, 
-  Globe, 
-  BarChart3, 
-  Shield, 
-  Headphones,
-  ArrowRight,
-  CheckCircle,
-  Zap
-} from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const features = [
-    {
-      icon: <Store className="h-6 w-6" />,
-      title: "Tienda Completa",
-      description: "Crea tu tienda online con productos físicos y digitales"
-    },
-    {
-      icon: <CreditCard className="h-6 w-6" />,
-      title: "Pagos Locales",
-      description: "Acepta pagos con métodos populares en Guinea Ecuatorial"
-    },
-    {
-      icon: <Globe className="h-6 w-6" />,
-      title: "Dominio Propio",
-      description: "Tu marca con dominio personalizado incluido"
-    },
-    {
-      icon: <BarChart3 className="h-6 w-6" />,
-      title: "Estadísticas",
-      description: "Analiza ventas y comportamiento de clientes"
-    },
-    {
-      icon: <Shield className="h-6 w-6" />,
-      title: "Seguridad",
-      description: "Protección SSL y respaldos automáticos"
-    },
-    {
-      icon: <Headphones className="h-6 w-6" />,
-      title: "Soporte 24/7",
-      description: "Asistencia técnica en español siempre disponible"
-    }
-  ];
-
-  const benefits = [
-    "Sin conocimientos técnicos necesarios",
-    "Configuración en menos de 5 minutos",
-    "Diseños profesionales y responsive",
-    "Inventario y pedidos automatizados"
-  ];
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
-      
+      {/* Header */}
+      <header className="px-4 py-4 md:px-8 md:py-6">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg md:text-xl">U</span>
+            </div>
+            <span className="text-xl md:text-2xl font-bold text-secondary">Umpla</span>
+          </div>
+          <nav className="hidden md:flex items-center space-x-6">
+            <Button variant="ghost" onClick={() => navigate('/pricing')}>Precios</Button>
+            <Button variant="ghost" onClick={() => navigate('/store-example')}>Ejemplos</Button>
+            <Button onClick={() => navigate('/create-store')}>Crear Tienda</Button>
+          </nav>
+          <Button className="md:hidden" onClick={() => navigate('/create-store')}>
+            Crear Tienda
+          </Button>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center animate-fade-in">
-            <div className="flex justify-center mb-8">
-              <div className="bg-primary/10 p-4 rounded-2xl">
-                <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-2xl">U</span>
-                </div>
-              </div>
-            </div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold text-secondary mb-6">
-              Tu tienda,{' '}
-              <span className="text-primary">sin límites</span>
-            </h1>
-            
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Crea tu tienda online en Guinea Ecuatorial sin conocimientos técnicos. 
-              Vende productos físicos y digitales con pagos locales integrados.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/onboarding">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold">
-                  Crear mi tienda gratis
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/store-example">
-                <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                  Ver ejemplo
-                </Button>
-              </Link>
-            </div>
-            
-            <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-success" />
-                <span>Sin tarjeta de crédito</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-success" />
-                <span>Listo en 5 minutos</span>
-              </div>
-            </div>
+      <section className="px-4 py-8 md:px-8 md:py-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-secondary mb-4 md:mb-6">
+            Tu tienda, sin límites
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto">
+            Crea tu tienda online en Guinea Ecuatorial en minutos. Sin conocimientos técnicos, sin complicaciones.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button 
+              size="lg" 
+              className="w-full sm:w-auto"
+              onClick={() => navigate('/create-store')}
+            >
+              Crear mi tienda gratis
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg"
+              className="w-full sm:w-auto"
+              onClick={() => navigate('/onboarding')}
+            >
+              Ver cómo funciona
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              ¿Por qué elegir Umpla?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Diseñado específicamente para emprendedores en Guinea Ecuatorial
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {benefits.map((benefit, index) => (
-              <Card key={index} className="p-6 text-center bg-white border-0 shadow-sm hover:shadow-md transition-shadow">
-                <CheckCircle className="h-8 w-8 text-success mx-auto mb-4" />
-                <p className="text-gray-700 font-medium">{benefit}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              Todo lo que necesitas
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Herramientas profesionales para hacer crecer tu negocio online
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="p-8 bg-white border border-gray-100 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group">
-                <div className="flex items-center mb-4">
-                  <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
-                    <div className="text-primary">
-                      {feature.icon}
-                    </div>
-                  </div>
-                </div>
-                <h3 className="text-xl font-semibold text-secondary mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </Card>
-            ))}
+      {/* Features */}
+      <section className="px-4 py-8 md:px-8 md:py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-secondary mb-8 md:mb-12">
+            Todo lo que necesitas para vender online
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-primary rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <span className="text-white text-xl">🏪</span>
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">Tienda profesional</h3>
+              <p className="text-gray-600 text-sm md:text-base">
+                Diseños modernos y responsive que se adaptan a cualquier dispositivo
+              </p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-success rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <span className="text-white text-xl">💳</span>
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">Pagos locales</h3>
+              <p className="text-gray-600 text-sm md:text-base">
+                Acepta pagos con métodos populares en Guinea Ecuatorial
+              </p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-premium rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <span className="text-white text-xl">📊</span>
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">Estadísticas</h3>
+              <p className="text-gray-600 text-sm md:text-base">
+                Analiza tus ventas y optimiza tu negocio con datos reales
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            ¿Listo para empezar?
+      <section className="px-4 py-8 md:px-8 md:py-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
+            Empieza gratis hoy mismo
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Únete a cientos de emprendedores que ya están vendiendo online con Umpla
+          <p className="text-lg md:text-xl text-gray-600 mb-6 md:mb-8">
+            No necesitas tarjeta de crédito. Crea tu tienda en menos de 5 minutos.
           </p>
-          <Link to="/onboarding">
-            <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-50 px-8 py-4 text-lg font-semibold">
-              Comenzar ahora
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="w-full sm:w-auto"
+            onClick={() => navigate('/create-store')}
+          >
+            Crear mi tienda ahora
+          </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-secondary py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">U</span>
-              </div>
-              <span className="text-xl font-bold text-white">Umpla</span>
+      <footer className="bg-secondary text-white px-4 py-8 md:px-8 md:py-12">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">U</span>
             </div>
-            <p className="text-gray-400 mb-8">
-              La plataforma de comercio electrónico líder en Guinea Ecuatorial
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-gray-400">
-              <Link to="/pricing" className="hover:text-white transition-colors">
-                Precios
-              </Link>
-              <Link to="/store-example" className="hover:text-white transition-colors">
-                Ejemplo
-              </Link>
-              <Link to="/onboarding" className="hover:text-white transition-colors">
-                Empezar
-              </Link>
-            </div>
+            <span className="text-xl font-bold">Umpla</span>
           </div>
+          <p className="text-gray-400 text-sm md:text-base">
+            La plataforma de comercio electrónico para Guinea Ecuatorial
+          </p>
         </div>
       </footer>
     </div>

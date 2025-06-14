@@ -1,236 +1,182 @@
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, 
-  ArrowLeft,
-  Store,
-  CreditCard,
-  Package,
-  Globe,
-  BarChart3,
-  Headphones,
-  CheckCircle,
-  Zap
-} from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
 
   const steps = [
     {
       title: "Bienvenido a Umpla",
-      subtitle: "Tu tienda online en minutos",
+      description: "La plataforma más fácil para crear tu tienda online en Guinea Ecuatorial",
       content: (
-        <div className="text-center space-y-6">
-          <div className="bg-primary/10 p-6 rounded-2xl inline-block">
-            <div className="w-20 h-20 bg-primary rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-3xl">U</span>
-            </div>
-          </div>
-          <p className="text-lg text-gray-600 max-w-md mx-auto">
-            Vamos a configurar tu tienda online paso a paso. Es muy fácil y rápido.
+        <div className="text-center space-y-4">
+          <div className="text-4xl md:text-6xl mb-4">🏪</div>
+          <p className="text-base md:text-lg text-gray-600 max-w-md mx-auto">
+            Sin conocimientos técnicos, sin complicaciones. Solo necesitas unos minutos para tener tu tienda funcionando.
           </p>
-          <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-success" />
-              <span>Solo 4 pasos</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-success" />
-              <span>5 minutos</span>
-            </div>
-          </div>
         </div>
       )
     },
     {
-      title: "Beneficios principales",
-      subtitle: "Todo lo que obtienes con Umpla",
+      title: "Beneficios clave",
+      description: "Todo lo que necesitas para vender online",
       content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="p-6 bg-white border border-gray-100">
-            <Store className="h-8 w-8 text-primary mb-4" />
-            <h3 className="font-semibold text-secondary mb-2">Tienda completa</h3>
-            <p className="text-gray-600 text-sm">Vende productos físicos y digitales con catálogo ilimitado</p>
-          </Card>
-          <Card className="p-6 bg-white border border-gray-100">
-            <CreditCard className="h-8 w-8 text-primary mb-4" />
-            <h3 className="font-semibold text-secondary mb-2">Pagos locales</h3>
-            <p className="text-gray-600 text-sm">Métodos de pago populares en Guinea Ecuatorial integrados</p>
-          </Card>
-          <Card className="p-6 bg-white border border-gray-100">
-            <Package className="h-8 w-8 text-primary mb-4" />
-            <h3 className="font-semibold text-secondary mb-2">Gestión fácil</h3>
-            <p className="text-gray-600 text-sm">Inventario, pedidos y envíos automatizados</p>
-          </Card>
-          <Card className="p-6 bg-white border border-gray-100">
-            <Globe className="h-8 w-8 text-primary mb-4" />
-            <h3 className="font-semibold text-secondary mb-2">Dominio propio</h3>
-            <p className="text-gray-600 text-sm">Tu marca con dirección web personalizada</p>
-          </Card>
+        <div className="space-y-4 md:space-y-6">
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg md:text-xl">🏪</span>
+            </div>
+            <div className="text-left">
+              <h3 className="font-semibold text-sm md:text-base">Crear tienda profesional</h3>
+              <p className="text-xs md:text-sm text-gray-600">Diseños modernos y atractivos</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-success rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg md:text-xl">💳</span>
+            </div>
+            <div className="text-left">
+              <h3 className="font-semibold text-sm md:text-base">Pagos locales</h3>
+              <p className="text-xs md:text-sm text-gray-600">Métodos de pago populares en GQ</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-premium rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg md:text-xl">📦</span>
+            </div>
+            <div className="text-left">
+              <h3 className="font-semibold text-sm md:text-base">Productos físicos y digitales</h3>
+              <p className="text-xs md:text-sm text-gray-600">Vende cualquier tipo de producto</p>
+            </div>
+          </div>
         </div>
       )
     },
     {
       title: "Características del SaaS",
-      subtitle: "Tecnología profesional a tu alcance",
+      description: "Herramientas profesionales para hacer crecer tu negocio",
       content: (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="bg-primary/10 p-4 rounded-xl inline-block mb-4">
-                <Globe className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-secondary mb-2">Dominio incluido</h3>
-              <p className="text-gray-600 text-sm">tutienda.umpla.com o conecta tu dominio</p>
+        <div className="space-y-4 md:space-y-6">
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg md:text-xl">🌐</span>
             </div>
-            <div className="text-center">
-              <div className="bg-primary/10 p-4 rounded-xl inline-block mb-4">
-                <Headphones className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-secondary mb-2">Soporte 24/7</h3>
-              <p className="text-gray-600 text-sm">Asistencia técnica en español</p>
-            </div>
-            <div className="text-center">
-              <div className="bg-primary/10 p-4 rounded-xl inline-block mb-4">
-                <BarChart3 className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-secondary mb-2">Estadísticas</h3>
-              <p className="text-gray-600 text-sm">Analíticas detalladas de ventas</p>
+            <div className="text-left">
+              <h3 className="font-semibold text-sm md:text-base">Dominio personalizado</h3>
+              <p className="text-xs md:text-sm text-gray-600">tutienda.umpla.gq incluido</p>
             </div>
           </div>
-          <div className="bg-gray-50 p-6 rounded-xl">
-            <h4 className="font-semibold text-secondary mb-3">¿Qué más incluye?</h4>
-            <ul className="space-y-2 text-gray-600 text-sm">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-success" />
-                <span>Certificado SSL para seguridad</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-success" />
-                <span>Respaldos automáticos diarios</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-success" />
-                <span>Diseños responsive para móviles</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-success" />
-                <span>SEO optimizado para buscadores</span>
-              </li>
-            </ul>
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-success rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg md:text-xl">🛠️</span>
+            </div>
+            <div className="text-left">
+              <h3 className="font-semibold text-sm md:text-base">Soporte técnico</h3>
+              <p className="text-xs md:text-sm text-gray-600">Ayuda cuando la necesites</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-premium rounded-lg flex items-center justify-center">
+              <span className="text-white text-lg md:text-xl">📊</span>
+            </div>
+            <div className="text-left">
+              <h3 className="font-semibold text-sm md:text-base">Estadísticas avanzadas</h3>
+              <p className="text-xs md:text-sm text-gray-600">Analiza tu rendimiento</p>
+            </div>
           </div>
         </div>
       )
     },
     {
-      title: "¡Listo para comenzar!",
-      subtitle: "Elige tu próximo paso",
+      title: "¡Listo para empezar!",
+      description: "Elige cómo quieres continuar",
       content: (
-        <div className="text-center space-y-8">
-          <div className="bg-success/10 p-6 rounded-2xl inline-block">
-            <CheckCircle className="h-16 w-16 text-success mx-auto" />
-          </div>
-          <p className="text-lg text-gray-600 max-w-md mx-auto">
-            Ya conoces todo sobre Umpla. ¿Estás listo para crear tu tienda online?
+        <div className="text-center space-y-6">
+          <div className="text-4xl md:text-6xl mb-4">🚀</div>
+          <p className="text-base md:text-lg text-gray-600 max-w-md mx-auto">
+            Tu tienda estará lista en menos de 5 minutos. ¡Comienza a vender hoy mismo!
           </p>
-          <div className="space-y-4">
-            <Link to="/dashboard" className="block">
-              <Button size="lg" className="w-full bg-primary hover:bg-primary/90 text-white py-4 text-lg font-semibold">
-                Crear mi tienda ahora
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link to="/store-example" className="block">
-              <Button variant="outline" size="lg" className="w-full py-4 text-lg">
-                Explorar Umpla primero
-              </Button>
-            </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <Button 
+              size="lg" 
+              onClick={() => navigate('/create-store')}
+              className="w-full sm:w-auto"
+            >
+              Crear mi tienda
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={() => navigate('/store-example')}
+              className="w-full sm:w-auto"
+            >
+              Explorar Umpla
+            </Button>
           </div>
         </div>
       )
     }
   ];
 
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
+  const currentStepData = steps[currentStep];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-4xl w-full">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 mb-6">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">U</span>
-            </div>
-            <span className="text-xl font-bold text-secondary">Umpla</span>
-          </Link>
-          
-          {/* Progress Bar */}
-          <div className="flex items-center justify-center space-x-2 mb-8">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4">
+      <div className="max-w-2xl w-full">
+        {/* Progress Bar */}
+        <div className="mb-8">
+          <div className="flex justify-center space-x-2 mb-4">
             {steps.map((_, index) => (
               <div
                 key={index}
-                className={`h-2 w-12 rounded-full transition-colors ${
-                  index <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors ${
+                  index <= currentStep ? 'bg-primary' : 'bg-gray-300'
                 }`}
               />
             ))}
           </div>
+          <div className="text-center text-xs md:text-sm text-gray-500">
+            {currentStep + 1} de {steps.length}
+          </div>
         </div>
 
         {/* Content */}
-        <Card className="p-8 md:p-12 bg-white border-0 shadow-lg animate-fade-in">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-secondary mb-2">
-              {steps[currentStep].title}
+        <div className="text-center space-y-6 md:space-y-8">
+          <div>
+            <h1 className="text-2xl md:text-4xl font-bold text-secondary mb-2 md:mb-4">
+              {currentStepData.title}
             </h1>
-            <p className="text-xl text-gray-600">
-              {steps[currentStep].subtitle}
+            <p className="text-base md:text-xl text-gray-600 mb-6 md:mb-8">
+              {currentStepData.description}
             </p>
           </div>
 
-          <div className="mb-12">
-            {steps[currentStep].content}
+          <div className="mb-8 md:mb-12">
+            {currentStepData.content}
           </div>
 
           {/* Navigation */}
-          {currentStep < steps.length - 1 && (
-            <div className="flex justify-between items-center">
-              <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStep === 0}
-                className="flex items-center gap-2"
+          {currentStep < steps.length - 1 ? (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/')}
+                className="w-full sm:w-auto"
               >
-                <ArrowLeft className="h-4 w-4" />
-                Anterior
+                Saltar
               </Button>
-              
-              <span className="text-sm text-gray-500">
-                {currentStep + 1} de {steps.length}
-              </span>
-              
-              <Button onClick={nextStep} className="flex items-center gap-2">
+              <Button 
+                onClick={() => setCurrentStep(currentStep + 1)}
+                className="w-full sm:w-auto"
+              >
                 Siguiente
-                <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
-          )}
-        </Card>
+          ) : null}
+        </div>
       </div>
     </div>
   );

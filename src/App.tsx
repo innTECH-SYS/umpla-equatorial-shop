@@ -9,6 +9,7 @@ import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import StoreExample from "./pages/StoreExample";
+import CreateStore from "./pages/CreateStore";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/store-example" element={<StoreExample />} />
+          <Route path="/create-store" element={<CreateStore />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
