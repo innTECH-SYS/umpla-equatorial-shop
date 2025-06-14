@@ -21,7 +21,7 @@ import {
 const StoreExample = () => {
   const [selectedStore, setSelectedStore] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const { addToCart, openCart, getTotalItems } = useCart();
+  const { addToCart, isCartOpen, closeCart, getTotalItems } = useCart();
 
   const stores = [
     {
@@ -201,7 +201,12 @@ const StoreExample = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <CartSidebar />
+      <CartSidebar 
+        isOpen={isCartOpen} 
+        onClose={closeCart} 
+        storeName={stores[selectedStore].name}
+        storeId={stores[selectedStore].id.toString()}
+      />
       
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">

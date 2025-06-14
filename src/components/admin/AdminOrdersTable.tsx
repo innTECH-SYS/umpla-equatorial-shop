@@ -60,7 +60,7 @@ export const AdminOrdersTable = () => {
       case 'enviado':
         return <Badge>Enviado</Badge>;
       case 'entregado':
-        return <Badge variant="success">Entregado</Badge>;
+        return <Badge variant="default">Entregado</Badge>;
       case 'cancelado':
         return <Badge variant="destructive">Cancelado</Badge>;
       default:

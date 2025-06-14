@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
 type UserRole = 'admin' | 'moderator' | 'user';
@@ -18,25 +17,14 @@ export const useUserRole = () => {
         return;
       }
 
-      try {
-        const { data, error } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single();
-
-        if (error) {
-          console.log('No role found for user, defaulting to user role');
-          setRole('user');
-        } else {
-          setRole(data.role as UserRole);
-        }
-      } catch (error) {
-        console.error('Error loading user role:', error);
+      // Por ahora asumimos que solo desarrollos@inntech.gq es admin
+      // Más tarde se puede implementar con la tabla user_roles
+      if (user.email === 'desarrollos@inntech.gq') {
+        setRole('admin');
+      } else {
         setRole('user');
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     loadUserRole();

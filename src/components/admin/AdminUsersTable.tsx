@@ -19,9 +19,6 @@ export const AdminUsersTable = () => {
             id,
             nombre,
             activa
-          ),
-          user_roles (
-            role
           )
         `)
         .order('creado_el', { ascending: false });
@@ -90,8 +87,8 @@ export const AdminUsersTable = () => {
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
-                  <Badge variant={user.user_roles?.[0]?.role === 'admin' ? "destructive" : "secondary"}>
-                    {user.user_roles?.[0]?.role || 'user'}
+                  <Badge variant={user.email === 'desarrollos@inntech.gq' ? "destructive" : "secondary"}>
+                    {user.email === 'desarrollos@inntech.gq' ? 'admin' : 'user'}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -100,7 +97,7 @@ export const AdminUsersTable = () => {
                       {user.tiendas.map((tienda: any) => (
                         <div key={tienda.id} className="flex items-center gap-2">
                           <span className="text-sm">{tienda.nombre}</span>
-                          <Badge variant={tienda.activa ? "success" : "destructive"} className="text-xs">
+                          <Badge variant={tienda.activa ? "default" : "destructive"} className="text-xs">
                             {tienda.activa ? "Activa" : "Inactiva"}
                           </Badge>
                         </div>

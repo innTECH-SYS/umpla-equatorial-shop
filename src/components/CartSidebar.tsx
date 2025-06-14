@@ -19,7 +19,7 @@ interface CartSidebarProps {
 }
 
 export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebarProps) => {
-  const { items, updateQuantity, removeFromCart, clearCart, getTotal } = useCart();
+  const { items, updateQuantity, removeFromCart, clearCart, getTotalPrice } = useCart();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
@@ -45,7 +45,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
     setIsProcessing(true);
 
     try {
-      const total = getTotal();
+      const total = getTotalPrice();
       
       // Crear el pedido
       const { data: pedido, error: pedidoError } = await supabase
@@ -68,11 +68,11 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
       // Crear los items del pedido
       const pedidoItems = items.map(item => ({
         pedido_id: pedido.id,
-        producto_id: item.id,
+        producto_id: item.id.toString(),
         nombre_producto: item.name,
-        precio_unitario: item.price,
+        precio_unitario: Number(item.price),
         cantidad: item.quantity,
-        subtotal: item.price * item.quantity
+        subtotal: Number(item.price) * item.quantity
       }));
 
       const { error: itemsError } = await supabase
@@ -192,7 +192,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-semibold">Total:</span>
-                    <span className="text-xl font-bold text-primary">{getTotal()} XAF</span>
+                    <span className="text-xl font-bold text-primary">{getTotalPrice()} XAF</span>
                   </div>
                   
                   <Button 
@@ -227,11 +227,11 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
             {items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm mb-1">
                 <span>{item.name} x{item.quantity}</span>
-                <span>{item.price * item.quantity} XAF</span>
+                <span>{Number(item.price) * item.quantity} XAF</span>
               </div>
             ))}
             <div className="border-t pt-2 mt-2 font-semibold">
-              Total: {getTotal()} XAF
+              Total: {getTotalPrice()} XAF
             </div>
           </div>
 
@@ -279,11 +279,21 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
               />
             </div>
 
-            <PaymentMethodSelector
-              storeId={storeId}
-              selectedMethod={selectedPaymentMethod}
-              onMethodSelect={setSelectedPaymentMethod}
-            />
+            <div>
+              <Label htmlFor="paymentMethod">Método de pago *</Label>
+              <select 
+                id="paymentMethod"
+                value={selectedPaymentMethod}
+                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                required
+              >
+                <option value="">Selecciona un método de pago</option>
+                <option value="bank_transfer">Transferencia Bancaria</option>
+                <option value="cash_delivery">Pago contra entrega</option>
+                <option value="mobile_money">Dinero móvil</option>
+              </select>
+            </div>
           </div>
 
           <div className="flex gap-2 pt-4">
