@@ -1,5 +1,5 @@
 
-import { Check, Crown } from 'lucide-react';
+import { Check, Crown, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -38,7 +38,8 @@ const Pricing = () => {
         'Soporte prioritario',
         'Gestión completa de stock',
         'Hasta 5 imágenes por producto',
-        'Análisis básicos'
+        'Análisis básicos',
+        'Verificación KYC disponible'
       ],
       buttonText: userPlan === 'professional' ? 'Plan actual' : 'Actualizar plan',
       popular: true,
@@ -59,13 +60,18 @@ const Pricing = () => {
         'Hasta 10 imágenes por producto',
         'Análisis avanzados',
         'Dominio .gq gratuito por 1 año',
-        'Múltiples métodos de pago'
+        'Múltiples métodos de pago',
+        'Verificación KYC disponible'
       ],
       buttonText: userPlan === 'premium' ? 'Plan actual' : 'Actualizar plan',
       popular: false,
       current: userPlan === 'premium'
     }
   ];
+
+  const handleClose = () => {
+    window.history.back();
+  };
 
   if (loading) {
     return (
@@ -87,9 +93,14 @@ const Pricing = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">TuTienda</h1>
-            <Button variant="outline" onClick={() => window.history.back()}>
-              Volver
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={handleClose}>
+                Volver
+              </Button>
+              <Button variant="ghost" size="icon" onClick={handleClose}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
