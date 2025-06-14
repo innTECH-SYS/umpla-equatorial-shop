@@ -15,7 +15,15 @@ import Pricing from "./pages/Pricing";
 import StoreExample from "./pages/StoreExample";
 import StoreProfile from "./pages/StoreProfile";
 
-const queryClient = new QueryClient();
+// Create QueryClient outside of component to avoid recreating it
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // Componente para proteger rutas que requieren autenticación
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -70,7 +78,6 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <CartProvider>
-          <Toaster />
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -105,6 +112,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
+          <Toaster />
         </CartProvider>
       </TooltipProvider>
     </QueryClientProvider>
