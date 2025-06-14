@@ -31,7 +31,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/create-store" element={<CreateStore />} />
-            <Route path="/store/:subdomain" element={<PublicStore />} />
+            <Route path="/tienda/:storename" element={<PublicStore />} />
             <Route path="/store-profile" element={<StoreProfile />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/onboarding" element={<Onboarding />} />

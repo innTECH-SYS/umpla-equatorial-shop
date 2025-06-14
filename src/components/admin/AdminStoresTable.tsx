@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
+import { generateStoreUrl } from '@/lib/storeUtils';
 import { Store } from 'lucide-react';
 import { AdminStoreActions } from './AdminStoreActions';
 
@@ -87,9 +88,7 @@ export const AdminStoresTable = () => {
                     )}
                     <div>
                       <div className="font-medium">{store.nombre}</div>
-                      {store.subdominio && (
-                        <div className="text-sm text-gray-500">{store.subdominio}.umpla.gq</div>
-                      )}
+                      <div className="text-sm text-gray-500">{generateStoreUrl(store.nombre)}</div>
                     </div>
                   </div>
                 </TableCell>

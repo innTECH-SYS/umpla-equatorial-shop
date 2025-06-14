@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,6 +7,7 @@ import { ShareStoreModal } from '@/components/ShareStoreModal';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { generateStoreUrl, normalizeStoreName } from '@/lib/storeUtils';
 import { 
   Share2, 
   MapPin, 
@@ -40,7 +40,7 @@ interface SEOData {
 }
 
 const StoreProfile = () => {
-  const { subdomain } = useParams<{ subdomain: string }>();
+  const { storename } = useParams<{ storename: string }>();
   const [store, setStore] = useState<StoreData | null>(null);
   const [seoData, setSeoData] = useState<SEOData>({});
   const [loading, setLoading] = useState(true);
@@ -48,23 +48,35 @@ const StoreProfile = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (subdomain) {
-      fetchStoreData(subdomain);
+    if (storename) {
+      fetchStoreData(storename);
     }
-  }, [subdomain]);
+  }, [storename]);
 
-  const fetchStoreData = async (subdominio: string) => {
+  const fetchStoreData = async (storenamePart: string) => {
     try {
-      // Obtener datos de la tienda
-      const { data: storeData, error: storeError } = await supabase
+      // Get all stores and find the one that matches the normalized name
+      const { data: allStores, error: storeError } = await supabase
         .from('tiendas')
         .select('*')
-        .eq('subdominio', subdominio)
-        .eq('activa', true)
-        .single();
+        .eq('activa', true);
 
       if (storeError) {
-        console.error('Error fetching store:', storeError);
+        console.error('Error fetching stores:', storeError);
+        toast({
+          title: "Error",
+          description: "Ocurrió un error al cargar las tiendas.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Find store by normalized name
+      const matchingStore = allStores?.find(store => 
+        normalizeStoreName(store.nombre) === storenamePart
+      );
+
+      if (!matchingStore) {
         toast({
           title: "Tienda no encontrada",
           description: "La tienda que buscas no existe o no está disponible.",
@@ -73,14 +85,14 @@ const StoreProfile = () => {
         return;
       }
 
-      setStore(storeData);
+      setStore(matchingStore);
 
       // Obtener datos SEO
-      if (storeData?.id) {
+      if (matchingStore?.id) {
         const { data: seoData } = await supabase
           .from('tiendas_seo')
           .select('*')
-          .eq('tienda_id', storeData.id)
+          .eq('tienda_id', matchingStore.id)
           .maybeSingle();
 
         if (seoData) {
@@ -123,7 +135,7 @@ const StoreProfile = () => {
     );
   }
 
-  const storeUrl = `${window.location.origin}/tienda/${store.subdominio}`;
+  const storeUrl = `${window.location.origin}${generateStoreUrl(store.nombre)}`;
   const seoTitle = seoData.meta_title || `${store.nombre} - Tienda en Umpla`;
   const seoDescription = seoData.meta_description || store.descripcion || `Visita la tienda ${store.nombre} en Umpla, la plataforma líder de comercio electrónico en Guinea Ecuatorial.`;
   const seoImage = seoData.og_image_url || store.logo_url || store.banner_url;
@@ -291,7 +303,6 @@ const StoreProfile = () => {
       <ShareStoreModal 
         isOpen={shareModalOpen}
         onClose={() => setShareModalOpen(false)}
-        storeUrl={storeUrl}
         storeName={store.nombre}
       />
     </div>

@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/contexts/CartContext';
 import { CartSidebar } from '@/components/CartSidebar';
 import { supabase } from '@/integrations/supabase/client';
+import { normalizeStoreName } from '@/lib/storeUtils';
 import { 
   ShoppingCart, 
   Heart,
@@ -19,7 +20,7 @@ import {
 } from 'lucide-react';
 
 const PublicStore = () => {
-  const { subdomain } = useParams();
+  const { storename } = useParams();
   const { toast } = useToast();
   const { addToCart, openCart, isCartOpen, closeCart, getTotalItems } = useCart();
   const [store, setStore] = useState<any>(null);
@@ -29,19 +30,29 @@ const PublicStore = () => {
   useEffect(() => {
     const loadStore = async () => {
       try {
-        const { data: storeData, error: storeError } = await supabase
+        // Get all stores and find the one that matches the normalized name
+        const { data: allStores, error: storeError } = await supabase
           .from('tiendas')
           .select('*')
-          .eq('subdominio', subdomain)
-          .single();
+          .eq('activa', true);
 
         if (storeError) throw storeError;
-        setStore(storeData);
+
+        // Find store by normalized name
+        const matchingStore = allStores?.find(store => 
+          normalizeStoreName(store.nombre) === storename
+        );
+
+        if (!matchingStore) {
+          throw new Error('Store not found');
+        }
+
+        setStore(matchingStore);
 
         const { data: productsData, error: productsError } = await supabase
           .from('productos')
           .select('*')
-          .eq('tienda_id', storeData.id)
+          .eq('tienda_id', matchingStore.id)
           .eq('activo', true);
 
         if (productsError) throw productsError;
@@ -58,10 +69,10 @@ const PublicStore = () => {
       }
     };
 
-    if (subdomain) {
+    if (storename) {
       loadStore();
     }
-  }, [subdomain, toast]);
+  }, [storename, toast]);
 
   const handleAddToCart = (product: any) => {
     addToCart(product, store);
@@ -240,7 +251,7 @@ const PublicStore = () => {
             <Card className="p-6 text-center bg-gray-50 border-0">
               <Mail className="h-8 w-8 text-primary mx-auto mb-4" />
               <h4 className="font-semibold text-secondary mb-2">Email</h4>
-              <p className="text-gray-600">info@{store.subdominio}.com</p>
+              <p className="text-gray-600">info@{normalizeStoreName(store.nombre)}.com</p>
               <p className="text-sm text-gray-500 mt-1">Respuesta en 24h</p>
             </Card>
             

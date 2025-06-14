@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { generateStoreUrl } from '@/lib/storeUtils';
 import { MoreHorizontal, Eye, Ban, CheckCircle, Edit, Trash2 } from 'lucide-react';
 
 interface AdminStoreActionsProps {
@@ -82,15 +83,8 @@ export const AdminStoreActions = ({ store, onUpdate }: AdminStoreActionsProps) =
   };
 
   const viewStore = () => {
-    if (store.subdominio) {
-      window.open(`/store/${store.subdominio}`, '_blank');
-    } else {
-      toast({
-        title: "Sin subdominio",
-        description: "Esta tienda no tiene un subdominio configurado",
-        variant: "destructive"
-      });
-    }
+    const storeUrl = generateStoreUrl(store.nombre);
+    window.open(storeUrl, '_blank');
   };
 
   return (

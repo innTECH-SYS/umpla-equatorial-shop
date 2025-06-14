@@ -6,7 +6,6 @@ import { useAuth } from '@/hooks/useAuth';
 interface UserStore {
   id: string;
   nombre: string;
-  subdominio?: string;
   activa: boolean;
 }
 
@@ -28,7 +27,7 @@ export const useUserStore = () => {
       try {
         const { data, error } = await supabase
           .from('tiendas')
-          .select('id, nombre, subdominio, activa')
+          .select('id, nombre, activa')
           .eq('usuario_id', user.id)
           .maybeSingle();
 

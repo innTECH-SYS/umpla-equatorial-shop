@@ -25,7 +25,6 @@ interface StoreData {
   ubicacion: string;
   logo_url: string;
   banner_url: string;
-  subdominio: string;
 }
 
 const categories = [
@@ -73,8 +72,7 @@ export const CustomizeStoreModal = ({ open, onOpenChange }: CustomizeStoreModalP
     telefono_whatsapp: '',
     ubicacion: '',
     logo_url: '',
-    banner_url: '',
-    subdominio: ''
+    banner_url: ''
   });
   const { user } = useAuth();
   const { toast } = useToast();
@@ -106,8 +104,7 @@ export const CustomizeStoreModal = ({ open, onOpenChange }: CustomizeStoreModalP
           telefono_whatsapp: data.telefono_whatsapp || '',
           ubicacion: data.ubicacion || '',
           logo_url: data.logo_url || '',
-          banner_url: data.banner_url || '',
-          subdominio: data.subdominio || ''
+          banner_url: data.banner_url || ''
         });
       }
     } catch (error) {
@@ -132,8 +129,7 @@ export const CustomizeStoreModal = ({ open, onOpenChange }: CustomizeStoreModalP
           telefono_whatsapp: storeData.telefono_whatsapp,
           ubicacion: storeData.ubicacion,
           logo_url: storeData.logo_url || null,
-          banner_url: storeData.banner_url || null,
-          subdominio: storeData.subdominio || null
+          banner_url: storeData.banner_url || null
         }, {
           onConflict: 'usuario_id'
         });
@@ -239,19 +235,6 @@ export const CustomizeStoreModal = ({ open, onOpenChange }: CustomizeStoreModalP
             </div>
 
             <div>
-              <Label htmlFor="subdominio">Subdominio personalizado</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  id="subdominio"
-                  value={storeData.subdominio}
-                  onChange={(e) => setStoreData({...storeData, subdominio: e.target.value})}
-                  placeholder="mi-tienda"
-                />
-                <span className="text-sm text-gray-500">.umpla.gq</span>
-              </div>
-            </div>
-
-            <div>
               <Label htmlFor="logo_url">URL del logo</Label>
               <Input
                 id="logo_url"
@@ -259,6 +242,9 @@ export const CustomizeStoreModal = ({ open, onOpenChange }: CustomizeStoreModalP
                 onChange={(e) => setStoreData({...storeData, logo_url: e.target.value})}
                 placeholder="https://ejemplo.com/logo.png"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                Recomendado: 200x200px, formato PNG o JPG
+              </p>
             </div>
 
             <div>
@@ -269,6 +255,9 @@ export const CustomizeStoreModal = ({ open, onOpenChange }: CustomizeStoreModalP
                 onChange={(e) => setStoreData({...storeData, banner_url: e.target.value})}
                 placeholder="https://ejemplo.com/banner.jpg"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                Recomendado: 1200x400px, formato JPG o PNG
+              </p>
             </div>
 
             <div className="flex gap-2 pt-4">

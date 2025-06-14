@@ -6,17 +6,19 @@ import { Input } from '@/components/ui/input';
 import { Share2, Copy, MessageCircle, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { QRCodeSVG } from 'qrcode.react';
+import { generateStoreUrl } from '@/lib/storeUtils';
 
 interface ShareStoreModalProps {
   isOpen: boolean;
   onClose: () => void;
-  storeUrl: string;
   storeName: string;
 }
 
-export const ShareStoreModal = ({ isOpen, onClose, storeUrl, storeName }: ShareStoreModalProps) => {
+export const ShareStoreModal = ({ isOpen, onClose, storeName }: ShareStoreModalProps) => {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+
+  const storeUrl = `${window.location.origin}${generateStoreUrl(storeName)}`;
 
   const handleCopyLink = async () => {
     try {
