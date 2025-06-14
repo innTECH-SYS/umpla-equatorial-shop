@@ -247,6 +247,44 @@ export type Database = {
           },
         ]
       }
+      metodos_pago: {
+        Row: {
+          activo: boolean | null
+          agregado_el: string | null
+          id: string
+          numero: string | null
+          tipo: string
+          titular: string | null
+          usuario_id: string | null
+        }
+        Insert: {
+          activo?: boolean | null
+          agregado_el?: string | null
+          id?: string
+          numero?: string | null
+          tipo: string
+          titular?: string | null
+          usuario_id?: string | null
+        }
+        Update: {
+          activo?: boolean | null
+          agregado_el?: string | null
+          id?: string
+          numero?: string | null
+          tipo?: string
+          titular?: string | null
+          usuario_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metodos_pago_usuario_id_fkey"
+            columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pharmacies: {
         Row: {
           address: string
@@ -314,6 +352,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      planes: {
+        Row: {
+          creado_el: string | null
+          descripcion: string | null
+          id: string
+          limite_productos: number | null
+          nombre: string
+          permite_dominio: boolean | null
+          precio: number
+        }
+        Insert: {
+          creado_el?: string | null
+          descripcion?: string | null
+          id?: string
+          limite_productos?: number | null
+          nombre: string
+          permite_dominio?: boolean | null
+          precio: number
+        }
+        Update: {
+          creado_el?: string | null
+          descripcion?: string | null
+          id?: string
+          limite_productos?: number | null
+          nombre?: string
+          permite_dominio?: boolean | null
+          precio?: number
+        }
+        Relationships: []
       }
       prescription_estimations: {
         Row: {
@@ -403,6 +471,53 @@ export type Database = {
           },
         ]
       }
+      productos: {
+        Row: {
+          activo: boolean | null
+          creado_el: string | null
+          descripcion: string | null
+          id: string
+          imagen_url: string | null
+          nombre: string
+          precio: number
+          stock: number | null
+          tienda_id: string | null
+          tipo: string | null
+        }
+        Insert: {
+          activo?: boolean | null
+          creado_el?: string | null
+          descripcion?: string | null
+          id?: string
+          imagen_url?: string | null
+          nombre: string
+          precio: number
+          stock?: number | null
+          tienda_id?: string | null
+          tipo?: string | null
+        }
+        Update: {
+          activo?: boolean | null
+          creado_el?: string | null
+          descripcion?: string | null
+          id?: string
+          imagen_url?: string | null
+          nombre?: string
+          precio?: number
+          stock?: number | null
+          tienda_id?: string | null
+          tipo?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "productos_tienda_id_fkey"
+            columns: ["tienda_id"]
+            isOneToOne: false
+            referencedRelation: "tiendas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -476,6 +591,87 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tiendas: {
+        Row: {
+          activa: boolean | null
+          categoria: string | null
+          creado_el: string | null
+          dominio_personal: string | null
+          id: string
+          logo_url: string | null
+          nombre: string
+          plan_id: string | null
+          subdominio: string | null
+          usuario_id: string | null
+        }
+        Insert: {
+          activa?: boolean | null
+          categoria?: string | null
+          creado_el?: string | null
+          dominio_personal?: string | null
+          id?: string
+          logo_url?: string | null
+          nombre: string
+          plan_id?: string | null
+          subdominio?: string | null
+          usuario_id?: string | null
+        }
+        Update: {
+          activa?: boolean | null
+          categoria?: string | null
+          creado_el?: string | null
+          dominio_personal?: string | null
+          id?: string
+          logo_url?: string | null
+          nombre?: string
+          plan_id?: string | null
+          subdominio?: string | null
+          usuario_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tiendas_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "planes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tiendas_usuario_id_fkey"
+            columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      usuarios: {
+        Row: {
+          creado_el: string | null
+          email: string | null
+          foto: string | null
+          id: string
+          nombre: string | null
+          rol: string | null
+        }
+        Insert: {
+          creado_el?: string | null
+          email?: string | null
+          foto?: string | null
+          id: string
+          nombre?: string | null
+          rol?: string | null
+        }
+        Update: {
+          creado_el?: string | null
+          email?: string | null
+          foto?: string | null
+          id?: string
+          nombre?: string | null
+          rol?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

@@ -1,9 +1,18 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleCreateStore = () => {
+    if (user) {
+      navigate('/create-store');
+    } else {
+      navigate('/auth');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -19,10 +28,14 @@ const Index = () => {
           <nav className="hidden md:flex items-center space-x-6">
             <Button variant="ghost" onClick={() => navigate('/pricing')}>Precios</Button>
             <Button variant="ghost" onClick={() => navigate('/store-example')}>Ejemplos</Button>
-            <Button onClick={() => navigate('/create-store')}>Crear Tienda</Button>
+            {user ? (
+              <Button onClick={() => navigate('/dashboard')}>Mi Dashboard</Button>
+            ) : (
+              <Button onClick={() => navigate('/auth')}>Iniciar Sesión</Button>
+            )}
           </nav>
-          <Button className="md:hidden" onClick={() => navigate('/create-store')}>
-            Crear Tienda
+          <Button className="md:hidden" onClick={handleCreateStore}>
+            {user ? 'Mi Dashboard' : 'Iniciar Sesión'}
           </Button>
         </div>
       </header>
@@ -40,7 +53,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="w-full sm:w-auto"
-              onClick={() => navigate('/create-store')}
+              onClick={handleCreateStore}
             >
               Crear mi tienda gratis
             </Button>
@@ -106,7 +119,7 @@ const Index = () => {
           <Button 
             size="lg" 
             className="w-full sm:w-auto"
-            onClick={() => navigate('/create-store')}
+            onClick={handleCreateStore}
           >
             Crear mi tienda ahora
           </Button>

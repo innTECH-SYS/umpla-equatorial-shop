@@ -1,11 +1,24 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Check, Crown, Star } from "lucide-react";
+
+interface Plan {
+  id: string;
+  nombre: string;
+  precio: number;
+  limite_productos: number;
+  permite_dominio: boolean;
+  descripcion: string;
+}
 
 const CreateStore = () => {
   const navigate = useNavigate();
@@ -16,6 +29,10 @@ const CreateStore = () => {
   const [logo, setLogo] = useState<File | null>(null);
   const [isCheckingDomain, setIsCheckingDomain] = useState(false);
   const [domainAvailable, setDomainAvailable] = useState<boolean | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   const categories = [
     "Moda",
@@ -26,6 +43,29 @@ const CreateStore = () => {
     "Otros"
   ];
 
+  useEffect(() => {
+    fetchPlans();
+  }, []);
+
+  const fetchPlans = async () => {
+    const { data: plansData, error } = await supabase
+      .from('planes')
+      .select('*')
+      .order('precio', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching plans:', error);
+      return;
+    }
+
+    setPlans(plansData || []);
+    // Seleccionar plan gratuito por defecto
+    const freePlan = plansData?.find(plan => plan.precio === 0);
+    if (freePlan) {
+      setSelectedPlan(freePlan);
+    }
+  };
+
   const checkDomainAvailability = async (domain: string) => {
     if (!domain) {
       setDomainAvailable(null);
@@ -33,14 +73,27 @@ const CreateStore = () => {
     }
     
     setIsCheckingDomain(true);
-    // Simular verificación de dominio
-    setTimeout(() => {
-      // Simular algunos dominios como no disponibles
-      const unavailableDomains = ['tienda', 'shop', 'store', 'moda', 'tech'];
-      const isAvailable = !unavailableDomains.includes(domain.toLowerCase());
-      setDomainAvailable(isAvailable);
-      setIsCheckingDomain(false);
-    }, 1000);
+    
+    try {
+      const { data, error } = await supabase
+        .from('tiendas')
+        .select('subdominio')
+        .eq('subdominio', domain.toLowerCase())
+        .single();
+
+      if (error && error.code === 'PGRST116') {
+        // No se encontró, está disponible
+        setDomainAvailable(true);
+      } else {
+        // Se encontró, no está disponible
+        setDomainAvailable(false);
+      }
+    } catch (error) {
+      console.error('Error checking domain:', error);
+      setDomainAvailable(false);
+    }
+    
+    setIsCheckingDomain(false);
   };
 
   const handleSubdomainChange = (value: string) => {
@@ -48,8 +101,8 @@ const CreateStore = () => {
     checkDomainAvailability(value);
   };
 
-  const handleCreateStore = () => {
-    if (!storeName || !category || !subdomain) {
+  const handleCreateStore = async () => {
+    if (!storeName || !category || !subdomain || !selectedPlan) {
       toast({
         title: "Campos requeridos",
         description: "Por favor completa todos los campos obligatorios.",
@@ -67,14 +120,79 @@ const CreateStore = () => {
       return;
     }
 
-    toast({
-      title: "¡Tienda creada!",
-      description: `Tu tienda ${storeName} se ha creado exitosamente.`,
-    });
-    
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 2000);
+    setIsCreating(true);
+
+    try {
+      // Verificar autenticación
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error de autenticación",
+          description: "Debes iniciar sesión para crear una tienda.",
+          variant: "destructive"
+        });
+        navigate('/auth');
+        return;
+      }
+
+      // Crear la tienda
+      const { data: tiendaData, error: tiendaError } = await supabase
+        .from('tiendas')
+        .insert({
+          usuario_id: user.id,
+          nombre: storeName,
+          categoria: category,
+          subdominio: subdomain.toLowerCase(),
+          plan_id: selectedPlan.id
+        })
+        .select()
+        .single();
+
+      if (tiendaError) {
+        console.error('Error creating store:', tiendaError);
+        toast({
+          title: "Error al crear tienda",
+          description: "Hubo un problema al crear tu tienda. Inténtalo de nuevo.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      toast({
+        title: "¡Tienda creada exitosamente!",
+        description: `Tu tienda ${storeName} está lista en ${subdomain}.umpla.gq`,
+      });
+      
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error inesperado",
+        description: "Ocurrió un error inesperado. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    return price === 0 ? 'Gratis' : `${price.toLocaleString()} XAF`;
+  };
+
+  const getPlanIcon = (planName: string) => {
+    switch (planName.toLowerCase()) {
+      case 'premium':
+        return <Crown className="h-5 w-5 text-yellow-500" />;
+      case 'estándar':
+        return <Star className="h-5 w-5 text-blue-500" />;
+      default:
+        return <Check className="h-5 w-5 text-green-500" />;
+    }
   };
 
   return (
@@ -208,27 +326,95 @@ const CreateStore = () => {
                 )}
               </div>
 
-              {/* Plan Gratuito Info */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start space-x-3">
-                  <div className="text-primary text-xl">ℹ️</div>
-                  <div>
-                    <h3 className="font-medium text-primary mb-1">Plan Gratuito</h3>
-                    <p className="text-sm text-gray-700">
-                      Con el plan gratuito puedes subir hasta <strong>10 productos</strong> y tener tu tienda en línea gratis con subdominio <strong>.umpla.gq</strong>
-                    </p>
+              {/* Plan seleccionado */}
+              {selectedPlan && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    {getPlanIcon(selectedPlan.nombre)}
+                    <div className="flex-1">
+                      <h3 className="font-medium text-primary mb-1">Plan {selectedPlan.nombre}</h3>
+                      <p className="text-sm text-gray-700 mb-2">
+                        {selectedPlan.descripcion}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-lg">{formatPrice(selectedPlan.precio)}</span>
+                        <Dialog open={showPlanModal} onOpenChange={setShowPlanModal}>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              ¿Quieres usar tu propio dominio?
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl">
+                            <DialogHeader>
+                              <DialogTitle>Planes disponibles</DialogTitle>
+                              <DialogDescription>
+                                Elige el plan que mejor se adapte a tus necesidades
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                              {plans.map((plan) => (
+                                <Card 
+                                  key={plan.id} 
+                                  className={`cursor-pointer transition-all ${
+                                    selectedPlan?.id === plan.id 
+                                      ? 'ring-2 ring-blue-500 bg-blue-50' 
+                                      : 'hover:shadow-lg'
+                                  }`}
+                                  onClick={() => {
+                                    setSelectedPlan(plan);
+                                    setShowPlanModal(false);
+                                  }}
+                                >
+                                  <CardHeader className="text-center">
+                                    {getPlanIcon(plan.nombre)}
+                                    <CardTitle className="text-xl">{plan.nombre}</CardTitle>
+                                    <CardDescription className="text-2xl font-bold">
+                                      {formatPrice(plan.precio)}
+                                    </CardDescription>
+                                  </CardHeader>
+                                  <CardContent>
+                                    <ul className="space-y-2 text-sm">
+                                      <li className="flex items-center">
+                                        <Check className="h-4 w-4 text-green-500 mr-2" />
+                                        {plan.limite_productos === -1 
+                                          ? 'Productos ilimitados' 
+                                          : `Hasta ${plan.limite_productos} productos`
+                                        }
+                                      </li>
+                                      <li className="flex items-center">
+                                        <Check className="h-4 w-4 text-green-500 mr-2" />
+                                        {plan.permite_dominio 
+                                          ? 'Dominio personalizado' 
+                                          : 'Subdominio gratuito'
+                                        }
+                                      </li>
+                                      {plan.nombre === 'Premium' && (
+                                        <li className="flex items-center">
+                                          <Check className="h-4 w-4 text-green-500 mr-2" />
+                                          Estadísticas avanzadas
+                                        </li>
+                                      )}
+                                    </ul>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Submit Button */}
               <Button 
                 onClick={handleCreateStore}
                 className="w-full"
                 size="lg"
-                disabled={!storeName || !category || !subdomain || domainAvailable === false}
+                disabled={!storeName || !category || !subdomain || domainAvailable === false || isCreating}
               >
-                Crear mi tienda
+                {isCreating ? 'Creando tienda...' : 'Crear mi tienda'}
               </Button>
             </div>
           </div>
