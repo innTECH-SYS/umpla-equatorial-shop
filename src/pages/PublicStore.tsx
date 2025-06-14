@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { useCart } from '@/contexts/CartContext';
 import { CartSidebar } from '@/components/CartSidebar';
 import { supabase } from '@/integrations/supabase/client';
 import { normalizeStoreName } from '@/lib/storeUtils';
+import { TranslationProvider } from '@/contexts/TranslationContext';
 import { 
   ShoppingCart, 
   Heart,
@@ -16,10 +18,11 @@ import {
   Shield,
   Phone,
   Mail,
-  MapPin
+  MapPin,
+  Package
 } from 'lucide-react';
 
-const PublicStore = () => {
+const PublicStoreContent = () => {
   const { storename } = useParams();
   const { toast } = useToast();
   const { addToCart, openCart, isCartOpen, closeCart, getTotalItems } = useCart();
@@ -30,6 +33,8 @@ const PublicStore = () => {
   useEffect(() => {
     const loadStore = async () => {
       try {
+        console.log('Loading store for storename:', storename);
+        
         // Get all stores and find the one that matches the normalized name
         const { data: allStores, error: storeError } = await supabase
           .from('tiendas')
@@ -47,15 +52,18 @@ const PublicStore = () => {
           throw new Error('Store not found');
         }
 
+        console.log('Store found:', matchingStore);
         setStore(matchingStore);
 
         const { data: productsData, error: productsError } = await supabase
           .from('productos')
           .select('*')
           .eq('tienda_id', matchingStore.id)
-          .eq('activo', true);
+          .eq('activo', true)
+          .eq('disponible', true);
 
         if (productsError) throw productsError;
+        console.log('Products loaded:', productsData?.length || 0);
         setProducts(productsData || []);
       } catch (error) {
         console.error('Error loading store:', error);
@@ -74,8 +82,30 @@ const PublicStore = () => {
     }
   }, [storename, toast]);
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'XAF',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price).replace('XAF', 'XAF');
+  };
+
   const handleAddToCart = (product: any) => {
-    addToCart(product, store);
+    console.log('Adding product to cart:', product);
+    
+    // Convertir producto al formato del carrito
+    const cartProduct = {
+      id: product.id,
+      name: product.nombre,
+      price: formatPrice(product.precio),
+      image: product.imagen_url || '/placeholder.svg',
+      storeId: store.id,
+      rawPrice: product.precio
+    };
+
+    addToCart(cartProduct, { name: store.nombre });
+    
     toast({
       title: "Producto agregado",
       description: `${product.nombre} se agregó al carrito`,
@@ -179,11 +209,17 @@ const PublicStore = () => {
             {products.map((product) => (
               <Card key={product.id} className="bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 group overflow-hidden">
                 <div className="relative">
-                  <img 
-                    src={product.imagen_url} 
-                    alt={product.nombre}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {product.imagen_url ? (
+                    <img 
+                      src={product.imagen_url} 
+                      alt={product.nombre}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                      <Package className="h-16 w-16 text-gray-400" />
+                    </div>
+                  )}
                   {product.destacado && (
                     <span className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-semibold bg-blue-500 text-white">
                       Destacado
@@ -202,9 +238,9 @@ const PublicStore = () => {
                   <div className="flex items-center gap-2 mb-2">
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium text-gray-700">{product.rating || 4.5}</span>
+                      <span className="text-sm font-medium text-gray-700">4.5</span>
                     </div>
-                    <span className="text-sm text-gray-500">({product.reviews || 100} reseñas)</span>
+                    <span className="text-sm text-gray-500">(100 reseñas)</span>
                   </div>
                   
                   <h4 className="font-semibold text-secondary mb-3 group-hover:text-primary transition-colors">
@@ -212,10 +248,7 @@ const PublicStore = () => {
                   </h4>
                   
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="text-lg font-bold text-secondary">{product.precio} XAF</span>
-                    {product.precio_anterior && (
-                      <span className="text-sm text-gray-500 line-through">{product.precio_anterior} XAF</span>
-                    )}
+                    <span className="text-lg font-bold text-secondary">{formatPrice(product.precio)}</span>
                   </div>
                   
                   <Button 
@@ -244,7 +277,7 @@ const PublicStore = () => {
             <Card className="p-6 text-center bg-gray-50 border-0">
               <Phone className="h-8 w-8 text-primary mx-auto mb-4" />
               <h4 className="font-semibold text-secondary mb-2">Teléfono</h4>
-              <p className="text-gray-600">+240 555 123 456</p>
+              <p className="text-gray-600">{store.telefono || '+240 555 123 456'}</p>
               <p className="text-sm text-gray-500 mt-1">Lun-Vie 8AM-6PM</p>
             </Card>
             
@@ -258,7 +291,7 @@ const PublicStore = () => {
             <Card className="p-6 text-center bg-gray-50 border-0">
               <MapPin className="h-8 w-8 text-primary mx-auto mb-4" />
               <h4 className="font-semibold text-secondary mb-2">Ubicación</h4>
-              <p className="text-gray-600">Malabo, Guinea Ecuatorial</p>
+              <p className="text-gray-600">{store.ubicacion || 'Malabo, Guinea Ecuatorial'}</p>
               <p className="text-sm text-gray-500 mt-1">Entregas locales</p>
             </Card>
           </div>
@@ -285,6 +318,14 @@ const PublicStore = () => {
         </div>
       </footer>
     </div>
+  );
+};
+
+const PublicStore = () => {
+  return (
+    <TranslationProvider>
+      <PublicStoreContent />
+    </TranslationProvider>
   );
 };
 
