@@ -71,7 +71,7 @@ const Auth = () => {
         email: signupEmail,
         password: signupPassword,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/dashboard`,
           data: {
             full_name: signupName
           }
@@ -89,7 +89,7 @@ const Auth = () => {
 
       toast({
         title: "¡Cuenta creada!",
-        description: "Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión.",
+        description: "Revisa tu email para confirmar tu cuenta. Una vez confirmada, serás redirigido automáticamente.",
       });
 
       // Limpiar formulario
