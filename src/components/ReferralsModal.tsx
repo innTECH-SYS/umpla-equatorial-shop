@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
@@ -23,7 +22,7 @@ interface Referral {
   usuarios: {
     nombre: string;
     email: string;
-  };
+  } | null;
 }
 
 export const ReferralsModal = ({ open, onOpenChange }: ReferralsModalProps) => {
@@ -64,7 +63,7 @@ export const ReferralsModal = ({ open, onOpenChange }: ReferralsModalProps) => {
       }
       setReferralCode(code);
 
-      // Cargar referidos
+      // Cargar referidos con información del usuario referido
       const { data: referralsData, error: referralsError } = await supabase
         .from('referidos')
         .select(`
@@ -215,7 +214,7 @@ export const ReferralsModal = ({ open, onOpenChange }: ReferralsModalProps) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{referral.usuarios?.nombre || 'Usuario'}</p>
-                        <p className="text-sm text-gray-600">{referral.usuarios?.email}</p>
+                        <p className="text-sm text-gray-600">{referral.usuarios?.email || 'Email no disponible'}</p>
                         <p className="text-xs text-gray-500">
                           Registrado: {new Date(referral.created_at).toLocaleDateString()}
                         </p>
