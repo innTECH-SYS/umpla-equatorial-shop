@@ -7,6 +7,10 @@ import { CustomizeStoreModal } from '@/components/CustomizeStoreModal';
 import { ReferralsModal } from '@/components/ReferralsModal';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header } from '@/components/dashboard/Header';
+import { MobileHeader } from '@/components/dashboard/MobileHeader';
+import { MobileBottomNav } from '@/components/dashboard/MobileBottomNav';
+import { MobileMoreMenu } from '@/components/dashboard/MobileMoreMenu';
+import { MobileOrdersView } from '@/components/dashboard/MobileOrdersView';
 import { PaymentMethodReminder } from '@/components/dashboard/PaymentMethodReminder';
 import { StatsGrid } from '@/components/dashboard/StatsGrid';
 import { QuickActions } from '@/components/dashboard/QuickActions';
@@ -17,6 +21,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [storeName] = useState("Mi Negocio GQ");
   const [hasPaymentMethod] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
   
   // Estados para los modales
   const [addProductOpen, setAddProductOpen] = useState(false);
@@ -45,49 +50,108 @@ const Dashboard = () => {
     };
   }, []);
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar 
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
-        onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
-        onReferralsClick={() => setReferralsOpen(true)}
-        onProductsClick={() => setProductsOpen(true)}
-      />
+  const renderMobileContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return (
+          <div className="space-y-4">
+            <PaymentMethodReminder 
+              hasPaymentMethod={hasPaymentMethod}
+              onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+            />
+            <StatsGrid />
+            <StoreImprovementChecklist />
+          </div>
+        );
+      case 'orders':
+        return <MobileOrdersView />;
+      case 'more':
+        return (
+          <MobileMoreMenu
+            onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+            onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
+            onReferralsClick={() => setReferralsOpen(true)}
+          />
+        );
+      default:
+        return (
+          <div className="space-y-4">
+            <PaymentMethodReminder 
+              hasPaymentMethod={hasPaymentMethod}
+              onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+            />
+            <StatsGrid />
+            <StoreImprovementChecklist />
+          </div>
+        );
+    }
+  };
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <Header 
-          storeName={storeName}
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex min-h-screen">
+        <Sidebar 
+          sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
-          onAddProductClick={() => setAddProductOpen(true)}
+          onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+          onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
+          onReferralsClick={() => setReferralsOpen(true)}
+          onProductsClick={() => setProductsOpen(true)}
         />
 
-        {/* Content */}
-        <main className="flex-1 p-4 sm:p-6 space-y-6">
-          <PaymentMethodReminder 
-            hasPaymentMethod={hasPaymentMethod}
-            onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          <Header 
+            storeName={storeName}
+            setSidebarOpen={setSidebarOpen}
+            onAddProductClick={() => setAddProductOpen(true)}
           />
 
-          <StatsGrid />
-
-          {/* Checklist de mejoras */}
-          <StoreImprovementChecklist />
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <QuickActions 
-              onAddProductClick={() => setAddProductOpen(true)}
+          {/* Content */}
+          <main className="flex-1 p-4 sm:p-6 space-y-6">
+            <PaymentMethodReminder 
+              hasPaymentMethod={hasPaymentMethod}
               onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
-              onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
-              onReferralsClick={() => setReferralsOpen(true)}
-              onProductsClick={() => setProductsOpen(true)}
             />
-            <PlanCard />
-          </div>
+
+            <StatsGrid />
+
+            {/* Checklist de mejoras */}
+            <StoreImprovementChecklist />
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <QuickActions 
+                onAddProductClick={() => setAddProductOpen(true)}
+                onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+                onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
+                onReferralsClick={() => setReferralsOpen(true)}
+                onProductsClick={() => setProductsOpen(true)}
+              />
+              <PlanCard />
+            </div>
+          </main>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="lg:hidden min-h-screen flex flex-col">
+        <MobileHeader storeName={storeName} activeTab={activeTab} />
+        
+        <main className="flex-1 overflow-y-auto">
+          {renderMobileContent()}
         </main>
+
+        <MobileBottomNav
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onAddProductClick={() => setAddProductOpen(true)}
+          onProductsClick={() => setProductsOpen(true)}
+          onPaymentMethodsClick={() => setPaymentMethodsOpen(true)}
+          onCustomizeStoreClick={() => setCustomizeStoreOpen(true)}
+          onReferralsClick={() => setReferralsOpen(true)}
+        />
       </div>
 
       {/* Modales */}
