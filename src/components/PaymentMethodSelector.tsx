@@ -11,15 +11,28 @@ interface PaymentMethod {
   description: string;
   icon: string;
   fee?: string;
+  disabled?: boolean;
+  comingSoon?: boolean;
 }
 
 const availablePaymentMethods: PaymentMethod[] = [
   {
-    id: 'mobile_money',
-    name: 'Mobile Money',
-    description: 'MTN Mobile Money, Orange Money',
+    id: 'mobile_money_mtn',
+    name: 'Muni Dinero',
+    description: 'Pagos móviles',
     icon: 'smartphone',
-    fee: '2% + ₣500'
+    fee: '2% + ₣500',
+    disabled: true,
+    comingSoon: true
+  },
+  {
+    id: 'mobile_money_orange',
+    name: 'Rosa Money',
+    description: 'Pagos móviles',
+    icon: 'smartphone',
+    fee: '2% + ₣500',
+    disabled: true,
+    comingSoon: true
   },
   {
     id: 'bank_transfer',
@@ -65,19 +78,20 @@ export const PaymentMethodSelector = ({ storeIds, onBack }: PaymentMethodSelecto
 
   // Simulate store payment methods (in real app, this would come from store settings)
   const storePaymentMethods = {
-    0: ['mobile_money', 'bank_transfer', 'credit_card', 'cash_delivery'], // Mi Negocio GQ
-    1: ['mobile_money', 'credit_card', 'cash_delivery'], // Moda Elegante
+    0: ['bank_transfer', 'credit_card', 'cash_delivery'], // Mi Negocio GQ
+    1: ['credit_card', 'cash_delivery'], // Moda Elegante
     2: ['bank_transfer', 'credit_card', 'cash_delivery'], // Hogar Perfecto
-    3: ['mobile_money', 'credit_card'], // Deporte Total
-    4: ['mobile_money', 'bank_transfer', 'credit_card'] // Salud y Belleza
+    3: ['credit_card'], // Deporte Total
+    4: ['bank_transfer', 'credit_card'] // Salud y Belleza
   };
 
-  // Get payment methods available for all stores in cart
-  const availableMethods = availablePaymentMethods.filter(method => 
-    storeIds.every(storeId => 
+  // Get payment methods available for all stores in cart (excluding disabled ones)
+  const availableMethods = availablePaymentMethods.filter(method => {
+    if (method.disabled) return false;
+    return storeIds.every(storeId => 
       storePaymentMethods[storeId as keyof typeof storePaymentMethods]?.includes(method.id)
-    )
-  );
+    );
+  });
 
   const handlePayment = () => {
     if (!selectedMethod) return;
@@ -97,38 +111,60 @@ export const PaymentMethodSelector = ({ storeIds, onBack }: PaymentMethodSelecto
         <h3 className="font-semibold">Método de pago</h3>
       </div>
 
+      {/* Mostrar métodos próximamente disponibles */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-medium text-gray-600">Próximamente disponibles:</h4>
+        {availablePaymentMethods.filter(method => method.comingSoon).map((method) => (
+          <div key={method.id} className="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 opacity-75">
+            <div className="text-gray-400">
+              {getIcon(method.icon)}
+            </div>
+            <div className="flex-1">
+              <div className="font-medium text-sm text-gray-600">{method.name}</div>
+              <div className="text-xs text-gray-500">{method.description}</div>
+            </div>
+            <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
+              Pronto disponible
+            </span>
+          </div>
+        ))}
+      </div>
+
       {availableMethods.length === 0 ? (
         <div className="text-center py-4 text-gray-500">
-          <p className="text-sm">No hay métodos de pago compatibles entre todas las tiendas seleccionadas.</p>
+          <p className="text-sm">No hay métodos de pago disponibles entre todas las tiendas seleccionadas.</p>
           <p className="text-xs mt-1">Contacta con las tiendas para más opciones.</p>
         </div>
       ) : (
         <>
-          <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod}>
-            <div className="space-y-3">
-              {availableMethods.map((method) => (
-                <div key={method.id} className="flex items-start space-x-3">
-                  <RadioGroupItem value={method.id} id={method.id} className="mt-1" />
-                  <label htmlFor={method.id} className="flex-1 cursor-pointer">
-                    <div className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50">
-                      <div className="text-primary">
-                        {getIcon(method.icon)}
+          <div>
+            <h4 className="text-sm font-medium text-gray-600 mb-3">Métodos disponibles:</h4>
+            <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod}>
+              <div className="space-y-3">
+                {availableMethods.map((method) => (
+                  <div key={method.id} className="flex items-start space-x-3">
+                    <RadioGroupItem value={method.id} id={method.id} className="mt-1" />
+                    <label htmlFor={method.id} className="flex-1 cursor-pointer">
+                      <div className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50">
+                        <div className="text-primary">
+                          {getIcon(method.icon)}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-sm">{method.name}</div>
+                          <div className="text-xs text-gray-600">{method.description}</div>
+                          {method.fee && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              Comisión: {method.fee}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <div className="font-medium text-sm">{method.name}</div>
-                        <div className="text-xs text-gray-600">{method.description}</div>
-                        {method.fee && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            Comisión: {method.fee}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </label>
-                </div>
-              ))}
-            </div>
-          </RadioGroup>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </RadioGroup>
+          </div>
 
           <Button 
             className="w-full"

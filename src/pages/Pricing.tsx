@@ -16,13 +16,13 @@ const Pricing = () => {
   const plans = [
     {
       name: "Básico",
-      price: "₣ 15,000",
-      period: "/mes",
+      price: "Gratis",
+      period: "",
       description: "Perfecto para empezar tu negocio online",
-      icon: <Zap className="h-6 w-6" />,
+      icon: <Star className="h-6 w-6" />,
       popular: false,
       features: [
-        "Hasta 50 productos",
+        "Hasta 5 productos",
         "Tienda online completa",
         "Dominio umpla.com",
         "Certificado SSL",
@@ -36,13 +36,14 @@ const Pricing = () => {
     },
     {
       name: "Profesional",
-      price: "₣ 35,000",
+      price: "₣ 5,000",
       period: "/mes",
       description: "Ideal para negocios en crecimiento",
-      icon: <Star className="h-6 w-6" />,
+      icon: <Zap className="h-6 w-6" />,
       popular: true,
       features: [
-        "Productos ilimitados",
+        "Hasta 50 productos",
+        "Gestión de stock automática",
         "Dominio personalizado",
         "Estadísticas avanzadas",
         "Soporte prioritario 24/7",
@@ -58,22 +59,23 @@ const Pricing = () => {
     },
     {
       name: "Premium",
-      price: "₣ 65,000",
+      price: "₣ 10,000",
       period: "/mes",
       description: "Para empresas que buscan máximo rendimiento",
       icon: <Crown className="h-6 w-6" />,
       popular: false,
       features: [
         "Todo de Profesional +",
+        "Productos ilimitados",
+        "Gestión avanzada de inventario",
         "Múltiples tiendas",
-        "API personalizada",
         "Gerente de cuenta dedicado",
         "Diseño personalizado",
         "Análisis de comportamiento",
         "Automatización avanzada",
-        "Integración con inventarios",
         "Reportes personalizados",
-        "Capacitación personalizada"
+        "Capacitación personalizada",
+        "Funciones exclusivas"
       ],
       cta: "Contactar ventas",
       ctaVariant: "outline" as const
@@ -206,7 +208,7 @@ const Pricing = () => {
               <p className="text-gray-600 text-sm mb-6">Todos los planes incluyen 14 días gratis. No se requiere tarjeta de crédito para comenzar.</p>
               
               <h3 className="font-semibold text-secondary mb-2">¿Qué métodos de pago acepto?</h3>
-              <p className="text-gray-600 text-sm">Integramos los métodos de pago más populares en Guinea Ecuatorial, incluyendo transferencias bancarias y móviles.</p>
+              <p className="text-gray-600 text-sm">Integramos los métodos de pago más populares en Guinea Ecuatorial, incluyendo transferencias bancarias.</p>
             </div>
             
             <div>

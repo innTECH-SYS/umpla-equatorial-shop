@@ -24,10 +24,34 @@ interface PaymentMethod {
 }
 
 const paymentTypes = [
-  { value: 'muni_dinero', label: 'Muni Dinero', icon: <Smartphone className="h-5 w-5" /> },
-  { value: 'rosa_money', label: 'Rosa Money', icon: <Smartphone className="h-5 w-5" /> },
-  { value: 'efectivo', label: 'Efectivo', icon: <Wallet className="h-5 w-5" /> },
-  { value: 'tarjeta_debito', label: 'Tarjeta de Débito', icon: <CreditCard className="h-5 w-5" /> }
+  { 
+    value: 'muni_dinero', 
+    label: 'Muni Dinero', 
+    icon: <Smartphone className="h-5 w-5" />,
+    disabled: true,
+    comingSoon: true
+  },
+  { 
+    value: 'rosa_money', 
+    label: 'Rosa Money', 
+    icon: <Smartphone className="h-5 w-5" />,
+    disabled: true,
+    comingSoon: true
+  },
+  { 
+    value: 'efectivo', 
+    label: 'Efectivo', 
+    icon: <Wallet className="h-5 w-5" />,
+    disabled: false,
+    comingSoon: false
+  },
+  { 
+    value: 'tarjeta_debito', 
+    label: 'Tarjeta de Débito', 
+    icon: <CreditCard className="h-5 w-5" />,
+    disabled: false,
+    comingSoon: false
+  }
 ];
 
 export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalProps) => {
@@ -181,11 +205,17 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
                       key={type.value}
                       type="button"
                       variant={newMethod.tipo === type.value ? "default" : "outline"}
-                      className="justify-start"
-                      onClick={() => setNewMethod({...newMethod, tipo: type.value})}
+                      className={`justify-start relative ${type.disabled ? 'opacity-50' : ''}`}
+                      onClick={() => !type.disabled && setNewMethod({...newMethod, tipo: type.value})}
+                      disabled={type.disabled}
                     >
                       {type.icon}
                       <span className="ml-2">{type.label}</span>
+                      {type.comingSoon && (
+                        <span className="ml-2 text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
+                          Pronto disponible
+                        </span>
+                      )}
                     </Button>
                   ))}
                 </div>
@@ -200,7 +230,7 @@ export const PaymentMethodsModal = ({ open, onOpenChange }: PaymentMethodsModalP
                     id="numero"
                     value={newMethod.numero}
                     onChange={(e) => setNewMethod({...newMethod, numero: e.target.value})}
-                    placeholder={newMethod.tipo === 'tarjeta_debito' ? '**** **** **** 1234' : '+237 6XX XXX XXX'}
+                    placeholder={newMethod.tipo === 'tarjeta_debito' ? '**** **** **** 1234' : '+240 6XX XXX XXX'}
                   />
                 </div>
               )}
