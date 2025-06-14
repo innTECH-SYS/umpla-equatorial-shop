@@ -1,217 +1,309 @@
-import { useCart } from '@/contexts/CartContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { X, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
-import { PaymentMethodSelector } from './PaymentMethodSelector';
-import { useToast } from '@/hooks/use-toast';
 
-export const CartSidebar = () => {
-  const { items, isOpen, closeCart, updateQuantity, getTotalPrice, getTotalItems, clearCart } = useCart();
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [customerData, setCustomerData] = useState({
-    nombre: '',
-    telefono: '',
-    direccion: '',
-    notas: ''
-  });
+import React, { useState } from 'react';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { PaymentMethodSelector } from "@/components/PaymentMethodSelector";
+import { supabase } from "@/integrations/supabase/client";
+
+interface CartSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+  storeName: string;
+  storeId: string;
+}
+
+export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebarProps) => {
+  const { items, updateQuantity, removeFromCart, clearCart, getTotal } = useCart();
   const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
+  
+  // Checkout form data
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [notes, setNotes] = useState('');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
 
-  if (!isOpen) return null;
-
-  const formatPrice = (price: number) => {
-    return `₣ ${price.toLocaleString()}`;
-  };
-
-  const groupedByStore = items.reduce((acc, item) => {
-    if (!acc[item.storeId]) {
-      acc[item.storeId] = {
-        storeName: item.storeName,
-        items: []
-      };
-    }
-    acc[item.storeId].items.push(item);
-    return acc;
-  }, {} as Record<number, { storeName: string; items: typeof items }>);
-
-  const handleCheckout = () => {
-    if (!customerData.nombre || !customerData.telefono || !customerData.direccion) {
+  const handleProcessOrder = async () => {
+    // Validar campos requeridos
+    if (!customerName.trim() || !customerPhone.trim() || !deliveryAddress.trim() || !selectedPaymentMethod) {
       toast({
         title: "Datos incompletos",
         description: "Por favor completa todos los campos obligatorios",
-        variant: "destructive"
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const total = getTotal();
+      
+      // Crear el pedido
+      const { data: pedido, error: pedidoError } = await supabase
+        .from('pedidos')
+        .insert({
+          tienda_id: storeId,
+          nombre_cliente: customerName,
+          telefono_cliente: customerPhone,
+          direccion_entrega: deliveryAddress,
+          metodo_pago: selectedPaymentMethod,
+          total: total,
+          notas: notes || null,
+          estado: 'pendiente'
+        })
+        .select()
+        .single();
+
+      if (pedidoError) throw pedidoError;
+
+      // Crear los items del pedido
+      const pedidoItems = items.map(item => ({
+        pedido_id: pedido.id,
+        producto_id: item.id,
+        nombre_producto: item.name,
+        precio_unitario: item.price,
+        cantidad: item.quantity,
+        subtotal: item.price * item.quantity
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('pedido_items')
+        .insert(pedidoItems);
+
+      if (itemsError) throw itemsError;
+
+      toast({
+        title: "¡Pedido enviado!",
+        description: `Tu pedido #${pedido.numero_pedido} ha sido enviado correctamente`,
+      });
+
+      // Limpiar carrito y cerrar sidebar
+      clearCart();
+      onClose();
+      setShowCheckout(false);
+      
+      // Limpiar formulario
+      setCustomerName('');
+      setCustomerPhone('');
+      setDeliveryAddress('');
+      setNotes('');
+      setSelectedPaymentMethod('');
+
+    } catch (error) {
+      console.error('Error processing order:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo procesar el pedido. Inténtalo de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const goToCheckout = () => {
+    if (items.length === 0) {
+      toast({
+        title: "Carrito vacío",
+        description: "Agrega productos antes de continuar",
+        variant: "destructive",
       });
       return;
     }
     setShowCheckout(true);
   };
 
-  const handleOrderComplete = () => {
-    toast({
-      title: "¡Pedido realizado!",
-      description: "Tu pedido ha sido enviado y será procesado pronto",
-    });
-    clearCart();
-    closeCart();
+  const goBackToCart = () => {
     setShowCheckout(false);
-    setCustomerData({ nombre: '', telefono: '', direccion: '', notas: '' });
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50">
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-lg">
-        <div className="flex h-full flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between border-b p-4">
-            <div className="flex items-center gap-2">
-              {showCheckout && (
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setShowCheckout(false)}
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                </Button>
-              )}
-              <ShoppingBag className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">
-                {showCheckout ? 'Finalizar Compra' : `Carrito (${getTotalItems()})`}
-              </h2>
-            </div>
-            <Button variant="ghost" size="sm" onClick={closeCart}>
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
+  if (!showCheckout) {
+    return (
+      <Sheet open={isOpen} onOpenChange={onClose}>
+        <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Tu Carrito
+            </SheetTitle>
+            <SheetDescription>
+              Productos de {storeName}
+            </SheetDescription>
+          </SheetHeader>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="mt-6 space-y-4">
             {items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <ShoppingBag className="h-12 w-12 mb-4 text-gray-300" />
-                <p>Tu carrito está vacío</p>
-              </div>
-            ) : showCheckout ? (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-semibold mb-3">Datos de entrega</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="nombre">Nombre completo *</Label>
-                      <Input
-                        id="nombre"
-                        value={customerData.nombre}
-                        onChange={(e) => setCustomerData(prev => ({ ...prev, nombre: e.target.value }))}
-                        placeholder="Tu nombre completo"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="telefono">Teléfono *</Label>
-                      <Input
-                        id="telefono"
-                        value={customerData.telefono}
-                        onChange={(e) => setCustomerData(prev => ({ ...prev, telefono: e.target.value }))}
-                        placeholder="Tu número de teléfono"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="direccion">Dirección de entrega *</Label>
-                      <Textarea
-                        id="direccion"
-                        value={customerData.direccion}
-                        onChange={(e) => setCustomerData(prev => ({ ...prev, direccion: e.target.value }))}
-                        placeholder="Dirección completa donde quieres recibir tu pedido"
-                        rows={3}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="notas">Notas adicionales</Label>
-                      <Textarea
-                        id="notas"
-                        value={customerData.notas}
-                        onChange={(e) => setCustomerData(prev => ({ ...prev, notas: e.target.value }))}
-                        placeholder="Instrucciones especiales para la entrega"
-                        rows={2}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <PaymentMethodSelector 
-                  storeIds={Object.keys(groupedByStore).map(Number)}
-                  onBack={() => setShowCheckout(false)}
-                  onOrderComplete={handleOrderComplete}
-                  customerData={customerData}
-                />
+              <div className="text-center py-8">
+                <ShoppingCart className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-500">Tu carrito está vacío</p>
               </div>
             ) : (
-              <div className="space-y-6">
-                {Object.entries(groupedByStore).map(([storeId, store]) => (
-                  <div key={storeId} className="space-y-3">
-                    <h3 className="font-semibold text-secondary border-b pb-2">
-                      {store.storeName}
-                    </h3>
-                    {store.items.map((item) => (
-                      <div key={item.id} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
-                        <img 
-                          src={item.image} 
-                          alt={item.name}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-medium text-sm">{item.name}</h4>
-                          <p className="text-primary font-semibold">{item.price}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-8 text-center text-sm">{item.quantity}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </div>
+              <>
+                {items.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                    {item.image && (
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <h4 className="font-medium text-sm">{item.name}</h4>
+                      <p className="text-primary font-semibold">{item.price} XAF</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="text-sm font-medium w-8 text-center">{item.quantity}</span>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => removeFromCart(item.id)}
+                          className="ml-2"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 ))}
-              </div>
+
+                <div className="border-t pt-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-lg font-semibold">Total:</span>
+                    <span className="text-xl font-bold text-primary">{getTotal()} XAF</span>
+                  </div>
+                  
+                  <Button 
+                    onClick={goToCheckout}
+                    className="w-full"
+                    size="lg"
+                  >
+                    Proceder al Checkout
+                  </Button>
+                </div>
+              </>
             )}
           </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
-          {/* Footer */}
-          {items.length > 0 && (
-            <div className="border-t p-4 space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold">Total:</span>
-                <span className="text-xl font-bold text-primary">
-                  {formatPrice(getTotalPrice())}
-                </span>
+  return (
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle>Finalizar Pedido</SheetTitle>
+          <SheetDescription>
+            Completa tus datos para recibir el pedido
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="mt-6 space-y-4">
+          <div className="border rounded-lg p-4 bg-gray-50">
+            <h4 className="font-medium mb-2">Resumen del pedido</h4>
+            {items.map((item) => (
+              <div key={item.id} className="flex justify-between text-sm mb-1">
+                <span>{item.name} x{item.quantity}</span>
+                <span>{item.price * item.quantity} XAF</span>
               </div>
-              
-              {!showCheckout && (
-                <Button 
-                  className="w-full"
-                  onClick={handleCheckout}
-                >
-                  Proceder al pago
-                </Button>
-              )}
+            ))}
+            <div className="border-t pt-2 mt-2 font-semibold">
+              Total: {getTotal()} XAF
             </div>
-          )}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="customerName">Nombre completo *</Label>
+              <Input
+                id="customerName"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                placeholder="Tu nombre completo"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="customerPhone">Teléfono *</Label>
+              <Input
+                id="customerPhone"
+                value={customerPhone}
+                onChange={(e) => setCustomerPhone(e.target.value)}
+                placeholder="Tu número de teléfono"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="deliveryAddress">Dirección de entrega *</Label>
+              <Textarea
+                id="deliveryAddress"
+                value={deliveryAddress}
+                onChange={(e) => setDeliveryAddress(e.target.value)}
+                placeholder="Dirección completa donde quieres recibir el pedido"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="notes">Notas adicionales</Label>
+              <Textarea
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Instrucciones especiales para la entrega (opcional)"
+              />
+            </div>
+
+            <PaymentMethodSelector
+              storeId={storeId}
+              selectedMethod={selectedPaymentMethod}
+              onMethodSelect={setSelectedPaymentMethod}
+            />
+          </div>
+
+          <div className="flex gap-2 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={goBackToCart}
+              className="flex-1"
+            >
+              Volver al Carrito
+            </Button>
+            <Button 
+              onClick={handleProcessOrder}
+              disabled={isProcessing}
+              className="flex-1"
+            >
+              {isProcessing ? 'Procesando...' : 'Confirmar Pedido'}
+            </Button>
+          </div>
         </div>
-      </div>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 };
