@@ -1,238 +1,107 @@
 
 {
   "nav": {
-    "pricing": "Pricing",
-    "example": "Example",
-    "start_free": "Start Free",
-    "admin": "Admin",
-    "dashboard": "Dashboard",
-    "login": "Log In",
-    "my_dashboard": "My Dashboard"
-  },
-  "auth": {
-    "login": "Log In",
-    "register": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "forgot_password": "Forgot your password?",
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
-    "or": "or",
-    "already_have_account": "Already have an account?",
-    "dont_have_account": "Don't have an account?"
-  },
-  "dashboard": {
-    "hello": "Hello, {{storeName}}!",
-    "subtitle": "Manage your store from Equatorial Guinea",
-    "products": "My Products",
-    "orders": "My Orders",
-    "settings": "Settings",
-    "quick_actions": "Quick actions",
-    "add_product": "Add product",
-    "add_product_desc": "Add new product",
-    "view_products": "View products",
-    "view_products_desc": "Manage inventory",
-    "payment_methods": "Payment methods",
-    "payment_methods_desc": "Configure payments",
-    "customize": "Customize",
-    "customize_desc": "Store design",
-    "products_published": "Products published",
-    "plan_limit": "{{plan}} plan limit",
-    "total_revenue": "Total revenue",
-    "delivered_orders": "Delivered orders",
-    "total_orders": "Total orders",
-    "current_plan": "Current plan",
-    "upgrade_features": "Upgrade for more features",
-    "upgrade_plan": "Upgrade plan",
-    "need_help": "Need help?",
-    "contact_team": "Contact our team",
-    "support_24_7": "24/7 Support"
-  },
-  "store": {
-    "share": "Share",
-    "cart": "Cart",
-    "our_products": "Our Products",
-    "products_available": "{{count}} products available",
-    "add_to_cart": "Add",
-    "out_of_stock": "Out of stock",
-    "last_units": "Last {{count}}",
-    "product_added": "Product added",
-    "product_added_desc": "{{productName}} has been added to cart"
-  },
-  "admin": {
-    "title": "Administration Panel",
-    "subtitle": "Manage the Umpla platform from this centralized panel",
-    "welcome": "Welcome, {{email}}",
-    "view_main_site": "View Main Site",
-    "dashboard": "Dashboard",
-    "analytics": "Analytics",
+    "home": "Home",
     "stores": "Stores",
-    "users": "Users",
-    "orders": "Orders",
-    "moderation": "Moderation",
-    "settings": "Settings",
-    "user_management": "User Management",
-    "manage_users_desc": "Manage all registered users on the platform",
-    "loading_users": "Loading users...",
-    "user": "User",
-    "email": "Email",
-    "role": "Role",
-    "stores": "Stores",
-    "registration_date": "Registration Date",
-    "admin": "admin",
-    "user_role": "user",
-    "active": "Active",
-    "inactive": "Inactive",
-    "no_stores": "No stores",
-    "no_name": "No name"
-  },
-  "footer": {
-    "create_store_question": "Want to create your own store?",
-    "create_store_desc": "With Umpla you can create your online store in minutes and start selling today.",
-    "create_free_store": "Create my free store",
-    "powered_by": "Powered by Umpla",
-    "location": "Equatorial Guinea"
-  },
-  "home": {
-    "hero_title": "Your store, without limits",
-    "hero_subtitle": "Create your online store in Equatorial Guinea in minutes. No technical knowledge, no complications.",
-    "main_cta": "Create my free store",
-    "secondary_cta": "See how it works",
-    "see_my_store": "See my store",
-    "improve_store_tips": "Tips to improve my store",
-    "loading": "Loading...",
-    "features_title": "Everything you need to sell online",
-    "feature_professional_store": "Professional store",
-    "feature_professional_store_desc": "Modern and responsive designs that adapt to any device",
-    "feature_local_payments": "Local payments",
-    "feature_local_payments_desc": "Accept payments with popular methods in Equatorial Guinea",
-    "feature_analytics": "Analytics",
-    "feature_analytics_desc": "Analyze your sales and optimize your business with real data",
-    "cta_title": "Start free today",
-    "cta_title_existing": "Improve your store today",
-    "cta_subtitle": "No credit card needed. Create your store in less than 5 minutes.",
-    "cta_subtitle_existing": "Complete the recommended improvements to maximize your sales.",
-    "footer_tagline": "The e-commerce platform for Equatorial Guinea"
-  },
-  "pricing": {
-    "title": "Choose the perfect plan for your business",
-    "subtitle": "Start for free and scale your business with our plans designed to grow with you",
-    "current_plan": "Your current plan:",
-    "back": "Back",
-    "most_popular": "Most popular",
-    "current": "Current plan",
-    "basic": {
-      "name": "Basic",
-      "price": "Free",
-      "description": "Perfect to start your online business",
-      "features": [
-        "Up to 10 products",
-        "Basic store",
-        "Email support",
-        "No stock management",
-        "Up to 2 images per product"
-      ],
-      "button": "Current plan"
-    },
-    "professional": {
-      "name": "Professional",
-      "price": "₣5,000",
-      "period": "/month",
-      "description": "For growing businesses",
-      "features": [
-        "Up to 50 products",
-        "Custom store",
-        "Priority support",
-        "Complete stock management",
-        "Up to 5 images per product",
-        "Basic analytics",
-        "KYC verification available"
-      ],
-      "button": "Upgrade plan"
-    },
-    "premium": {
-      "name": "Premium",
-      "price": "₣10,000",
-      "period": "/month",
-      "description": "For established businesses",
-      "features": [
-        "Up to 100 products",
-        "Extra products with additional fee",
-        "Fully customized store",
-        "24/7 support",
-        "Complete stock management",
-        "Up to 10 images per product",
-        "Advanced analytics",
-        "Free .gq domain for 1 year",
-        "Multiple payment methods",
-        "KYC verification available"
-      ],
-      "button": "Upgrade plan"
-    },
-    "contact": "Have questions?",
-    "contact_us": "Contact us"
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard"
   },
   "onboarding": {
-    "step_indicator": "{{current}} of {{total}}",
+    "welcome": "Welcome to Umpla!",
+    "subtitle": "The leading e-commerce platform in Equatorial Guinea",
     "step1": {
-      "title": "Welcome to Umpla",
-      "description": "The easiest platform to create your online store in Equatorial Guinea",
-      "content": "No technical knowledge, no complications. You just need a few minutes to get your store running."
+      "title": "Choose your language",
+      "description": "Select the language you prefer to browse in"
     },
     "step2": {
-      "title": "Key benefits",
-      "description": "Everything you need to sell online",
-      "professional_store": "Create professional store",
-      "professional_store_desc": "Modern and attractive designs",
-      "local_payments": "Local payments",
-      "local_payments_desc": "Popular payment methods in EG",
-      "physical_digital": "Physical and digital products",
-      "physical_digital_desc": "Sell any type of product"
+      "title": "Discover local stores",
+      "description": "Explore products from verified local sellers"
     },
     "step3": {
-      "title": "SaaS features",
-      "description": "Professional tools to grow your business",
-      "custom_domain": "Custom domain",
-      "custom_domain_desc": "yourstore.umpla.gq included",
-      "technical_support": "Technical support",
-      "technical_support_desc": "Help when you need it",
-      "advanced_analytics": "Advanced analytics",
-      "advanced_analytics_desc": "Analyze your performance"
+      "title": "Shop securely",
+      "description": "Secure payments and guaranteed delivery throughout Equatorial Guinea"
     },
     "step4": {
-      "title": "Ready to start!",
-      "description": "Choose how you want to continue",
-      "content": "Your store will be ready in less than 5 minutes. Start selling today!",
-      "create_store": "Create my store",
-      "explore": "Explore Umpla"
+      "title": "Ready to get started?",
+      "description": "Create your account or explore our stores"
     },
+    "next": "Next",
+    "previous": "Previous",
     "skip": "Skip",
-    "next": "Next"
+    "getStarted": "Get Started",
+    "exploreStores": "Explore Stores",
+    "createAccount": "Create Account"
+  },
+  "home": {
+    "hero": {
+      "title": "Your digital marketplace in Equatorial Guinea",
+      "subtitle": "Connecting buyers and sellers across Equatorial Guinea",
+      "cta": "Explore Stores",
+      "createStore": "Create my store"
+    },
+    "features": {
+      "title": "Why choose Umpla?",
+      "local": {
+        "title": "100% Local",
+        "description": "We support local businesses in Equatorial Guinea"
+      },
+      "secure": {
+        "title": "Secure Payments",
+        "description": "Protected transactions with multiple payment methods"
+      },
+      "delivery": {
+        "title": "Fast Delivery",
+        "description": "Receive your products at your doorstep"
+      }
+    },
+    "stores": {
+      "title": "Featured Stores",
+      "subtitle": "Discover the best verified sellers",
+      "viewAll": "View all stores"
+    }
+  },
+  "stores": {
+    "title": "All Stores",
+    "subtitle": "Explore our selection of verified stores",
+    "searchPlaceholder": "Search stores...",
+    "categories": {
+      "all": "All",
+      "technology": "Technology",
+      "fashion": "Fashion",
+      "food": "Food",
+      "health": "Health",
+      "beauty": "Beauty",
+      "sports": "Sports"
+    },
+    "noStores": "No stores found",
+    "verified": "Verified",
+    "products": "products",
+    "visitStore": "Visit store"
+  },
+  "store": {
+    "product_added": "Product added",
+    "product_added_desc": "added to cart",
+    "our_products": "Our Products",
+    "products_available": "products available",
+    "last_units": "Last units",
+    "out_of_stock": "Out of stock",
+    "add_to_cart": "Add to cart"
   },
   "common": {
     "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
     "save": "Save",
     "cancel": "Cancel",
-    "close": "Close",
-    "edit": "Edit",
     "delete": "Delete",
-    "yes": "Yes",
-    "no": "No",
-    "search": "Search",
-    "filter": "Filter",
-    "all": "All",
-    "none": "None",
-    "select": "Select",
-    "confirm": "Confirm"
-  },
-  "language": {
-    "spanish": "Español",
-    "english": "English",
-    "select_language": "Select language"
-  },
-  "not_found": {
-    "title": "404",
-    "message": "Oops! Page not found",
-    "return_home": "Return to Home"
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
   }
 }

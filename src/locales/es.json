@@ -1,238 +1,107 @@
 
 {
   "nav": {
-    "pricing": "Precios",
-    "example": "Ejemplo",
-    "start_free": "Empezar Gratis",
-    "admin": "Admin",
-    "dashboard": "Panel",
-    "login": "Iniciar Sesión",
-    "my_dashboard": "Mi Dashboard"
-  },
-  "auth": {
-    "login": "Iniciar Sesión",
+    "home": "Inicio",
+    "stores": "Tiendas",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "login": "Iniciar sesión",
     "register": "Registrarse",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
-    "forgot_password": "¿Olvidaste tu contraseña?",
-    "sign_in": "Ingresar",
-    "sign_up": "Crear cuenta",
-    "or": "o",
-    "already_have_account": "¿Ya tienes cuenta?",
-    "dont_have_account": "¿No tienes cuenta?"
-  },
-  "dashboard": {
-    "hello": "¡Hola, {{storeName}}!",
-    "subtitle": "Gestiona tu tienda desde Guinea Ecuatorial",
-    "products": "Mis Productos",
-    "orders": "Mis Pedidos",
-    "settings": "Configuración",
-    "quick_actions": "Acciones rápidas",
-    "add_product": "Añadir producto",
-    "add_product_desc": "Agregar nuevo producto",
-    "view_products": "Ver productos",
-    "view_products_desc": "Gestionar inventario",
-    "payment_methods": "Métodos de pago",
-    "payment_methods_desc": "Configurar pagos",
-    "customize": "Personalizar",
-    "customize_desc": "Diseño de tienda",
-    "products_published": "Productos publicados",
-    "plan_limit": "Límite del plan {{plan}}",
-    "total_revenue": "Ingresos totales",
-    "delivered_orders": "Pedidos entregados",
-    "total_orders": "Total de pedidos",
-    "current_plan": "Plan actual",
-    "upgrade_features": "Actualizar para más funciones",
-    "upgrade_plan": "Actualizar plan",
-    "need_help": "¿Necesitas ayuda?",
-    "contact_team": "Contacta con nuestro equipo",
-    "support_24_7": "Soporte 24/7"
-  },
-  "store": {
-    "share": "Compartir",
-    "cart": "Carrito",
-    "our_products": "Nuestros Productos",
-    "products_available": "{{count}} productos disponibles",
-    "add_to_cart": "Añadir",
-    "out_of_stock": "Agotado",
-    "last_units": "Últimas {{count}}",
-    "product_added": "Producto añadido",
-    "product_added_desc": "{{productName}} se ha añadido al carrito"
-  },
-  "admin": {
-    "title": "Panel de Administración",
-    "subtitle": "Gestiona la plataforma Umpla desde este panel centralizado",
-    "welcome": "Bienvenido, {{email}}",
-    "view_main_site": "Ver Sitio Principal",
-    "dashboard": "Dashboard",
-    "analytics": "Analytics",
-    "stores": "Tiendas",
-    "users": "Usuarios",
-    "orders": "Pedidos",
-    "moderation": "Moderación",
-    "settings": "Configuración",
-    "user_management": "Gestión de Usuarios",
-    "manage_users_desc": "Administra todos los usuarios registrados en la plataforma",
-    "loading_users": "Cargando usuarios...",
-    "user": "Usuario",
-    "email": "Email",
-    "role": "Rol",
-    "stores": "Tiendas",
-    "registration_date": "Fecha de Registro",
-    "admin": "admin",
-    "user_role": "user",
-    "active": "Activa",
-    "inactive": "Inactiva",
-    "no_stores": "Sin tiendas",
-    "no_name": "Sin nombre"
-  },
-  "footer": {
-    "create_store_question": "¿Quieres crear tu propia tienda?",
-    "create_store_desc": "Con Umpla puedes crear tu tienda online en minutos y empezar a vender hoy mismo.",
-    "create_free_store": "Crear mi tienda gratis",
-    "powered_by": "Powered by Umpla",
-    "location": "Guinea Ecuatorial"
-  },
-  "home": {
-    "hero_title": "Tu tienda, sin límites",
-    "hero_subtitle": "Crea tu tienda online en Guinea Ecuatorial en minutos. Sin conocimientos técnicos, sin complicaciones.",
-    "main_cta": "Crear mi tienda gratis",
-    "secondary_cta": "Ver cómo funciona",
-    "see_my_store": "Ver mi tienda",
-    "improve_store_tips": "Consejos para mejorar mi tienda",
-    "loading": "Cargando...",
-    "features_title": "Todo lo que necesitas para vender online",
-    "feature_professional_store": "Tienda profesional",
-    "feature_professional_store_desc": "Diseños modernos y responsive que se adaptan a cualquier dispositivo",
-    "feature_local_payments": "Pagos locales",
-    "feature_local_payments_desc": "Acepta pagos con métodos populares en Guinea Ecuatorial",
-    "feature_analytics": "Estadísticas",
-    "feature_analytics_desc": "Analiza tus ventas y optimiza tu negocio con datos reales",
-    "cta_title": "Empieza gratis hoy mismo",
-    "cta_title_existing": "Mejora tu tienda hoy mismo",
-    "cta_subtitle": "No necesitas tarjeta de crédito. Crea tu tienda en menos de 5 minutos.",
-    "cta_subtitle_existing": "Completa las mejoras recomendadas para maximizar tus ventas.",
-    "footer_tagline": "La plataforma de comercio electrónico para Guinea Ecuatorial"
-  },
-  "pricing": {
-    "title": "Elige el plan perfecto para tu negocio",
-    "subtitle": "Comienza gratis y escala tu negocio con nuestros planes diseñados para crecer contigo",
-    "current_plan": "Tu plan actual:",
-    "back": "Volver",
-    "most_popular": "Más popular",
-    "current": "Plan actual",
-    "basic": {
-      "name": "Basic",
-      "price": "Gratis",
-      "description": "Perfecto para empezar tu negocio online",
-      "features": [
-        "Hasta 10 productos",
-        "Tienda básica",
-        "Soporte por email",
-        "Sin gestión de stock",
-        "Hasta 2 imágenes por producto"
-      ],
-      "button": "Plan actual"
-    },
-    "professional": {
-      "name": "Professional",
-      "price": "₣5,000",
-      "period": "/mes",
-      "description": "Para negocios en crecimiento",
-      "features": [
-        "Hasta 50 productos",
-        "Tienda personalizada",
-        "Soporte prioritario",
-        "Gestión completa de stock",
-        "Hasta 5 imágenes por producto",
-        "Análisis básicos",
-        "Verificación KYC disponible"
-      ],
-      "button": "Actualizar plan"
-    },
-    "premium": {
-      "name": "Premium",
-      "price": "₣10,000",
-      "period": "/mes",
-      "description": "Para empresas establecidas",
-      "features": [
-        "Hasta 100 productos",
-        "Productos extra con cuota adicional",
-        "Tienda completamente personalizada",
-        "Soporte 24/7",
-        "Gestión completa de stock",
-        "Hasta 10 imágenes por producto",
-        "Análisis avanzados",
-        "Dominio .gq gratuito por 1 año",
-        "Múltiples métodos de pago",
-        "Verificación KYC disponible"
-      ],
-      "button": "Actualizar plan"
-    },
-    "contact": "¿Tienes preguntas?",
-    "contact_us": "Contáctanos"
+    "dashboard": "Panel"
   },
   "onboarding": {
-    "step_indicator": "{{current}} de {{total}}",
+    "welcome": "¡Bienvenido a Umpla!",
+    "subtitle": "La plataforma de comercio electrónico líder en Guinea Ecuatorial",
     "step1": {
-      "title": "Bienvenido a Umpla",
-      "description": "La plataforma más fácil para crear tu tienda online en Guinea Ecuatorial",
-      "content": "Sin conocimientos técnicos, sin complicaciones. Solo necesitas unos minutos para tener tu tienda funcionando."
+      "title": "Elige tu idioma",
+      "description": "Selecciona el idioma en el que prefieres navegar"
     },
     "step2": {
-      "title": "Beneficios clave",
-      "description": "Todo lo que necesitas para vender online",
-      "professional_store": "Crear tienda profesional",
-      "professional_store_desc": "Diseños modernos y atractivos",
-      "local_payments": "Pagos locales",
-      "local_payments_desc": "Métodos de pago populares en GQ",
-      "physical_digital": "Productos físicos y digitales",
-      "physical_digital_desc": "Vende cualquier tipo de producto"
+      "title": "Descubre tiendas locales",
+      "description": "Explora productos de vendedores locales verificados"
     },
     "step3": {
-      "title": "Características del SaaS",
-      "description": "Herramientas profesionales para hacer crecer tu negocio",
-      "custom_domain": "Dominio personalizado",
-      "custom_domain_desc": "tutienda.umpla.gq incluido",
-      "technical_support": "Soporte técnico",
-      "technical_support_desc": "Ayuda cuando la necesites",
-      "advanced_analytics": "Estadísticas avanzadas",
-      "advanced_analytics_desc": "Analiza tu rendimiento"
+      "title": "Compra de forma segura",
+      "description": "Pagos seguros y entrega garantizada en toda Guinea Ecuatorial"
     },
     "step4": {
-      "title": "¡Listo para empezar!",
-      "description": "Elige cómo quieres continuar",
-      "content": "Tu tienda estará lista en menos de 5 minutos. ¡Comienza a vender hoy mismo!",
-      "create_store": "Crear mi tienda",
-      "explore": "Explorar Umpla"
+      "title": "¿Listo para empezar?",
+      "description": "Crea tu cuenta o explora nuestras tiendas"
     },
+    "next": "Siguiente",
+    "previous": "Anterior",
     "skip": "Saltar",
-    "next": "Siguiente"
+    "getStarted": "Comenzar",
+    "exploreStores": "Explorar Tiendas",
+    "createAccount": "Crear Cuenta"
+  },
+  "home": {
+    "hero": {
+      "title": "Tu mercado digital en Guinea Ecuatorial",
+      "subtitle": "Conectamos compradores y vendedores en toda Guinea Ecuatorial",
+      "cta": "Explorar Tiendas",
+      "createStore": "Crear mi tienda"
+    },
+    "features": {
+      "title": "¿Por qué elegir Umpla?",
+      "local": {
+        "title": "100% Local",
+        "description": "Apoyamos a los negocios locales de Guinea Ecuatorial"
+      },
+      "secure": {
+        "title": "Pagos Seguros",
+        "description": "Transacciones protegidas con múltiples métodos de pago"
+      },
+      "delivery": {
+        "title": "Entrega Rápida",
+        "description": "Recibe tus productos en la puerta de tu casa"
+      }
+    },
+    "stores": {
+      "title": "Tiendas Destacadas",
+      "subtitle": "Descubre los mejores vendedores verificados",
+      "viewAll": "Ver todas las tiendas"
+    }
+  },
+  "stores": {
+    "title": "Todas las Tiendas",
+    "subtitle": "Explora nuestra selección de tiendas verificadas",
+    "searchPlaceholder": "Buscar tiendas...",
+    "categories": {
+      "all": "Todas",
+      "technology": "Tecnología",
+      "fashion": "Moda",
+      "food": "Alimentación",
+      "health": "Salud",
+      "beauty": "Belleza",
+      "sports": "Deportes"
+    },
+    "noStores": "No se encontraron tiendas",
+    "verified": "Verificada",
+    "products": "productos",
+    "visitStore": "Visitar tienda"
+  },
+  "store": {
+    "product_added": "Producto agregado",
+    "product_added_desc": "se agregó al carrito",
+    "our_products": "Nuestros Productos",
+    "products_available": "productos disponibles",
+    "last_units": "Últimas unidades",
+    "out_of_stock": "Sin stock",
+    "add_to_cart": "Agregar al carrito"
   },
   "common": {
     "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "close": "Cerrar",
     "save": "Guardar",
     "cancel": "Cancelar",
-    "close": "Cerrar",
-    "edit": "Editar",
     "delete": "Eliminar",
-    "yes": "Sí",
-    "no": "No",
-    "search": "Buscar",
-    "filter": "Filtrar",
-    "all": "Todos",
-    "none": "Ninguno",
-    "select": "Seleccionar",
-    "confirm": "Confirmar"
-  },
-  "language": {
-    "spanish": "Español",
-    "english": "English",
-    "select_language": "Seleccionar idioma"
-  },
-  "not_found": {
-    "title": "404",
-    "message": "¡Ups! Página no encontrada",
-    "return_home": "Volver al Inicio"
+    "edit": "Editar",
+    "view": "Ver",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior"
   }
 }

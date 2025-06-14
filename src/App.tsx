@@ -11,6 +11,9 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import PublicStore from "./pages/PublicStore";
+import Stores from "./pages/Stores";
+import Pricing from "./pages/Pricing";
+import "./i18n/config";
 
 const queryClient = new QueryClient();
 
@@ -24,9 +27,11 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/stores" element={<Stores />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/store/:storename" element={<PublicStore />} />
             </Routes>
           </BrowserRouter>
