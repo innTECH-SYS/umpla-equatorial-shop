@@ -1,8 +1,9 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
+import { useCart } from '@/contexts/CartContext';
+import { CartSidebar } from '@/components/CartSidebar';
 import { 
   ShoppingCart, 
   Heart,
@@ -13,16 +14,14 @@ import {
   Mail,
   MapPin,
   ArrowLeft,
-  Plus,
-  Minus,
   Filter,
   Store
 } from 'lucide-react';
 
 const StoreExample = () => {
-  const [cartItems, setCartItems] = useState(0);
   const [selectedStore, setSelectedStore] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const { addToCart, openCart, getTotalItems } = useCart();
 
   const stores = [
     {
@@ -31,7 +30,8 @@ const StoreExample = () => {
       category: "Electrónicos",
       logo: "M",
       color: "bg-primary",
-      description: "Tecnología y electrónicos de calidad"
+      description: "Tecnología y electrónicos de calidad",
+      paymentMethods: ['mobile_money', 'bank_transfer', 'credit_card', 'cash_delivery']
     },
     {
       id: 1,
@@ -39,7 +39,8 @@ const StoreExample = () => {
       category: "Ropa y Moda",
       logo: "E",
       color: "bg-purple-600",
-      description: "Las últimas tendencias en moda"
+      description: "Las últimas tendencias en moda",
+      paymentMethods: ['mobile_money', 'credit_card', 'cash_delivery']
     },
     {
       id: 2,
@@ -47,7 +48,8 @@ const StoreExample = () => {
       category: "Hogar y Decoración",
       logo: "H",
       color: "bg-green-600",
-      description: "Todo para tu hogar ideal"
+      description: "Todo para tu hogar ideal",
+      paymentMethods: ['bank_transfer', 'credit_card', 'cash_delivery']
     },
     {
       id: 3,
@@ -55,7 +57,8 @@ const StoreExample = () => {
       category: "Deportes",
       logo: "D",
       color: "bg-orange-600",
-      description: "Equipamiento deportivo profesional"
+      description: "Equipamiento deportivo profesional",
+      paymentMethods: ['mobile_money', 'credit_card']
     },
     {
       id: 4,
@@ -63,7 +66,8 @@ const StoreExample = () => {
       category: "Belleza",
       logo: "S",
       color: "bg-pink-600",
-      description: "Productos de belleza y cuidado personal"
+      description: "Productos de belleza y cuidado personal",
+      paymentMethods: ['mobile_money', 'bank_transfer', 'credit_card']
     }
   ];
 
@@ -186,8 +190,8 @@ const StoreExample = () => {
     ? allProducts.filter(p => p.storeId === selectedStore)
     : allProducts.filter(p => p.storeId === selectedStore && p.category === selectedCategory);
 
-  const addToCart = () => {
-    setCartItems(cartItems + 1);
+  const handleAddToCart = (product: any) => {
+    addToCart(product, currentStore);
   };
 
   const switchStore = (storeId: number) => {
@@ -197,6 +201,8 @@ const StoreExample = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <CartSidebar />
+      
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -216,11 +222,11 @@ const StoreExample = () => {
               </div>
             </div>
             
-            <Button className="relative" onClick={addToCart}>
+            <Button className="relative" onClick={openCart}>
               <ShoppingCart className="h-5 w-5" />
-              {cartItems > 0 && (
+              {getTotalItems() > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                  {cartItems}
+                  {getTotalItems()}
                 </span>
               )}
             </Button>
@@ -354,7 +360,7 @@ const StoreExample = () => {
                   
                   <Button 
                     className={`w-full ${currentStore.color} hover:opacity-90`}
-                    onClick={addToCart}
+                    onClick={() => handleAddToCart(product)}
                   >
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     Agregar al carrito
