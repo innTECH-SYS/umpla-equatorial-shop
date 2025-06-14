@@ -46,10 +46,11 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
     try {
       const total = getTotalPrice();
       
-      // Crear el pedido (sin numero_pedido, se genera automáticamente)
+      // Crear el pedido (numero_pedido se genera automáticamente por el trigger)
       const { data: pedido, error: pedidoError } = await supabase
         .from('pedidos')
         .insert({
+          numero_pedido: '', // Will be overridden by database trigger
           tienda_id: storeId,
           nombre_cliente: customerName,
           telefono_cliente: customerPhone,
@@ -195,7 +196,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
                   </div>
                   
                   <Button 
-                    onClick={goToCheckout}
+                    onClick={() => setShowCheckout(true)}
                     className="w-full"
                     size="lg"
                   >
@@ -298,7 +299,7 @@ export const CartSidebar = ({ isOpen, onClose, storeName, storeId }: CartSidebar
           <div className="flex gap-2 pt-4">
             <Button 
               variant="outline" 
-              onClick={goBackToCart}
+              onClick={() => setShowCheckout(false)}
               className="flex-1"
             >
               Volver al Carrito
