@@ -21,6 +21,7 @@ interface SidebarProps {
   onPaymentMethodsClick: () => void;
   onCustomizeStoreClick: () => void;
   onReferralsClick: () => void;
+  onProductsClick: () => void;
 }
 
 export const Sidebar = ({ 
@@ -28,11 +29,12 @@ export const Sidebar = ({
   setSidebarOpen, 
   onPaymentMethodsClick,
   onCustomizeStoreClick,
-  onReferralsClick
+  onReferralsClick,
+  onProductsClick
 }: SidebarProps) => {
   const menuItems = [
     { icon: <Home className="h-5 w-5" />, label: 'Inicio', active: true },
-    { icon: <Package className="h-5 w-5" />, label: 'Mis productos' },
+    { icon: <Package className="h-5 w-5" />, label: 'Mis productos', onClick: onProductsClick },
     { icon: <ShoppingCart className="h-5 w-5" />, label: 'Pedidos' },
     { icon: <CreditCard className="h-5 w-5" />, label: 'Métodos de pago', onClick: onPaymentMethodsClick },
     { icon: <Store className="h-5 w-5" />, label: 'Configuración de tienda', onClick: onCustomizeStoreClick },
