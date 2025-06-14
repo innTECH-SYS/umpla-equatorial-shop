@@ -13,14 +13,14 @@ export const ImprovedLanguageSelector = ({
   variant = 'default', 
   showLabel = true 
 }: ImprovedLanguageSelectorProps) => {
-  const { t, changeLanguage, currentLanguage } = useTranslation();
+  const { t, changeLanguage, language } = useTranslation();
 
   const languages = [
     { code: 'es', name: 'Español', flag: '🇪🇸', shortName: 'ES' },
     { code: 'en', name: 'English', flag: '🇺🇸', shortName: 'EN' }
   ];
 
-  const currentLang = languages.find(lang => lang.code === currentLanguage);
+  const currentLang = languages.find(lang => lang.code === language);
 
   const getButtonContent = () => {
     switch (variant) {
@@ -80,7 +80,7 @@ export const ImprovedLanguageSelector = ({
           >
             <span className="text-lg">{language.flag}</span>
             <span className="flex-1">{language.name}</span>
-            {currentLanguage === language.code && (
+            {language === language.code && (
               <Check className="h-4 w-4 text-blue-600" />
             )}
           </DropdownMenuItem>

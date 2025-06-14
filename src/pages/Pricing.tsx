@@ -17,7 +17,12 @@ const Pricing = () => {
       price: t('pricing.basic.price'),
       period: '',
       description: t('pricing.basic.description'),
-      features: t('pricing.basic.features') as string[],
+      features: [
+        'Tienda básica online',
+        'Hasta 10 productos',
+        'Soporte por email',
+        'Panel de control simple'
+      ],
       buttonText: userPlan === 'basic' ? t('pricing.basic.button') : t('pricing.basic.button'),
       popular: false,
       current: userPlan === 'basic'
@@ -28,7 +33,14 @@ const Pricing = () => {
       price: t('pricing.professional.price'),
       period: t('pricing.professional.period'),
       description: t('pricing.professional.description'),
-      features: t('pricing.professional.features') as string[],
+      features: [
+        'Tienda profesional completa',
+        'Productos ilimitados',
+        'Integración con WhatsApp',
+        'Reportes de ventas',
+        'Soporte prioritario',
+        'Personalización avanzada'
+      ],
       buttonText: userPlan === 'professional' ? t('pricing.basic.button') : t('pricing.professional.button'),
       popular: true,
       current: userPlan === 'professional'
@@ -39,7 +51,15 @@ const Pricing = () => {
       price: t('pricing.premium.price'),
       period: t('pricing.premium.period'),
       description: t('pricing.premium.description'),
-      features: t('pricing.premium.features') as string[],
+      features: [
+        'Todo lo del plan Profesional',
+        'Dominio personalizado',
+        'Analíticas avanzadas',
+        'Integración con redes sociales',
+        'Soporte técnico 24/7',
+        'API personalizada',
+        'Múltiples métodos de pago'
+      ],
       buttonText: userPlan === 'premium' ? t('pricing.basic.button') : t('pricing.premium.button'),
       popular: false,
       current: userPlan === 'premium'

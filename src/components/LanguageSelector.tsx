@@ -5,7 +5,7 @@ import { Languages, Check } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export const LanguageSelector = () => {
-  const { t, changeLanguage, currentLanguage } = useTranslation();
+  const { t, changeLanguage, language } = useTranslation();
 
   const languages = [
     { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -18,20 +18,20 @@ export const LanguageSelector = () => {
         <Button variant="ghost" size="sm" className="flex items-center gap-2">
           <Languages className="h-4 w-4" />
           <span className="hidden sm:inline">
-            {languages.find(lang => lang.code === currentLanguage)?.flag}
+            {languages.find(lang => lang.code === language)?.flag}
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white border shadow-lg z-50">
-        {languages.map((language) => (
+        {languages.map((lang) => (
           <DropdownMenuItem
-            key={language.code}
-            onClick={() => changeLanguage(language.code)}
+            key={lang.code}
+            onClick={() => changeLanguage(lang.code)}
             className="flex items-center gap-3 cursor-pointer hover:bg-gray-50"
           >
-            <span className="text-lg">{language.flag}</span>
-            <span>{language.name}</span>
-            {currentLanguage === language.code && (
+            <span className="text-lg">{lang.flag}</span>
+            <span>{lang.name}</span>
+            {language === lang.code && (
               <Check className="h-4 w-4 text-blue-600 ml-auto" />
             )}
           </DropdownMenuItem>
