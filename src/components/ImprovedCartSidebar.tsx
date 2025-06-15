@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -120,6 +119,9 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
     try {
       const total = getTotalPrice();
       
+      // Generate order number
+      const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
+      
       // Create order
       const { data: pedido, error: pedidoError } = await supabase
         .from('pedidos')
@@ -131,7 +133,8 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
           metodo_pago: selectedPaymentMethod,
           total: total,
           notas: notes || null,
-          estado: 'pendiente'
+          estado: 'pendiente',
+          numero_pedido: orderNumber
         })
         .select()
         .single();
