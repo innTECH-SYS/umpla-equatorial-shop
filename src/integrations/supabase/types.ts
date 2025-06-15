@@ -777,6 +777,44 @@ export type Database = {
           },
         ]
       }
+      tienda_metodos_pago: {
+        Row: {
+          activo: boolean | null
+          comision_fija: number | null
+          comision_porcentaje: number | null
+          created_at: string | null
+          id: string
+          metodo_tipo: string
+          tienda_id: string | null
+        }
+        Insert: {
+          activo?: boolean | null
+          comision_fija?: number | null
+          comision_porcentaje?: number | null
+          created_at?: string | null
+          id?: string
+          metodo_tipo: string
+          tienda_id?: string | null
+        }
+        Update: {
+          activo?: boolean | null
+          comision_fija?: number | null
+          comision_porcentaje?: number | null
+          created_at?: string | null
+          id?: string
+          metodo_tipo?: string
+          tienda_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tienda_metodos_pago_tienda_id_fkey"
+            columns: ["tienda_id"]
+            isOneToOne: false
+            referencedRelation: "tiendas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tiendas: {
         Row: {
           activa: boolean | null

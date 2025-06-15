@@ -1,4 +1,3 @@
-
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -34,7 +33,7 @@ const Index = () => {
               </Link>
               <Link to="/auth">
                 <Button size="lg" className="text-lg px-8 py-3">
-                  {t('home.hero.createStore')}
+                  Crear mi tienda gratis
                 </Button>
               </Link>
             </div>
@@ -108,7 +107,7 @@ const Index = () => {
           </p>
           <Link to="/auth">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-3">
-              {t('home.hero.createStore')}
+              Crear mi tienda gratis
             </Button>
           </Link>
         </div>
