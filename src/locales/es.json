@@ -5,9 +5,10 @@
     "stores": "Tiendas",
     "about": "Acerca de",
     "contact": "Contacto",
-    "login": "Iniciar sesión",
+    "login": "Login",
     "register": "Registrarse",
-    "dashboard": "Panel"
+    "dashboard": "Panel",
+    "how_it_works": "Cómo funciona"
   },
   "onboarding": {
     "welcome": "¡Bienvenido a Umpla!",
@@ -37,10 +38,10 @@
   },
   "home": {
     "hero": {
-      "title": "Tu mercado digital en Guinea Ecuatorial",
-      "subtitle": "Conectamos compradores y vendedores en toda Guinea Ecuatorial",
+      "title": "Crea tu tienda online sin conocimientos técnicos",
+      "subtitle": "La plataforma más fácil para tener tu propia tienda en Guinea Ecuatorial",
       "cta": "Explorar Tiendas",
-      "createStore": "Crear mi tienda"
+      "createStore": "Crear mi tienda gratis"
     },
     "features": {
       "title": "¿Por qué elegir Umpla?",
@@ -49,8 +50,8 @@
         "description": "Apoyamos a los negocios locales de Guinea Ecuatorial"
       },
       "secure": {
-        "title": "Pagos Seguros",
-        "description": "Transacciones protegidas con múltiples métodos de pago"
+        "title": "Fácil de usar",
+        "description": "Sin conocimientos técnicos. Todo listo en minutos"
       },
       "delivery": {
         "title": "Entrega Rápida",
@@ -89,6 +90,26 @@
     "last_units": "Últimas unidades",
     "out_of_stock": "Sin stock",
     "add_to_cart": "Agregar al carrito"
+  },
+  "how_it_works": {
+    "title": "¿Cómo funciona Umpla?",
+    "subtitle": "Crear tu tienda online nunca fue tan fácil",
+    "step1": {
+      "title": "1. Regístrate gratis",
+      "description": "Solo necesitas tu email y listo. Sin complicaciones."
+    },
+    "step2": {
+      "title": "2. Personaliza tu tienda", 
+      "description": "Agrega tu logo, colores y productos en minutos."
+    },
+    "step3": {
+      "title": "3. Comparte y vende",
+      "description": "Comparte el enlace de tu tienda y comienza a vender."
+    },
+    "cta": "Crear mi tienda gratis",
+    "no_tech_needed": "Sin conocimientos técnicos",
+    "ready_in_minutes": "Lista en minutos",
+    "free_to_start": "Gratis para empezar"
   },
   "common": {
     "loading": "Cargando...",

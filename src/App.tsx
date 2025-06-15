@@ -13,6 +13,7 @@ import Admin from "./pages/Admin";
 import PublicStore from "./pages/PublicStore";
 import Stores from "./pages/Stores";
 import Pricing from "./pages/Pricing";
+import ComoFunciona from "./pages/ComoFunciona";
 import "./i18n/config";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/como-funciona" element={<ComoFunciona />} />
               <Route path="/store/:storename" element={<PublicStore />} />
             </Routes>
           </BrowserRouter>

@@ -23,15 +23,21 @@ const Navigation = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/pricing" className="text-gray-600 hover:text-primary transition-colors">
-              {t('nav.pricing')}
+            <Link to="/" className="text-gray-600 hover:text-primary transition-colors">
+              {t('nav.home')}
             </Link>
-            <Link to="/store-example" className="text-gray-600 hover:text-primary transition-colors">
-              {t('nav.example')}
+            <Link to="/stores" className="text-gray-600 hover:text-primary transition-colors">
+              {t('nav.stores')}
+            </Link>
+            <Link to="/como-funciona" className="text-gray-600 hover:text-primary transition-colors">
+              {t('nav.how_it_works')}
             </Link>
             <LanguageSelector />
-            <Link to="/onboarding">
-              <Button>{t('nav.start_free')}</Button>
+            <Link to="/auth">
+              <Button variant="outline" className="mr-2">{t('nav.login')}</Button>
+            </Link>
+            <Link to="/auth">
+              <Button>{t('home.hero.createStore')}</Button>
             </Link>
           </div>
 
@@ -52,24 +58,34 @@ const Navigation = () => {
           <div className="md:hidden py-4 border-t border-gray-100">
             <div className="flex flex-col space-y-4">
               <Link 
-                to="/pricing" 
+                to="/" 
                 className="text-gray-600 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t('nav.pricing')}
+                {t('nav.home')}
               </Link>
               <Link 
-                to="/store-example" 
+                to="/stores" 
                 className="text-gray-600 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t('nav.example')}
+                {t('nav.stores')}
+              </Link>
+              <Link 
+                to="/como-funciona" 
+                className="text-gray-600 hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('nav.how_it_works')}
               </Link>
               <div className="flex justify-center">
                 <LanguageSelector />
               </div>
-              <Link to="/onboarding" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full">{t('nav.start_free')}</Button>
+              <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="outline" className="w-full mb-2">{t('nav.login')}</Button>
+              </Link>
+              <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                <Button className="w-full">{t('home.hero.createStore')}</Button>
               </Link>
             </div>
           </div>

@@ -7,7 +7,8 @@
     "contact": "Contact",
     "login": "Login",
     "register": "Register",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "how_it_works": "How it works"
   },
   "onboarding": {
     "welcome": "Welcome to Umpla!",
@@ -37,10 +38,10 @@
   },
   "home": {
     "hero": {
-      "title": "Your digital marketplace in Equatorial Guinea",
-      "subtitle": "Connecting buyers and sellers across Equatorial Guinea",
+      "title": "Create your online store without technical knowledge",
+      "subtitle": "The easiest platform to have your own store in Equatorial Guinea",
       "cta": "Explore Stores",
-      "createStore": "Create my store"
+      "createStore": "Create my free store"
     },
     "features": {
       "title": "Why choose Umpla?",
@@ -49,8 +50,8 @@
         "description": "We support local businesses in Equatorial Guinea"
       },
       "secure": {
-        "title": "Secure Payments",
-        "description": "Protected transactions with multiple payment methods"
+        "title": "Easy to use",
+        "description": "No technical knowledge needed. Everything ready in minutes"
       },
       "delivery": {
         "title": "Fast Delivery",
@@ -89,6 +90,26 @@
     "last_units": "Last units",
     "out_of_stock": "Out of stock",
     "add_to_cart": "Add to cart"
+  },
+  "how_it_works": {
+    "title": "How does Umpla work?",
+    "subtitle": "Creating your online store has never been easier",
+    "step1": {
+      "title": "1. Sign up for free",
+      "description": "Just need your email and you're ready. No complications."
+    },
+    "step2": {
+      "title": "2. Customize your store",
+      "description": "Add your logo, colors and products in minutes."
+    },
+    "step3": {
+      "title": "3. Share and sell",
+      "description": "Share your store link and start selling."
+    },
+    "cta": "Create my free store",
+    "no_tech_needed": "No technical knowledge needed",
+    "ready_in_minutes": "Ready in minutes",
+    "free_to_start": "Free to start"
   },
   "common": {
     "loading": "Loading...",

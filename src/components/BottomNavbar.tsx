@@ -5,10 +5,8 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { 
   Home, 
   Store, 
-  Search, 
-  User, 
-  ShoppingCart,
-  MessageCircle
+  HelpCircle, 
+  User
 } from 'lucide-react';
 
 export const BottomNavbar = () => {
@@ -29,22 +27,16 @@ export const BottomNavbar = () => {
       key: 'stores'
     },
     {
-      icon: Search,
-      label: 'Buscar',
-      path: '/search',
-      key: 'search'
-    },
-    {
-      icon: ShoppingCart,
-      label: 'Carrito',
-      path: '/cart',
-      key: 'cart'
+      icon: HelpCircle,
+      label: t('nav.how_it_works'),
+      path: '/como-funciona',
+      key: 'how_it_works'
     },
     {
       icon: User,
-      label: 'Perfil',
+      label: t('nav.login'),
       path: '/auth',
-      key: 'profile'
+      key: 'login'
     }
   ];
 
@@ -62,7 +54,7 @@ export const BottomNavbar = () => {
       
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 lg:hidden">
-        <div className="grid grid-cols-5 h-16">
+        <div className="grid grid-cols-4 h-16">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -99,13 +91,9 @@ export const BottomNavbar = () => {
                 <span className="text-xl font-bold">Umpla</span>
               </div>
               <p className="text-gray-400 mb-4">
-                La plataforma de comercio electrónico líder en Guinea Ecuatorial. 
-                Conectamos compradores y vendedores locales.
+                La plataforma más fácil para crear tu tienda online en Guinea Ecuatorial. 
+                Sin conocimientos técnicos necesarios.
               </p>
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-primary" />
-                <span className="text-sm">Soporte 24/7 disponible</span>
-              </div>
             </div>
             
             <div>
@@ -117,8 +105,11 @@ export const BottomNavbar = () => {
                 <Link to="/stores" className="block text-gray-400 hover:text-white transition-colors">
                   {t('nav.stores')}
                 </Link>
+                <Link to="/como-funciona" className="block text-gray-400 hover:text-white transition-colors">
+                  {t('nav.how_it_works')}
+                </Link>
                 <Link to="/auth" className="block text-gray-400 hover:text-white transition-colors">
-                  Crear cuenta
+                  {t('nav.login')}
                 </Link>
               </div>
             </div>
