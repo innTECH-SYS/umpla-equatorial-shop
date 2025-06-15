@@ -1,11 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Minus, Plus, ShoppingCart, Trash2, CreditCard, Building, Smartphone, Wallet } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Trash2, CreditCard, Building, Smartphone, Wallet, Clock } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,6 +16,7 @@ interface PaymentMethod {
   tipo: string;
   numero?: string;
   titular: string;
+  activo: boolean;
   comision_porcentaje?: number;
   comision_fija?: number;
 }
@@ -56,15 +59,21 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
 
       if (!storeData) return;
 
-      // Get available payment methods for the store
+      // Get all payment methods for the store (active and inactive)
       const { data: methods, error } = await supabase
         .from('metodos_pago')
         .select('*')
         .eq('usuario_id', storeData.usuario_id)
-        .eq('activo', true);
+        .order('activo', { ascending: false }); // Show active methods first
 
       if (error) throw error;
       setPaymentMethods(methods || []);
+      
+      // Auto-select cash delivery if available
+      const cashMethod = methods?.find(m => m.tipo === 'cash_delivery' && m.activo);
+      if (cashMethod) {
+        setSelectedPaymentMethod(cashMethod.tipo);
+      }
     } catch (error) {
       console.error('Error loading payment methods:', error);
       toast({
@@ -109,6 +118,17 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
       toast({
         title: "Carrito vacío",
         description: "Agrega productos antes de continuar",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Verificar que el método de pago esté activo
+    const selectedMethod = paymentMethods.find(m => m.tipo === selectedPaymentMethod);
+    if (!selectedMethod?.activo) {
+      toast({
+        title: "Método no disponible",
+        description: "Este método de pago no está disponible actualmente",
         variant: "destructive",
       });
       return;
@@ -208,12 +228,16 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
             ) : (
               <>
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                  <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg bg-white shadow-sm">
                     {item.image && (
                       <img 
                         src={item.image} 
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded"
+                        className="w-16 h-16 object-cover rounded-lg shadow-sm"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/placeholder.svg';
+                        }}
                       />
                     )}
                     <div className="flex-1">
@@ -224,6 +248,7 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
                           size="sm"
                           variant="outline"
                           onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                          className="h-8 w-8 p-0"
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -232,6 +257,7 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
                           size="sm"
                           variant="outline"
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          className="h-8 w-8 p-0"
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -239,7 +265,7 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
                           size="sm"
                           variant="destructive"
                           onClick={() => removeFromCart(item.id)}
-                          className="ml-2"
+                          className="ml-2 h-8 w-8 p-0"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -248,7 +274,7 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
                   </div>
                 ))}
 
-                <div className="border-t pt-4">
+                <div className="border-t pt-4 bg-gray-50 rounded-lg p-4">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-semibold">Total:</span>
                     <span className="text-xl font-bold text-primary">{getTotalPrice()} XAF</span>
@@ -342,14 +368,24 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
                         name="paymentMethod"
                         value={method.tipo}
                         checked={selectedPaymentMethod === method.tipo}
-                        onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                        onChange={(e) => method.activo && setSelectedPaymentMethod(e.target.value)}
+                        disabled={!method.activo}
                         className="w-4 h-4 text-primary"
                       />
-                      <label htmlFor={method.id} className="flex items-center gap-2 cursor-pointer">
+                      <label 
+                        htmlFor={method.id} 
+                        className={`flex items-center gap-2 cursor-pointer flex-1 ${!method.activo ? 'opacity-60' : ''}`}
+                      >
                         {getPaymentIcon(method.tipo)}
                         <span className="text-sm">{getPaymentLabel(method.tipo)}</span>
-                        {method.numero && (
+                        {method.numero && method.activo && (
                           <span className="text-xs text-gray-500">({method.numero})</span>
+                        )}
+                        {!method.activo && (
+                          <Badge variant="secondary" className="ml-auto">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Próximamente
+                          </Badge>
                         )}
                       </label>
                     </div>
@@ -379,7 +415,7 @@ export const ImprovedCartSidebar = ({ isOpen, onClose, storeName, storeId }: Car
             </Button>
             <Button 
               onClick={handleProcessOrder}
-              disabled={isProcessing || paymentMethods.length === 0}
+              disabled={isProcessing || paymentMethods.length === 0 || !paymentMethods.some(m => m.activo)}
               className="flex-1"
             >
               {isProcessing ? 'Procesando...' : 'Confirmar Pedido'}
